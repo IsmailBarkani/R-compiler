@@ -436,11 +436,6 @@ int Length_NOM = 0;
 void Vider_NOM() {
     Length_NOM = 0;
     int i = 0;
-    char c = NOM[0];
-    /*while(i < 100 && c!='\0'){
-        NOM[i] = '\0';
-        i++;
-    }*/
     memset(NOM,'\0',100);
 }
 
