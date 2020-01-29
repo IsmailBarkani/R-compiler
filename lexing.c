@@ -766,13 +766,11 @@ void lire_special() {
         break;
     }
 }
-//adding hexa floating points
-// hexa 0x[0-9,a-f]+
-// numeric [0-9]*.?[0-9]*(e[+,-]?[0-9]+)? Either the fractional or
+
+// Either the fractional or
 // the decimal part can be empty, but not both at once.
 // Double : 1.5 15.e10 integer : 15L complex = 5i
 //
-//  hexadecimal : 0x[0-9]*[a-f]*
 //  integers : [0-9]+ (e[+,-]?[0-9]+)? L
 //  complex :  [0-9]* . [0-9]* (e[+,-]?[0-9]+)? i
 //  doubles : 
@@ -780,10 +778,6 @@ void lire_special() {
 //              . [0-9]+ (e[+,-]?[0-9]+)?
 //              [0-9]+ (e[+,-]?[0-9]+)?
 // erreur .5L
-
-
-//e[+,-]?[0-9]+
-//verifier lire hexa est ce 0x est possible
 void lire_exposant() {
     NOM[Length_NOM] = Car_Cour;
     Length_NOM++;
@@ -807,19 +801,6 @@ void lire_exposant() {
 }
 
 void lire_nombre() {
-    
-    if(Car_Cour == '0' && Length_NOM  == 0) {
-        NOM[Length_NOM] = Car_Cour;
-        Length_NOM++;
-        Lire_Car();
-        if(Car_Cour == 'x') {
-            lire_hexa();
-            if( isalpha(Car_Cour) ) {
-                SYM_COUR.CODE = ERREUR_TOKEN;
-            }
-            return;
-        }
-    }
 
     while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
         NOM[Length_NOM] = Car_Cour;
@@ -893,56 +874,6 @@ void lire_nombre() {
 
     if(Length_NOM > 100 || isalpha(Car_Cour)){
         SYM_COUR.CODE == ERREUR_TOKEN;
-    }
-}
-
-//  hexadeci : 0x[0-9]*[a-f]*
-void lire_hexa() {
-    NOM[Length_NOM] = Car_Cour;
-    Length_NOM++;
-    Lire_Car();
-
-    while( ('0' <= Car_Cour && Car_Cour <= '9') || ('a' <= Car_Cour && Car_Cour <= 'f')) {
-        NOM[Length_NOM] = Car_Cour;
-        Length_NOM++;
-        Lire_Car();
-    }
-
-    if(Car_Cour == '.' ) {
-        Lire_Car();
-        if(Car_Cour == 'p') {
-            lire_exposant();
-        }
-        switch (Car_Cour) {
-            case 'i':
-                SYM_COUR.CODE = COMPLEXE_TOKEN;
-                Lire_Car();
-                break;
-            default:
-                SYM_COUR.CODE = DOUBLE_TOKEN;
-                break;
-        }
-    } else {
-        if(Car_Cour == 'p') {
-            lire_exposant();
-        }
-        switch (Car_Cour) {
-            case 'i':
-                SYM_COUR.CODE = COMPLEXE_TOKEN;
-                Lire_Car();
-                break;
-            case 'L':
-                SYM_COUR.CODE = INTEGER_TOKEN;
-                Lire_Car();
-                break;
-            default:
-                SYM_COUR.CODE = DOUBLE_TOKEN;
-                break;
-        }
-    }
-
-    if(isalpha(Car_Cour) || Length_NOM > 100) {
-        SYM_COUR.CODE = ERREUR_TOKEN;
     }
 }
 

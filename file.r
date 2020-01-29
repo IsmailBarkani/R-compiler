@@ -1,2 +1,3 @@
 1 10 0.1 .2 1e-7 1.2e+7
 1L 0x10L 1000000L 1e6L
+NULL, NA, Inf, and NaN.
