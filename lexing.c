@@ -435,7 +435,6 @@ int Length_NOM = 0;
 
 void Vider_NOM() {
     Length_NOM = 0;
-    int i = 0;
     memset(NOM,'\0',100);
 }
 
@@ -532,11 +531,6 @@ bool mot_cle(char nom[]){
 void lire_mot() {
     NOM[Length_NOM] = Car_Cour;
     Length_NOM++;
-    
-    if(!(isalpha(Car_Cour) || Car_Cour == '.')) {
-        SYM_COUR.CODE = ERREUR_TOKEN;
-        return;
-    }
 
     if(Car_Cour == '.') {
         Lire_Car();
@@ -548,8 +542,6 @@ void lire_mot() {
             if(isalpha(Car_Cour) || Car_Cour == '.' || Car_Cour == '_') {
                 NOM[Length_NOM] = Car_Cour;
                 Length_NOM++;
-            } else {
-                return;
             }
         }
     }
@@ -774,32 +766,41 @@ void lire_special() {
         break;
     }
 }
-
+//adding hexa floating points
+// hexa 0x[0-9,a-f]+
+// numeric [0-9]*.?[0-9]*(e[+,-]?[0-9]+)? Either the fractional or
+// the decimal part can be empty, but not both at once.
 // Double : 1.5 15.e10 integer : 15L complex = 5i
+//
 //  hexadecimal : 0x[0-9]*[a-f]*
 //  integers : [0-9]+ (e[+,-]?[0-9]+)? L
-//  complex :  [0-9]+ (e[+,-]?[0-9]+)? i
+//  complex :  [0-9]* . [0-9]* (e[+,-]?[0-9]+)? i
 //  doubles : 
 //              [0-9]+ . [0-9]* (e[+,-]?[0-9]+)?
 //              . [0-9]+ (e[+,-]?[0-9]+)?
 //              [0-9]+ (e[+,-]?[0-9]+)?
-// [0-9]+ ( (e[+,-]?[0-9]+)? (epsilon | i | L ) | (.[0-9]* (e[+,-]?[0-9]+)? ) ) | (. [0-9]+ (e[+,-]?[0-9]+)? )
 // erreur .5L
+
+
+//e[+,-]?[0-9]+
+//verifier lire hexa est ce 0x est possible
 void lire_exposant() {
     NOM[Length_NOM] = Car_Cour;
     Length_NOM++;
     Lire_Car();
+
     if(Car_Cour == '+' || Car_Cour == '-'){
         NOM[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
+
     if(isdigit(Car_Cour)){
-            while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
-                NOM[Length_NOM] = Car_Cour;
-                Length_NOM++;
-                Lire_Car();
-            }
+        while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
+            NOM[Length_NOM] = Car_Cour;
+            Length_NOM++;
+            Lire_Car();
+        }
     } else {
             SYM_COUR.CODE = ERREUR_TOKEN;
     }
@@ -807,137 +808,90 @@ void lire_exposant() {
 
 void lire_nombre() {
     
-    if(Car_Cour == '0'){
+    if(Car_Cour == '0' && Length_NOM  == 0) {
         NOM[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
-        if(Car_Cour == 'x'){
-            NOM[0] = "0";
-            Length_NOM++;
-            SYM_COUR.CODE = HEXA_TOKEN;
+        if(Car_Cour == 'x') {
             lire_hexa();
+            if( isalpha(Car_Cour) ) {
+                SYM_COUR.CODE = ERREUR_TOKEN;
+            }
             return;
         }
     }
-    
+
     while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
         NOM[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
-
     
-    /*if(Length_NOM == 1) {
-        if(Car_Cour == ".") {
+
+    if(NOM[0] == '.') {
+        if(Length_NOM >= 2){
             SYM_COUR.CODE = DOUBLE_TOKEN;
+            if(Car_Cour == 'e') {
+                lire_exposant();
+            }
+            switch (Car_Cour) {
+                case 'i':
+                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    Lire_Car();
+                    break;
+                default:
+                    SYM_COUR.CODE = DOUBLE_TOKEN;
+                    break;
+            }
+        } else {
+            SYM_COUR.CODE = ERREUR_TOKEN;
+        }
+    } else {
+        switch(Car_Cour) {
+        case '.':
+            NOM[Length_NOM] = Car_Cour;
+            Length_NOM++;
             Lire_Car();
             while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
                 NOM[Length_NOM] = Car_Cour;
                 Length_NOM++;
                 Lire_Car();
             }
-            if(Length_NOM >= 2){
-                if(Car_Cour == "e") {
-                    lire_exposant();
-                    return;
-                }
-            } else {
-                SYM_COUR.CODE = ERREUR_TOKEN;
-            }
-        } else {
-            SYM_COUR.CODE = DOUBLE_TOKEN;
-        }
-    } else {
-        switch(Car_Cour) {
-            case '.':
-                SYM_COUR.CODE = DOUBLE_TOKEN;
-                NOM[Length_NOM] = Car_Cour;
-                Length_NOM++;
-                Lire_Car();
-                while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
-                    NOM[Length_NOM] = Car_Cour;
-                    Length_NOM++;
-                    Lire_Car();
-                }
-                if(Car_Cour == "e"){
-                    lire_exposant();
-                }
-                break;
-            default:
-                if(Car_Cour == "e"){
-                    lire_exposant();
-                }
-                switch (Car_Cour)
-                {
-                    case 'L':
-                        SYM_COUR.CODE = INTEGER_TOKEN;
-                    break;
-                    case 'i':
-                        SYM_COUR.CODE = COMPLEXE_TOKEN;
-                    break;
-                    default:
-                        SYM_COUR.CODE = DOUBLE_TOKEN;
-                        break;
-                }
-                break;
-        }
-    }*/
-
-    if(Length_NOM == 0 && Car_Cour == '.') {
-        SYM_COUR.CODE = DOUBLE_TOKEN;
-        Lire_Car();
-        while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
-            NOM[Length_NOM] = Car_Cour;
-            Length_NOM++;
-            Lire_Car();
-        }
-        if(Length_NOM >= 2){
             if(Car_Cour == 'e') {
                 lire_exposant();
-                return;
             }
-        } else {
-            SYM_COUR.CODE = ERREUR_TOKEN;
-        }
-    }   if(Length_NOM >= 1){
-        switch(Car_Cour) {
-            case '.':
-                SYM_COUR.CODE = DOUBLE_TOKEN;
-                NOM[Length_NOM] = Car_Cour;
-                Length_NOM++;
-                Lire_Car();
-                while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
-                    NOM[Length_NOM] = Car_Cour;
-                    Length_NOM++;
+            switch (Car_Cour) {
+                case 'i':
+                    SYM_COUR.CODE = COMPLEXE_TOKEN;
                     Lire_Car();
-                }
-                if(Car_Cour == 'e'){
-                    lire_exposant();
-                }
                 break;
-            default:
-                if(Car_Cour == 'e'){
-                    lire_exposant();
-                }
-                switch (Car_Cour)
-                {
-                    case 'L':
-                        SYM_COUR.CODE = INTEGER_TOKEN;
-                        Lire_Car();
+                default:
+                    SYM_COUR.CODE = DOUBLE_TOKEN;
                     break;
-                    case 'i':
-                        SYM_COUR.CODE = COMPLEXE_TOKEN;
-                        Lire_Car();
-                    break;
-                    default:
-                        SYM_COUR.CODE = DOUBLE_TOKEN;
-                        break;
-                }
+            }
+            break;
+        default:
+            if(Car_Cour == 'e') {
+                lire_exposant();
+            }
+            switch (Car_Cour) {
+                case 'L':
+                    SYM_COUR.CODE = INTEGER_TOKEN;
+                    Lire_Car();
                 break;
+                case 'i':
+                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    Lire_Car();
+                break;
+                default:
+                    SYM_COUR.CODE = DOUBLE_TOKEN;
+                break;
+            }
+            break;
         }
     }
 
-    if(Length_NOM > 100){
+    if(Length_NOM > 100 || isalpha(Car_Cour)){
         SYM_COUR.CODE == ERREUR_TOKEN;
     }
 }
@@ -947,13 +901,48 @@ void lire_hexa() {
     NOM[Length_NOM] = Car_Cour;
     Length_NOM++;
     Lire_Car();
+
     while( ('0' <= Car_Cour && Car_Cour <= '9') || ('a' <= Car_Cour && Car_Cour <= 'f')) {
         NOM[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
-    if(Length_NOM > 100){
-        SYM_COUR.CODE == ERREUR_TOKEN;
+
+    if(Car_Cour == '.' ) {
+        Lire_Car();
+        if(Car_Cour == 'p') {
+            lire_exposant();
+        }
+        switch (Car_Cour) {
+            case 'i':
+                SYM_COUR.CODE = COMPLEXE_TOKEN;
+                Lire_Car();
+                break;
+            default:
+                SYM_COUR.CODE = DOUBLE_TOKEN;
+                break;
+        }
+    } else {
+        if(Car_Cour == 'p') {
+            lire_exposant();
+        }
+        switch (Car_Cour) {
+            case 'i':
+                SYM_COUR.CODE = COMPLEXE_TOKEN;
+                Lire_Car();
+                break;
+            case 'L':
+                SYM_COUR.CODE = INTEGER_TOKEN;
+                Lire_Car();
+                break;
+            default:
+                SYM_COUR.CODE = DOUBLE_TOKEN;
+                break;
+        }
+    }
+
+    if(isalpha(Car_Cour) || Length_NOM > 100) {
+        SYM_COUR.CODE = ERREUR_TOKEN;
     }
 }
 
