@@ -9,7 +9,7 @@ typedef enum {
     PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
     SWITCH_TOKEN,BREAK_TOKEN,NEXT_TOKEN,FUNCTION_TOKEN,BODY_TOKEN,INPUT_TOKEN,END_TOKEN,OF_TOKEN,TYPEOF_TOKEN,STRING_TOKEN,
-    NUMERIC_TOKEN,INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,LIST_TOKEN,DATAFRAME_TOKEN,ATTR_TOKEN,CHARACTER_TOKEN,ATOMIC_TOKEN,
+    LIST_TOKEN,DATAFRAME_TOKEN,ATTR_TOKEN,CHARACTER_TOKEN,ATOMIC_TOKEN,
     VECTOR_TOKEN,AS_NUMERIC_TOKEN,AS_DOUBLE_TOKEN,AS_INTEGER_TOKEN,AS_CHARACTER_TOKEN,IS_LOGICAL_TOKEN,IS_INTEGER_TOKEN,
     IS_DOUBLE_TOKEN,IS_CHARACTER_TOKEN,IS_ATOMIC_TOKEN,IS_VECTOR_TOKEN,IS_NUMERIC_TOKEN,TRUE_TOKEN,FALSE_TOKEN,
     LENGTH_TOKEN,PI_TOKEN,LETTERS_TOKEN,LS_TOKEN,PAT_TOKEN,LS_STR_TOKEN,MAX_LEVEL_TOKEN,EPS_TOKEN,MONTH_NAME_TOKEN,MONTH_ABB_TOKEN,
@@ -22,14 +22,14 @@ typedef enum {
     PT_TOKEN,QT_TOKEN,RLOGIS_TOKEN,DLOGIS_TOKEN,PLOGIS_TOKEN,QLOGIS_TOKEN,SCALE_TOKEN,LOCATION_TOKEN,MEAN_TOKEN,RATE_TOKEN,FACTOR_TOKEN,
     LEVEL_TOKEN,LABELS_TOKEN,EXCLUDE_TOKEN,
 
-
     PV_TOKEN,PARO_TOKEN,PARF_TOKEN,MINUS_TOKEN,PLS_TOKEN,MULT_TOKEN,DIV_TOKEN,NEG_TOKEN,
     TILD_TOKEN,DP_TOKEN,INTER_TOKEN,POWER_TOKEN,INF_TOKEN,SUP_TOKEN,EG_TOKEN,EQ_TOKEN,DIFF_TOKEN,INFEG_TOKEN,SUPEG_TOKEN,DET_TOKEN,
     ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
     ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,
     
+    INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,NUM_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,HEXA_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN
 }CODES_LEX;
 
 typedef struct {
@@ -37,14 +37,15 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN;
 
-int NUMBEROFTOKENS = 183;
-int DEBUTMOTCLE = 0;
-int FINMOTCLE= 142;
-int DEBUTSPECIAL = 143;
-int FINSPECIAL = 177;
-int TAILLETABLEAUTOKENS  = 185;
+int NUMBEROFTOKENS = 180;
 
-TOKEN ALLTOKENS[184] = {
+int DEBUTMOTCLE = 0;
+int FINMOTCLE = 138;
+
+//la differene de 5 est COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN
+int TAILLETABLEAUALLTOKENS  = 175;
+
+TOKEN ALLTOKENS[175] = {
     {"print",PRINT_TOKEN},
     {"getwd",GETWD_TOKEN},
     {"setwd",SETWD_TOKEN},
@@ -77,10 +78,6 @@ TOKEN ALLTOKENS[184] = {
     {"of",OF_TOKEN},
     {"typeof",TYPEOF_TOKEN},
     {"string" ,STRING_TOKEN},
-    {"numeric",NUMERIC_TOKEN},
-    {"integer",INTEGER_TOKEN},
-    {"double",DOUBLE_TOKEN},
-    {"logical",LOGICAL_TOKEN},
     {"list",LIST_TOKEN},
     {"dataframe",DATAFRAME_TOKEN},
     {"attr",ATTR_TOKEN},
@@ -188,6 +185,7 @@ TOKEN ALLTOKENS[184] = {
     {"level",LEVEL_TOKEN},
     {"labels",LABELS_TOKEN},
     {"exclude",EXCLUDE_TOKEN},
+    //fin utilisation de ce tableau
     {";",PV_TOKEN},
     {"(",PARO_TOKEN},
     {")",PARF_TOKEN},
@@ -223,10 +221,7 @@ TOKEN ALLTOKENS[184] = {
     {"}",ACCF_TOKEN},
     {"[",BRO_TOKEN},
     {"]",BRF_TOKEN},
-    {"#",COM_TOKEN},
-    {"",ID_TOKEN},
-    {"",FIN_TOKEN},
-    {"",ERREUR_TOKEN}
+    {"#",COM_TOKEN}
 };
 
 typedef struct {
@@ -234,7 +229,7 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
-TOKEN_TEXT ALLTOKENS_TEXT[182] = {
+TOKEN_TEXT ALLTOKENS_TEXT[180] = {
     {"PRINT_TOKEN",PRINT_TOKEN},
     {"GETWD_TOKEN",GETWD_TOKEN},
     {"SETWD_TOKEN",SETWD_TOKEN},
@@ -267,11 +262,6 @@ TOKEN_TEXT ALLTOKENS_TEXT[182] = {
     {"OF_TOKEN",OF_TOKEN},
     {"TYPEOF_TOKEN",TYPEOF_TOKEN},
     {"STRING_TOKEN" ,STRING_TOKEN},
-    {"NUMERIC_TOKEN",NUMERIC_TOKEN},
-    {"INTEGER_TOKEN",INTEGER_TOKEN},
-    {"DOUBLE_TOKEN",DOUBLE_TOKEN},
-    {"HEXA_TOKEN",HEXA_TOKEN},
-    {"LOGICAL_TOKEN",LOGICAL_TOKEN},
     {"LIST_TOKEN",LIST_TOKEN},
     {"DATAFRAME_TOKEN",DATAFRAME_TOKEN},
     {"ATTR_TOKEN",ATTR_TOKEN},
@@ -289,8 +279,8 @@ TOKEN_TEXT ALLTOKENS_TEXT[182] = {
     {"IS_ATOMIC_TOKEN",IS_ATOMIC_TOKEN},
     {"IS_VECTOR_TOKEN",IS_VECTOR_TOKEN},
     {"IS_NUMERIC_TOKEN",IS_NUMERIC_TOKEN},
-    {"FALSE_TOKEN",FALSE_TOKEN},
     {"TRUE_TOKEN",TRUE_TOKEN},
+    {"FALSE_TOKEN",FALSE_TOKEN},
     {"LENGTH_TOKEN",LENGTH_TOKEN},
     {"PI_TOKEN",PI_TOKEN},
     {"LETTERS_TOKEN",LETTERS_TOKEN},
@@ -377,10 +367,6 @@ TOKEN_TEXT ALLTOKENS_TEXT[182] = {
     {"LEVEL_TOKEN",LEVEL_TOKEN},
     {"LABELS_TOKEN",LABELS_TOKEN},
     {"EXCLUDE_TOKEN",EXCLUDE_TOKEN},
-    {"ID_TOKEN",ID_TOKEN},
-    {"FIN_TOKEN",FIN_TOKEN},
-    {"ERREUR_TOKEN",ERREUR_TOKEN},
-    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
     {"PV_TOKEN",PV_TOKEN},
     {"PARO_TOKEN",PARO_TOKEN},
     {"PARF_TOKEN",PARF_TOKEN},
@@ -416,26 +402,53 @@ TOKEN_TEXT ALLTOKENS_TEXT[182] = {
     {"ACCF_TOKEN",ACCF_TOKEN},
     {"BRO_TOKEN",BRO_TOKEN},
     {"BRF_TOKEN",BRF_TOKEN},
+    {"INTEGER_TOKEN",INTEGER_TOKEN},
+    {"DOUBLE_TOKEN",DOUBLE_TOKEN},
+    {"LOGICAL_TOKEN",LOGICAL_TOKEN},
+    {"COM_TOKEN",COM_TOKEN},
+    {"ID_TOKEN",ID_TOKEN},
+    {"FIN_TOKEN",FIN_TOKEN},
+    {"ERREUR_TOKEN",ERREUR_TOKEN},
+    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN}
 };
 
 typedef struct {
     CODES_LEX CODE;
-    char NOM[20];
+    char NOM[101];
 }TSym_Cour;
 
 // Variable Globale
-int MAX_ID_NAME_LENGTH = 256;
+int MAX_ID_NAME_LENGTH = 100;
 char Car_Cour;
 FILE *file;
 TSym_Cour SYM_COUR;
 int Ligne_Courante = 1;
 int Colonne_Courante = 0;
-char NOM[100];
+char NOM[101];
 int Length_NOM = 0;
+
+
+//Prototypes
+void Vider_NOM();
+void Ouvrir_Fichier(const char path[]);
+void Lire_Car();
+bool Separateur(char c);
+void Sym_Suiv();
+void AfficherToken(TSym_Cour SYM);
+CODES_LEX code_mot_cle(char nom[]);
+bool mot_cle(char nom[]);
+void lire_mot();
+void lire_special();
+void lire_commentaire();
+void lire_nombre();
+int isalpha();
+int isdigit();
+
 
 void Vider_NOM() {
     Length_NOM = 0;
-    memset(NOM,'\0',100);
+    memset(NOM,'\0',101);
+    memset(SYM_COUR.NOM,'\0',101);
 }
 
 void Ouvrir_Fichier(const char path[]){
@@ -487,15 +500,13 @@ void Sym_Suiv(){
 
 void AfficherToken(TSym_Cour SYM){
     if( SYM.CODE == ERREUR_TOKEN) {
-        printf("erreur ligne %d colonne %d .\n",Ligne_Courante,Colonne_Courante);
+        printf("erreur ligne %d colonne %d .\n", Ligne_Courante, Colonne_Courante);
         exit(EXIT_FAILURE);
     }
-    if(SYM.CODE < TAILLETABLEAUTOKENS) {
-        for(int i = 0;i < NUMBEROFTOKENS; i++) {
-            if(ALLTOKENS_TEXT[i].CODE == SYM.CODE) {
-                printf("%s\n",ALLTOKENS_TEXT[i].TOKEN_TEXT);
-                break;
-            }
+    for(int i = 0;i < NUMBEROFTOKENS; i++) {
+        if(ALLTOKENS_TEXT[i].CODE == SYM.CODE) {
+            printf("%s\n",ALLTOKENS_TEXT[i].TOKEN_TEXT);
+            break;
         }
     }
     Vider_NOM();
@@ -505,14 +516,6 @@ void AfficherToken(TSym_Cour SYM){
 CODES_LEX code_mot_cle(char nom[]) {
     for (int i = DEBUTMOTCLE; i <= FINMOTCLE; i++) {
         if(strcmp(ALLTOKENS[i].TOKEN_NAME,nom) == 0){
-            return ALLTOKENS[i].CODE;
-        }
-    }
-}
-
-CODES_LEX code_special(char special[]) {
-    for(int i = DEBUTSPECIAL;i <= FINSPECIAL ; i++) {
-        if(strcmp(ALLTOKENS[i].TOKEN_NAME,special) == 0){
             return ALLTOKENS[i].CODE;
         }
     }
@@ -545,7 +548,7 @@ void lire_mot() {
             }
         }
     }
-    //normalement c'est MAX_ID_NAME_LENGTH mais pas 100
+    // le max du longeur d'un nom est 100
     while( !feof(file) && (Length_NOM <= 100)){
         Lire_Car();
         if(isdigit(Car_Cour) || isalpha(Car_Cour) || Car_Cour == '.' || Car_Cour == '_') {
@@ -567,7 +570,7 @@ void lire_mot() {
     dépassement de len
     */
     if(Length_NOM > 100){
-        SYM_COUR.CODE == ERREUR_TOKEN;
+        SYM_COUR.CODE = ERREUR_TOKEN;
     }
     return;
 }
@@ -771,13 +774,16 @@ void lire_special() {
 // the decimal part can be empty, but not both at once.
 // Double : 1.5 15.e10 integer : 15L complex = 5i
 //
-//  integers : [0-9]+ (e[+,-]?[0-9]+)? L
-//  complex :  [0-9]* . [0-9]* (e[+,-]?[0-9]+)? i
+//  integers : [0-9]+ L
+//  complex :  [0-9]+ .? [0-9]* (e[+,-]?[0-9]+)? i
+//             . [0-9]+ (e[+,-]?[0-9]+)? i
+//             [0-9]+ (e[+,-]?[0-9]+)? i
 //  doubles : 
-//              [0-9]+ . [0-9]* (e[+,-]?[0-9]+)?
-//              . [0-9]+ (e[+,-]?[0-9]+)?
+//              [0-9]+ .? [0-9]* (e[+,-]?[0-9]+)?
+//              .[0-9]+ (e[+,-]?[0-9]+)?
 //              [0-9]+ (e[+,-]?[0-9]+)?
 // erreur .5L
+
 void lire_exposant() {
     NOM[Length_NOM] = Car_Cour;
     Length_NOM++;
@@ -854,27 +860,40 @@ void lire_nombre() {
         default:
             if(Car_Cour == 'e') {
                 lire_exposant();
-            }
-            switch (Car_Cour) {
+                switch (Car_Cour) {
+                    case 'i':
+                        SYM_COUR.CODE = COMPLEXE_TOKEN;
+                        Lire_Car();
+                    break;
+                    default:
+                        SYM_COUR.CODE = DOUBLE_TOKEN;
+                    break;
+                }
+            } else {
+                switch (Car_Cour) {
                 case 'L':
                     SYM_COUR.CODE = INTEGER_TOKEN;
                     Lire_Car();
-                break;
+                    break;
                 case 'i':
                     SYM_COUR.CODE = COMPLEXE_TOKEN;
                     Lire_Car();
-                break;
+                    break;
                 default:
                     SYM_COUR.CODE = DOUBLE_TOKEN;
-                break;
+                    break;
+                }
             }
             break;
         }
     }
 
     if(Length_NOM > 100 || isalpha(Car_Cour)){
-        SYM_COUR.CODE == ERREUR_TOKEN;
+        SYM_COUR.CODE = ERREUR_TOKEN;
+    } else {
+        strcpy(SYM_COUR.NOM, NOM);
     }
+
 }
 
 // pas de fin du commentaire ou fin de ligne ?
@@ -901,7 +920,6 @@ int main(int argc, char const *argv[])
         printf("FIN_TOKEN\n");
         exit(EXIT_SUCCESS);
     }
-    
     fclose(file);
     getchar();
     return 0;

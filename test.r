@@ -1,7 +1,6 @@
 1e+9
 2e8
 2e8i
-2e8L
 2i
 2L
 2
@@ -44,10 +43,6 @@ end
 of
 typeof
 string
-numeric
-integer
-double
-logical
 list
 dataframe
 attr
