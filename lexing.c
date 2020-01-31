@@ -29,7 +29,7 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
 }CODES_LEX;
 
 typedef struct {
@@ -37,12 +37,12 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN;
 
-int NUMBEROFTOKENS = 180;
+int NUMBEROFTOKENS = 181;
 
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 138;
 
-//la differene de 5 est COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN
+//la differene de 5 est COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
 int TAILLETABLEAUALLTOKENS  = 175;
 
 TOKEN ALLTOKENS[175] = {
@@ -229,7 +229,7 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
-TOKEN_TEXT ALLTOKENS_TEXT[180] = {
+TOKEN_TEXT ALLTOKENS_TEXT[181] = {
     {"PRINT_TOKEN",PRINT_TOKEN},
     {"GETWD_TOKEN",GETWD_TOKEN},
     {"SETWD_TOKEN",SETWD_TOKEN},
@@ -409,7 +409,8 @@ TOKEN_TEXT ALLTOKENS_TEXT[180] = {
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
-    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN}
+    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
+    {"CHAINE_TOKEN",CHAINE_TOKEN}
 };
 
 typedef struct {
@@ -719,6 +720,7 @@ void lire_special() {
         Lire_Car();
         break;
     case 39:
+
         SYM_COUR.CODE = SQ_TOKEN;
         Lire_Car();
         break;
@@ -767,6 +769,15 @@ void lire_special() {
         break;
     default:
         break;
+    }
+}
+
+void lire_chaine() {
+    char simple_double = Car_Cour;
+    Lire_Car();
+    while( !feof(file) && (Length_NOM <= 100)) {
+        if () {
+        }
     }
 }
 
@@ -922,5 +933,8 @@ int main(int argc, char const *argv[])
     }
     fclose(file);
     getchar();
+    
+    //printf("%s\n",ALLTOKENS[FINMOTCLE].TOKEN_NAME);
+    
     return 0;
 }
