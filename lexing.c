@@ -22,6 +22,14 @@ typedef enum {
     PT_TOKEN,QT_TOKEN,RLOGIS_TOKEN,DLOGIS_TOKEN,PLOGIS_TOKEN,QLOGIS_TOKEN,SCALE_TOKEN,LOCATION_TOKEN,MEAN_TOKEN,RATE_TOKEN,FACTOR_TOKEN,
     LEVEL_TOKEN,LABELS_TOKEN,EXCLUDE_TOKEN,
 
+    LOG2_TOKEN,LOG10_TOKEN,COS_TOKEN,SIN_TOKEN,TAN_TOKEN,ACOS_TOKEN,ASIN_TOKEN,ATAN_TOKEN,ABS_TOKEN,SQRT_TOKEN,RANGE_TOKEN,SUM_TOKEN,
+    PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEXE_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
+    MATRIX_TOKEN,DATA_TOKEN,NROW_TOKEN,NCOL_TOKEN,BYROW_TOKEN,DIMNAMES_TOKEN,T_TOKEN,DIM_TOKEN,ROWSUMS_TOKEN,COLSUMS_TOKEN,
+    COLMEANS_TOKEN,ROWMEANS_TOKEN,APPLY_TOKEN,LEVELS_TOKEN,IS_FACTOR_TOKEN,AS_FACTOR_TOKEN,SUMMARY_TOKEN,TAPPLY_TOKEN,TABLE_TOKEN,
+    IS_DATA_FRAME_TOKEN,AS_DATA_FRAME_TOKEN,SUBSET_TOKEN,ATTACH_TOKEN,DETACH_TOKEN,FILE_CHOOSE_TOKEN,READ_TSV_TOKEN,WRITE_TABLE_TOKEN,
+    WRITE_CSV_TOKEN,WRITE_CSV2_TOKEN,SAVERDS_TOKEN,READRDS_TOKEN,LOAD_TOKEN,SAVE_TOKEN,SAVE_IMAGE_TOKEN,NA_TOKEN,
+
+
     PV_TOKEN,PARO_TOKEN,PARF_TOKEN,MINUS_TOKEN,PLS_TOKEN,MULT_TOKEN,DIV_TOKEN,NEG_TOKEN,
     TILD_TOKEN,DP_TOKEN,INTER_TOKEN,POWER_TOKEN,INF_TOKEN,SUP_TOKEN,EG_TOKEN,EQ_TOKEN,DIFF_TOKEN,INFEG_TOKEN,SUPEG_TOKEN,DET_TOKEN,
     ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
@@ -40,12 +48,12 @@ typedef struct {
 int NUMBEROFTOKENS = 181;
 
 int DEBUTMOTCLE = 0;
-int FINMOTCLE = 137;
+int FINMOTCLE = 194;
 
-//la differene de 5 est COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
+//la differene de 6 est COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
 int TAILLETABLEAUALLTOKENS  = 175;
 
-TOKEN ALLTOKENS[175] = {
+TOKEN ALLTOKENS[500] = {
     {"print",PRINT_TOKEN},
     {"getwd",GETWD_TOKEN},
     {"setwd",SETWD_TOKEN},
@@ -184,6 +192,63 @@ TOKEN ALLTOKENS[175] = {
     {"level",LEVEL_TOKEN},
     {"labels",LABELS_TOKEN},
     {"exclude",EXCLUDE_TOKEN},
+    {"log2",},
+    {"log10",},
+    {"cos",},
+    {"sin",},
+    {"tan",},
+    {"acos",},
+    {"asin",},
+    {"atan",},
+    {"abs",},
+    {"sqrt",},
+    {"range",},
+    {"sum",},
+    {"prod",},
+    {"sd",},
+    {"var",},
+    {"is.complexe",},
+    {"as.logical",},
+    {"is.na",},
+    {"is.nan",},
+    {"names",},
+    {"rbind",},
+    {"cbind",},
+    {"matrix",},
+    {"data",},
+    {"nrow",},
+    {"ncol",},
+    {"byrow",},
+    {"dimnames",},
+    {"t",},
+    {"dim",},
+    {"rowSums",},
+    {"colSums",},
+    {"colMeans",},
+    {"rowMeans",},
+    {"apply",},
+    {"levels",},
+    {"is.factor",},
+    {"as.factor",},
+    {"summary",},
+    {"tapply",},
+    {"table",},
+    {"is.data.frame",},
+    {"as.data.frame",},
+    {"subset",},
+    {"attach",},
+    {"detach",},
+    {"file.choose",},
+    {"read.tsv",},
+    {"write.table",},
+    {"write.csv",},
+    {"write.csv2",},
+    {"saveRDS",},
+    {"readRDS",},
+    {"load",},
+    {"save",},
+    {"save.image",},
+    {"NA",},
     //fin utilisation de ce tableau
     {";",PV_TOKEN},
     {"(",PARO_TOKEN},
