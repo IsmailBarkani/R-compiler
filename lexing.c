@@ -8,7 +8,7 @@
 typedef enum {
     PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
-    SWITCH_TOKEN,BREAK_TOKEN,NEXT_TOKEN,FUNCTION_TOKEN,BODY_TOKEN,INPUT_TOKEN,END_TOKEN,OF_TOKEN,TYPEOF_TOKEN,STRING_TOKEN,
+    SWITCH_TOKEN,BREAK_TOKEN,NEXT_TOKEN,FUNCTION_TOKEN,BODY_TOKEN,INPUT_TOKEN,END_TOKEN,OF_TOKEN,TYPEOF_TOKEN,
     LIST_TOKEN,DATAFRAME_TOKEN,ATTR_TOKEN,CHARACTER_TOKEN,ATOMIC_TOKEN,
     VECTOR_TOKEN,AS_NUMERIC_TOKEN,AS_DOUBLE_TOKEN,AS_INTEGER_TOKEN,AS_CHARACTER_TOKEN,IS_LOGICAL_TOKEN,IS_INTEGER_TOKEN,
     IS_DOUBLE_TOKEN,IS_CHARACTER_TOKEN,IS_ATOMIC_TOKEN,IS_VECTOR_TOKEN,IS_NUMERIC_TOKEN,TRUE_TOKEN,FALSE_TOKEN,
@@ -27,7 +27,7 @@ typedef enum {
     ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
     ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,
     
-    INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,
+    INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,
     
     COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
 }CODES_LEX;
@@ -40,7 +40,7 @@ typedef struct {
 int NUMBEROFTOKENS = 181;
 
 int DEBUTMOTCLE = 0;
-int FINMOTCLE = 138;
+int FINMOTCLE = 137;
 
 //la differene de 5 est COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
 int TAILLETABLEAUALLTOKENS  = 175;
@@ -77,9 +77,8 @@ TOKEN ALLTOKENS[175] = {
     {"end",END_TOKEN},
     {"of",OF_TOKEN},
     {"typeof",TYPEOF_TOKEN},
-    {"string" ,STRING_TOKEN},
     {"list",LIST_TOKEN},
-    {"dataframe",DATAFRAME_TOKEN},
+    {"data.frame",DATAFRAME_TOKEN},
     {"attr",ATTR_TOKEN},
     {"character",CHARACTER_TOKEN},
     {"atomic",ATOMIC_TOKEN},
@@ -473,7 +472,7 @@ bool Separateur(char c) {
         Ligne_Courante++;
         Colonne_Courante = 0 ;
     }
-    for (int i = 0; i < strlen(separateur); i++) {
+    for (int i = 0; i < strlen(separateur) ; i++) {
         if(separateur[i] == c) {
             return true;
         }
@@ -717,12 +716,13 @@ void lire_special() {
         break;
     case '\"':
         SYM_COUR.CODE = DQ_TOKEN;
-        Lire_Car();
+        AfficherToken(SYM_COUR);
+        lire_chaine();
         break;
     case 39:
-
         SYM_COUR.CODE = SQ_TOKEN;
-        Lire_Car();
+        AfficherToken(SYM_COUR);
+        lire_chaine();
         break;
     case '{':
         SYM_COUR.CODE = ACCO_TOKEN;
@@ -768,15 +768,25 @@ void lire_special() {
         }
         break;
     default:
+        SYM_COUR.CODE = ERREUR_TOKEN;
         break;
     }
 }
 
 void lire_chaine() {
-    char simple_double = Car_Cour;
+    char simpleORdouble = Car_Cour;
+    SYM_COUR.CODE = STRING_TOKEN;
+    AfficherToken(SYM_COUR);
     Lire_Car();
-    while( !feof(file) && (Length_NOM <= 100)) {
-        if () {
+    while( !feof(file) && (Length_NOM <= 100) ) {
+        if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ){
+            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
+            Lire_Car();
+            break;
+        } else {
+            NOM[Length_NOM] = Car_Cour;
+            Length_NOM++;
+            Lire_Car();
         }
     }
 }
@@ -785,11 +795,11 @@ void lire_chaine() {
 // the decimal part can be empty, but not both at once.
 // Double : 1.5 15.e10 integer : 15L complex = 5i
 //
-//  integers : [0-9]+ L
-//  complex :  [0-9]+ .? [0-9]* (e[+,-]?[0-9]+)? i
+// integers : [0-9]+ L
+// complex :  [0-9]+ .? [0-9]* (e[+,-]?[0-9]+)? i
 //             . [0-9]+ (e[+,-]?[0-9]+)? i
 //             [0-9]+ (e[+,-]?[0-9]+)? i
-//  doubles : 
+// doubles : 
 //              [0-9]+ .? [0-9]* (e[+,-]?[0-9]+)?
 //              .[0-9]+ (e[+,-]?[0-9]+)?
 //              [0-9]+ (e[+,-]?[0-9]+)?

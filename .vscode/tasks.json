@@ -5,6 +5,22 @@
     "tasks": [
         {
             "type": "shell",
+            "label": "cl.exe build active file",
+            "command": "cl.exe",
+            "args": [
+                "/Zi",
+                "/EHsc",
+                "/Fe:",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
             "label": "gcc.exe build active file",
             "command": "C:\\MinGW\\bin\\gcc.exe",
             "args": [
