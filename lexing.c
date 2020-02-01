@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdlib.h> 
 
-//ajouter lire chaine
-
 typedef enum {
     PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
@@ -25,7 +23,7 @@ typedef enum {
     LOG2_TOKEN,LOG10_TOKEN,COS_TOKEN,SIN_TOKEN,TAN_TOKEN,ACOS_TOKEN,ASIN_TOKEN,ATAN_TOKEN,ABS_TOKEN,SQRT_TOKEN,RANGE_TOKEN,SUM_TOKEN,
     PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEXE_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
     MATRIX_TOKEN,DATA_TOKEN,NROW_TOKEN,NCOL_TOKEN,BYROW_TOKEN,DIMNAMES_TOKEN,T_TOKEN,DIM_TOKEN,ROWSUMS_TOKEN,COLSUMS_TOKEN,
-    COLMEANS_TOKEN,ROWMEANS_TOKEN,APPLY_TOKEN,LEVELS_TOKEN,IS_FACTOR_TOKEN,AS_FACTOR_TOKEN,SUMMARY_TOKEN,TAPPLY_TOKEN,TABLE_TOKEN,
+    COLMEANS_TOKEN,ROWMEANS_TOKEN,APPLY_TOKEN,LEVELS_TOKEN,IS_FACTOR_TOKEN,AS_FACTOR_TOKEN,SUMMARY_TOKEN,TAPPLY_TOKEN,
     IS_DATA_FRAME_TOKEN,AS_DATA_FRAME_TOKEN,SUBSET_TOKEN,ATTACH_TOKEN,DETACH_TOKEN,FILE_CHOOSE_TOKEN,READ_TSV_TOKEN,WRITE_TABLE_TOKEN,
     WRITE_CSV_TOKEN,WRITE_CSV2_TOKEN,SAVERDS_TOKEN,READRDS_TOKEN,LOAD_TOKEN,SAVE_TOKEN,SAVE_IMAGE_TOKEN,NA_TOKEN,
 
@@ -33,11 +31,12 @@ typedef enum {
     PV_TOKEN,PARO_TOKEN,PARF_TOKEN,MINUS_TOKEN,PLS_TOKEN,MULT_TOKEN,DIV_TOKEN,NEG_TOKEN,
     TILD_TOKEN,DP_TOKEN,INTER_TOKEN,POWER_TOKEN,INF_TOKEN,SUP_TOKEN,EG_TOKEN,EQ_TOKEN,DIFF_TOKEN,INFEG_TOKEN,SUPEG_TOKEN,DET_TOKEN,
     ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
-    ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,
+    ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,SEPARATEUR_TOKEN,
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,
     
     COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
+
 }CODES_LEX;
 
 typedef struct {
@@ -48,10 +47,9 @@ typedef struct {
 int NUMBEROFTOKENS = 238;
 
 int DEBUTMOTCLE = 0;
-int FINMOTCLE = 194;
+int FINMOTCLE = 193;
 
-
-TOKEN ALLTOKENS[236] = {
+TOKEN ALLTOKENS[230] = {
     {"print",PRINT_TOKEN},
     {"getwd",GETWD_TOKEN},
     {"setwd",SETWD_TOKEN},
@@ -230,7 +228,6 @@ TOKEN ALLTOKENS[236] = {
     {"as.factor",AS_FACTOR_TOKEN},
     {"summary",SUMMARY_TOKEN},
     {"tapply",TAPPLY_TOKEN},
-    {"table",TABLE_TOKEN},
     {"is.data.frame",IS_DATA_FRAME_TOKEN},
     {"as.data.frame",AS_DATA_FRAME_TOKEN},
     {"subset",SUBSET_TOKEN},
@@ -468,7 +465,6 @@ TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"AS_FACTOR_TOKEN",AS_FACTOR_TOKEN},
     {"SUMMARY_TOKEN",SUMMARY_TOKEN},
     {"TAPPLY_TOKEN",TAPPLY_TOKEN},
-    {"TABLE_TOKEN",TABLE_TOKEN},
     {"IS_DATA_FRAME_TOKEN",IS_DATA_FRAME_TOKEN},
     {"AS_DATA_FRAME_TOKEN",AS_DATA_FRAME_TOKEN},
     {"SUBSET_TOKEN",SUBSET_TOKEN},
@@ -520,6 +516,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"ACCF_TOKEN",ACCF_TOKEN},
     {"BRO_TOKEN",BRO_TOKEN},
     {"BRF_TOKEN",BRF_TOKEN},
+    {"SEPARATEUR_TOKEN",SEPARATEUR_TOKEN},
     {"INTEGER_TOKEN",INTEGER_TOKEN},
     {"DOUBLE_TOKEN",DOUBLE_TOKEN},
     {"LOGICAL_TOKEN",LOGICAL_TOKEN},
@@ -552,7 +549,7 @@ int Length_NOM = 0;
 void Vider_NOM();
 void Ouvrir_Fichier(const char path[]);
 void Lire_Car();
-bool Separateur(char c);
+bool Separateur();
 void Sym_Suiv();
 void AfficherToken(TSym_Cour SYM);
 CODES_LEX code_mot_cle(char nom[]);
@@ -563,6 +560,8 @@ void lire_commentaire();
 void lire_nombre();
 int isalpha();
 int isdigit();
+void lire_chaine();
+void lire_separateur();
 
 
 void Vider_NOM() {
@@ -580,42 +579,50 @@ void Ouvrir_Fichier(const char path[]){
       return;
     }
 }
-// comment traiter les fonction 
+
 void Lire_Car(){
     Car_Cour = fgetc(file);
     Colonne_Courante++;
 }
 
-bool Separateur(char c) {
+bool Separateur() {
     char separateur[] = {' ','\t','\n','\r'};
-    if(c == '\n'){
+    if(Car_Cour == '\n'){
         Ligne_Courante++;
         Colonne_Courante = 0 ;
     }
     for (int i = 0; i < strlen(separateur) ; i++) {
-        if(separateur[i] == c) {
+        if(separateur[i] == Car_Cour) {
             return true;
         }
     }
     return false;    
 }
 
+void lire_separateur() {
+    SYM_COUR.NOM[0] = Car_Cour; 
+    SYM_COUR.CODE = SEPARATEUR_TOKEN;
+    Lire_Car();
+}
+
 void Sym_Suiv(){
         if(Car_Cour == '#'){
             lire_commentaire();
-        }
-        while(Separateur(Car_Cour)){
-            Lire_Car();
-            }
-          if( isalpha(Car_Cour) || Car_Cour == '.'){
+        } else {
+        if(Separateur()){
+            lire_separateur();
+            } else {
+            if( isalpha(Car_Cour) || Car_Cour == '.'){
               lire_mot();
-          } else {
-              if( isdigit(Car_Cour) ){
+            } else {
+                if( isdigit(Car_Cour) ){
                   lire_nombre();
-              } else {
+                } else {
                   lire_special();
-              }
+                }
+            }
           }
+        }
 }
 
 void AfficherToken(TSym_Cour SYM){
@@ -923,7 +930,6 @@ void lire_chaine() {
 //              [0-9]+ .? [0-9]* (e[+,-]?[0-9]+)?
 //              .[0-9]+ (e[+,-]?[0-9]+)?
 //              [0-9]+ (e[+,-]?[0-9]+)?
-// erreur .5L
 
 void lire_exposant() {
     NOM[Length_NOM] = Car_Cour;
@@ -1040,9 +1046,10 @@ void lire_nombre() {
 // pas de fin du commentaire ou fin de ligne ?
 // si ######################### ??
 
-void lire_commentaire() {
+void lire_commentaire() { 
+    SYM_COUR.CODE = COM_TOKEN;
     Lire_Car();
-    while(Car_Cour!='\n') {
+    while(Car_Cour!='\n' &&  !feof(file) ) {
         Lire_Car();
     }
 }
