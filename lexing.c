@@ -606,23 +606,11 @@ void lire_separateur() {
 }
 
 void Sym_Suiv(){
-        if(Car_Cour == '#'){
-            lire_commentaire();
-        } else {
-        if(Separateur()){
-            lire_separateur();
-            } else {
-            if( isalpha(Car_Cour) || Car_Cour == '.'){
-              lire_mot();
-            } else {
-                if( isdigit(Car_Cour) ){
-                  lire_nombre();
-                } else {
-                  lire_special();
-                }
-            }
-          }
-        }
+        if(Car_Cour == '#'){ lire_commentaire(); }
+        else if(Separateur()){ lire_separateur(); }
+        else if( isalpha(Car_Cour) || Car_Cour == '.'){ lire_mot(); }
+        else if( isdigit(Car_Cour) ){ lire_nombre(); }
+        else { lire_special(); }
 }
 
 void AfficherToken(TSym_Cour SYM){
