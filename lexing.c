@@ -33,7 +33,7 @@ typedef enum {
     ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
     ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,SEPARATEUR_TOKEN,
     
-    INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,
+    INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
     COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
 
@@ -44,7 +44,7 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN;
 
-int NUMBEROFTOKENS = 238;
+int NUMBEROFTOKENS = 239;
 
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 193;
@@ -288,7 +288,7 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
-TOKEN_TEXT ALLTOKENS_TEXT[238] = {
+TOKEN_TEXT ALLTOKENS_TEXT[239] = {
     {"PRINT_TOKEN",PRINT_TOKEN},
     {"GETWD_TOKEN",GETWD_TOKEN},
     {"SETWD_TOKEN",SETWD_TOKEN},
@@ -521,6 +521,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"DOUBLE_TOKEN",DOUBLE_TOKEN},
     {"LOGICAL_TOKEN",LOGICAL_TOKEN},
     {"STRING_TOKEN" ,STRING_TOKEN},
+    {"NEWLINE_TOKEN" ,NEWLINE_TOKEN},
     {"COM_TOKEN",COM_TOKEN},
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
@@ -587,10 +588,6 @@ void Lire_Car(){
 
 bool Separateur() {
     char separateur[] = {' ','\t','\n','\r'};
-    if(Car_Cour == '\n'){
-        Ligne_Courante++;
-        Colonne_Courante = 0 ;
-    }
     for (int i = 0; i < strlen(separateur) ; i++) {
         if(separateur[i] == Car_Cour) {
             return true;
@@ -600,8 +597,14 @@ bool Separateur() {
 }
 
 void lire_separateur() {
+    if(Car_Cour == '\n'){
+        SYM_COUR.CODE = NEWLINE_TOKEN;
+        Ligne_Courante++;
+        Colonne_Courante = 0 ;
+    } else {
+        SYM_COUR.CODE = SEPARATEUR_TOKEN;
+    }
     SYM_COUR.NOM[0] = Car_Cour; 
-    SYM_COUR.CODE = SEPARATEUR_TOKEN;
     Lire_Car();
 }
 
