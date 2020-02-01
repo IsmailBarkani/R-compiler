@@ -892,12 +892,14 @@ void lire_special() {
 }
 
 void lire_chaine() {
+    bool closedQuotes = false;
     char simpleORdouble = Car_Cour;
     SYM_COUR.CODE = STRING_TOKEN;
     AfficherToken(SYM_COUR);
     Lire_Car();
     while( !feof(file) && (Length_NOM <= 100) ) {
-        if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ){
+        if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
+            closedQuotes = true;
             SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
             Lire_Car();
             break;
@@ -906,6 +908,10 @@ void lire_chaine() {
             Length_NOM++;
             Lire_Car();
         }
+    }
+
+    if(Length_NOM > 100 || !closedQuotes ) {
+        SYM_COUR.CODE = ERREUR_TOKEN;
     }
 }
 
