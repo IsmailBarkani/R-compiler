@@ -1,3 +1,0 @@
-void PROGRAM() {
-    HELP();
-}

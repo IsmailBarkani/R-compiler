@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdlib.h> 
 
+
+//Enumeration
+
 typedef enum {
     PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
@@ -21,7 +24,7 @@ typedef enum {
     LEVEL_TOKEN,LABELS_TOKEN,EXCLUDE_TOKEN,
 
     LOG2_TOKEN,LOG10_TOKEN,COS_TOKEN,SIN_TOKEN,TAN_TOKEN,ACOS_TOKEN,ASIN_TOKEN,ATAN_TOKEN,ABS_TOKEN,SQRT_TOKEN,RANGE_TOKEN,SUM_TOKEN,
-    PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEXE_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
+    PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEX_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
     MATRIX_TOKEN,DATA_TOKEN,NROW_TOKEN,NCOL_TOKEN,BYROW_TOKEN,DIMNAMES_TOKEN,T_TOKEN,DIM_TOKEN,ROWSUMS_TOKEN,COLSUMS_TOKEN,
     COLMEANS_TOKEN,ROWMEANS_TOKEN,APPLY_TOKEN,LEVELS_TOKEN,IS_FACTOR_TOKEN,AS_FACTOR_TOKEN,SUMMARY_TOKEN,TAPPLY_TOKEN,
     IS_DATA_FRAME_TOKEN,AS_DATA_FRAME_TOKEN,SUBSET_TOKEN,ATTACH_TOKEN,DETACH_TOKEN,FILE_CHOOSE_TOKEN,READ_TSV_TOKEN,WRITE_TABLE_TOKEN,
@@ -39,12 +42,35 @@ typedef enum {
 
 }CODES_LEX;
 
+typedef enum {
+    ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
+    PROGRAM_ERR, CONST_ERR, VAR_ERR, BEGIN_ERR, END_ERR, IF_ERR,
+    THEN_ERR, WHILE_ERR, DO_ERR, READ_ERR, WRITE_ERR,
+    PV_ERR, PT_ERR, PLUS_ERR, MOINS_ERR, MULT_ERR, DIV_ERR, VIR_ERR, AFF_ERR,
+    INF_ERR, INFEG_ERR, SUP_ERR, SUPEG_ERR, DIFF_ERR, PO_ERR, PF_ERR, FIN_ERR, 
+    ID_ERR, NUM_ERR, CONST_VAR_BEGIN_ERR, V_TOKEN_ERR, VAR_BEGIN_ERR, EQ_ERR,
+    COND_ERR, EXPR_ERR, TERM_ERR
+}Erreurs;
+
 typedef struct {
     char TOKEN_NAME[40];
     CODES_LEX CODE;
 }TOKEN;
 
-int NUMBEROFTOKENS = 240;
+typedef struct {
+    char TOKEN_TEXT[40];
+    CODES_LEX CODE;
+}TOKEN_TEXT;
+
+typedef struct {
+    Erreurs CODE_ERR;
+    char MES[40];
+}Erreur;
+
+typedef struct {
+    CODES_LEX CODE;
+    char NOM[101];
+}TSym_Cour;
 
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
@@ -203,7 +229,7 @@ TOKEN ALLTOKENS[231] = {
     {"prod",PROD_TOKEN},
     {"sd",SD_TOKEN},
     {"var",VAR_TOKEN},
-    {"is.complexe",IS_COMPLEXE_TOKEN},
+    {"is.complex",IS_COMPLEX_TOKEN},
     {"as.logical",AS_LOGICAL_TOKEN},
     {"is.na",IS_NA_TOKEN},
     {"is.nan",IS_NAN_TOKEN},
@@ -284,10 +310,7 @@ TOKEN ALLTOKENS[231] = {
     {"#",COM_TOKEN}
 };
 
-typedef struct {
-    char TOKEN_TEXT[40];
-    CODES_LEX CODE;
-}TOKEN_TEXT;
+int NUMBEROFTOKENS = 240;
 
 TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"PRINT_TOKEN",PRINT_TOKEN},
@@ -441,7 +464,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"PROD_TOKEN",PROD_TOKEN},
     {"SD_TOKEN",SD_TOKEN},
     {"VAR_TOKEN",VAR_TOKEN},
-    {"IS_COMPLEXE_TOKEN",IS_COMPLEXE_TOKEN},
+    {"IS_COMPLEX_TOKEN",IS_COMPLEX_TOKEN},
     {"AS_LOGICAL_TOKEN",AS_LOGICAL_TOKEN},
     {"IS_NA_TOKEN",IS_NA_TOKEN},
     {"IS_NAN_TOKEN",IS_NAN_TOKEN},
@@ -532,10 +555,51 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"CHAINE_TOKEN",CHAINE_TOKEN}
 };
 
-typedef struct {
-    CODES_LEX CODE;
-    char NOM[101];
-}TSym_Cour;
+int NOMBRE_ERREUR = 42;
+
+Erreur MES_ERR[42] = {
+    {ERR_CAR_INC , "Caractere inconnu"},
+    {ERR_FICH_VIDE , "Fichier Vide"},
+    {ERR_ID_LONG , "IDF Long"},
+    {ERR_NUM_LONG , "Numero Long"},
+    {ID_INV , "ID Invalid"},
+    {ERR_FICH_INEX , "Fichier inexistant"},
+    {PROGRAM_ERR , "Program Erreur"},
+    {CONST_ERR , "Const Erreur"},
+    {VAR_ERR , "Var Erreur"},
+    {BEGIN_ERR , "Begin Erreur"},
+    {END_ERR , "End Erreur"},
+    {IF_ERR , "If Erreur"},
+    {THEN_ERR , "Then Erreur"},
+    {WHILE_ERR , "While Erreur"},
+    {DO_ERR , "Do Erreur"},
+    {READ_ERR , "Read Erreur"},
+    {WRITE_ERR , "Write Erreur"},
+    {PV_ERR , "Point Virgule Erreur"},
+    {PT_ERR , "Point Erreur"},
+    {PLUS_ERR , "Plus Erreur"},
+    {MOINS_ERR , "Moins Erreur"},
+    {MULT_ERR , "Multiplication Erreur"},
+    {DIV_ERR , "Division Erreur"},
+    {VIR_ERR , "Virgule Erreur"},
+    {AFF_ERR , "Affectation Erreur"},
+    {INF_ERR , "Inferieur Erreur"},
+    {INFEG_ERR , "Inferieur ou egale Erreur"},
+    {SUP_ERR , "Superieur Erreur"},
+    {SUPEG_ERR , "Superieur ou egale Erreur"},
+    {DIFF_ERR , "Difference Erreur"},
+    {PO_ERR , "Parenthese Ouvert Erreur"},
+    {PF_ERR , "Parenthese Ferme Erreur"},
+    {FIN_ERR , "Fin Erreur"}, 
+    {ID_ERR , "Identificateur Erreur"},
+    {NUM_ERR , "Numero Erreur"},
+    {CONST_VAR_BEGIN_ERR , "Const Var Begin Erreur"},
+    {VAR_BEGIN_ERR , "Var Begin Erreur"},
+    {EQ_ERR , "Condition Eguale Erreur"},
+    {COND_ERR , "Condition Erreur"},
+    {EXPR_ERR , "Expression Erreur"},
+    {TERM_ERR , "Terme Erreur"}
+};
 
 // Variable Globale
 int MAX_ID_NAME_LENGTH = 100;
@@ -546,6 +610,7 @@ int Ligne_Courante = 1;
 int Colonne_Courante = 0;
 char NOM[101];
 int Length_NOM = 0;
+Erreurs CODE_ERR;
 
 
 //Prototypes
@@ -1053,6 +1118,189 @@ void lire_commentaire() {
     }
 }
 
+void Erreur_aff(Erreurs ERR){
+    if(ERR < NOMBRE_ERREUR){
+        printf("Erreur numero %d: %s , ligne : %d .\n",ERR,MES_ERR[ERR].MES,Ligne_Courante);
+    }
+    getchar();
+    exit(-1);
+}
+
+//Analyseur Syntaxique
+
+void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
+    if(SYM_COUR.CODE == CODE_LEX) {
+        Sym_Suiv();
+    }
+    else {
+        Erreur_aff(CODE_ERR);
+    }
+}
+
+void S() {
+    switch (SYM_COUR.CODE) {
+        case INTER_TOKEN:
+        case HELP_TOKEN:
+            HELP();
+        break;
+
+        case PRINT_TOKEN:
+            PRINT();
+        break;
+
+        case ROW_NAMES_TOKEN:
+        case COL_NAMES_TOKEN:
+        case LEVELS_TOKEN:
+            A();
+        break;
+
+        case LS_TOKEN:
+            LIST();
+        break;
+
+        case RM_TOKEN:
+            REMOVE();
+        break;
+
+        case ID_TOKEN:
+        case TRUE_TOKEN:
+        case FALSE_TOKEN:
+        case INTEGER_TOKEN:
+        case DOUBLE_TOKEN:
+        case STRING_TOKEN:
+        case COMPLEXE_TOKEN:
+            BASIC_TYPE();
+        break;
+
+        case C_TOKEN:
+            VECTOR();
+        break;
+
+        case MODE_TOKEN:
+        case CAT_TOKEN:
+        case LENGTH_TOKEN:
+        case LOG2_TOKEN:
+        case LOG10_TOKEN:
+        case EXP_TOKEN:
+        case COS_TOKEN:
+        case SIN_TOKEN:
+        case TAN_TOKEN:
+        case ACOS_TOKEN:
+        case ASIN_TOKEN:
+        case ATAN_TOKEN:
+        case ABS_TOKEN:
+        case SQRT_TOKEN:
+            FUNCTION();
+        break;
+
+        case MAX_TOKEN:
+        case MIN_TOKEN:
+        case RANGE_TOKEN:
+        case SUM_TOKEN:
+        case PROD_TOKEN:
+        case MEAN_TOKEN:
+        case SD_TOKEN:
+        case VAR_TOKEN:
+        case SORT_TOKEN:
+            STAT_FUNCTION();
+        break;
+
+        case TYPEOF_TOKEN:
+        case CLASS_TOKEN:
+            TYPE();
+        break;
+
+        case IS_NUMERIC_TOKEN:
+        case IS_CHARACTER_TOKEN:
+        case IS_LOGICAL_TOKEN:
+        case IS_COMPLEX_TOKEN:
+        case IS_NA_TOKEN:
+        case IS_NAN_TOKEN:
+        case IS_FACTOR_TOKEN:
+        case IS_DATA_FRAME_TOKEN:
+            TEST_TYPE();
+        break;
+
+        case AS_NUMERIC_TOKEN:
+        case AS_CHARACTER_TOKEN:
+        case AS_LOGICAL_TOKEN:
+        case AS_FACTOR_TOKEN:
+        case AS_DATA_FRAME_TOKEN:
+            CONVERT();
+        break;
+
+        case RBIND_TOKEN:
+        case CBIND_TOKEN:
+        case MATRIX_TOKEN:
+            CREATE_MATRIX();
+        break;
+
+        case T_TOKEN:
+            TRANSPOSE();
+        break;
+
+        case NCOL_TOKEN:
+        case NROW_TOKEN:
+        case DIM_TOKEN:
+            DIMENSION();
+        break;
+
+        case ROWSUMS_TOKEN:
+        case COLSUMS_TOKEN:
+        case COLMEANS_TOKEN:
+        case ROWMEANS_TOKEN:
+        case APPLY_TOKEN:
+            SPEC_MATRIX_FUNCTION();
+        break;
+
+        case FACTOR_TOKEN:
+            CREATE_FACTOR();
+        break;
+
+        case SUMMARY_TOKEN:
+            INDIVID_PER_LEVEL();
+        break;
+
+        case TAPPLY_TOKEN:
+        case TABLE_TOKEN:
+            SPEC_FACTOR_FUNC();
+        break;
+
+        /*case LEVELS_TOKEN:
+            LEVELS();
+        break;*/
+
+        case DATAFRAME_TOKEN:
+            CREATE_DATAFRAME();
+        break;
+
+
+    default:
+        break;
+    }
+}
+
+void STAT_FUNCTION() {
+    switch(SYM_COUR.CODE) {
+        case MAX_TOKEN:
+        case MIN_TOKEN:
+        case RANGE_TOKEN:
+        case LENGTH_TOKEN:
+        case SUM_TOKEN:
+        case PROD_TOKEN:
+        case MEAN_TOKEN:
+        case SD_TOKEN:
+        case VAR_TOKEN:
+        case SORT_TOKEN:
+        Sym_Suiv();
+        Test_Symbole(PARO_TOKEN,PARO_TOKEN);
+        VAR();
+        Test_Symbole(PARF_TOKEN,PARF_TOKEN);
+        default:
+
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     //argv[1]
@@ -1074,3 +1322,6 @@ int main(int argc, char const *argv[])
     
     return 0;
 }
+
+
+
