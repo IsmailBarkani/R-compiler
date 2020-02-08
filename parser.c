@@ -38,7 +38,7 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN,CHAINE_TOKEN
 
 }CODES_LEX;
 
@@ -551,7 +551,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
-    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
+    {"COMPLEX_TOKEN",COMPLEX_TOKEN},
     {"CHAINE_TOKEN",CHAINE_TOKEN}
 };
 
@@ -1034,7 +1034,7 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    SYM_COUR.CODE = COMPLEX_TOKEN;
                     Lire_Car();
                     break;
                 default:
@@ -1060,7 +1060,7 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    SYM_COUR.CODE = COMPLEX_TOKEN;
                     Lire_Car();
                 break;
                 default:
@@ -1073,7 +1073,7 @@ void lire_nombre() {
                 lire_exposant();
                 switch (Car_Cour) {
                     case 'i':
-                        SYM_COUR.CODE = COMPLEXE_TOKEN;
+                        SYM_COUR.CODE = COMPLEX_TOKEN;
                         Lire_Car();
                     break;
                     default:
@@ -1087,7 +1087,7 @@ void lire_nombre() {
                     Lire_Car();
                     break;
                 case 'i':
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    SYM_COUR.CODE = COMPLEX_TOKEN;
                     Lire_Car();
                     break;
                 default:
@@ -1148,18 +1148,32 @@ void S() {
             PRINT();
         break;
 
-        case ROW_NAMES_TOKEN:
-        case COL_NAMES_TOKEN:
         case LEVELS_TOKEN:
-            A();
+            LEVELS();
+            AEXP1();
         break;
 
         case LS_TOKEN:
             LIST();
         break;
 
+        case SUBSET_TOKEN:
+        case ATTACH_TOKEN:
+            SUBSET_DATAFRAME();
+            AEXP2();
+        break;
+
         case RM_TOKEN:
             REMOVE();
+        break;
+
+        case NAMES_TOKEN:
+            ELEMENT_NAMES();
+        break;
+        
+        case ROW_NAMES_TOKEN:
+        case COL_NAMES_TOKEN:
+            A();
         break;
 
         case ID_TOKEN:
@@ -1168,14 +1182,8 @@ void S() {
         case INTEGER_TOKEN:
         case DOUBLE_TOKEN:
         case STRING_TOKEN:
-        case COMPLEXE_TOKEN:
-            BASIC_TYPE();
-        break;
-
+        case COMPLEX_TOKEN:
         case C_TOKEN:
-            VECTOR();
-        break;
-
         case MODE_TOKEN:
         case CAT_TOKEN:
         case LENGTH_TOKEN:
@@ -1190,9 +1198,6 @@ void S() {
         case ATAN_TOKEN:
         case ABS_TOKEN:
         case SQRT_TOKEN:
-            FUNCTION();
-        break;
-
         case MAX_TOKEN:
         case MIN_TOKEN:
         case RANGE_TOKEN:
@@ -1202,14 +1207,8 @@ void S() {
         case SD_TOKEN:
         case VAR_TOKEN:
         case SORT_TOKEN:
-            STAT_FUNCTION();
-        break;
-
         case TYPEOF_TOKEN:
         case CLASS_TOKEN:
-            TYPE();
-        break;
-
         case IS_NUMERIC_TOKEN:
         case IS_CHARACTER_TOKEN:
         case IS_LOGICAL_TOKEN:
@@ -1218,69 +1217,120 @@ void S() {
         case IS_NAN_TOKEN:
         case IS_FACTOR_TOKEN:
         case IS_DATA_FRAME_TOKEN:
-            TEST_TYPE();
-        break;
-
         case AS_NUMERIC_TOKEN:
         case AS_CHARACTER_TOKEN:
         case AS_LOGICAL_TOKEN:
         case AS_FACTOR_TOKEN:
         case AS_DATA_FRAME_TOKEN:
-            CONVERT();
-        break;
-
         case RBIND_TOKEN:
         case CBIND_TOKEN:
         case MATRIX_TOKEN:
-            CREATE_MATRIX();
-        break;
-
         case T_TOKEN:
-            TRANSPOSE();
-        break;
-
         case NCOL_TOKEN:
         case NROW_TOKEN:
         case DIM_TOKEN:
-            DIMENSION();
-        break;
-
         case ROWSUMS_TOKEN:
         case COLSUMS_TOKEN:
         case COLMEANS_TOKEN:
         case ROWMEANS_TOKEN:
         case APPLY_TOKEN:
-            SPEC_MATRIX_FUNCTION();
-        break;
-
         case FACTOR_TOKEN:
-            CREATE_FACTOR();
-        break;
-
         case SUMMARY_TOKEN:
-            INDIVID_PER_LEVEL();
-        break;
-
         case TAPPLY_TOKEN:
         case TABLE_TOKEN:
-            SPEC_FACTOR_FUNC();
-        break;
-
-        /*case LEVELS_TOKEN:
-            LEVELS();
-        break;*/
-
         case DATAFRAME_TOKEN:
-            CREATE_DATAFRAME();
+        case SEQ_TOKEN:
+        case REP_TOKEN:
+        case SEQUENCE_TOKEN:
+        case RNORM_TOKEN:
+        case DNORM_TOKEN:
+        case PNORM_TOKEN:
+        case QNORM_TOKEN:
+        case REXP_TOKEN:
+        case DEXP_TOKEN:
+        case PEXP_TOKEN:
+        case QEXP_TOKEN:
+        case RGAMMA_TOKEN:
+        case DGAMMA_TOKEN:
+        case PGAMMA_TOKEN:
+        case QGAMMA_TOKEN:
+        case RNBINOM_TOKEN:
+        case DNBINOM_TOKEN:
+        case PNBINOM_TOKEN:
+        case QNBINOM_TOKEN:
+        case RUNIF_TOKEN:
+        case DUNIF_TOKEN:
+        case PUNIF_TOKEN:
+        case QUNIF_TOKEN:
+        case RGEOM_TOKEN:
+        case DGEOM_TOKEN:
+        case PGEOM_TOKEN:
+        case QGEOM_TOKEN:
+        case RCAUCHY_TOKEN:
+        case DCAUCHY_TOKEN:
+        case PCAUCHY_TOKEN:
+        case QCAUCHY_TOKEN:
+        case RPOIS_TOKEN:
+        case DPOIS_TOKEN:
+        case PPOIS_TOKEN:
+        case QPOIS_TOKEN:
+        case RF_TOKEN:
+        case DF_TOKEN:
+        case PF_TOKEN:
+        case QF_TOKEN:
+        case RT_TOKEN:
+        case DT_TOKEN:
+        case PT_TOKEN:
+        case QT_TOKEN:
+        case RLOGIS_TOKEN:
+        case DLOGIS_TOKEN:
+        case PLOGIS_TOKEN:
+        case QLOGIS_TOKEN:
+        case LIST_TOKEN:
+            EXP();
         break;
 
+        case READ_DELIM_TOKEN:
+        case READ_CSV_TOKEN:
+        case READ_CSV2_TOKEN:
+            READ();
+        break;
+
+        case DATA_TOKEN:
+        case WRITE_TABLE_TOKEN:
+        case WRITE_CSV_TOKEN:
+        case WRITE_CSV2_TOKEN:
+            WRITE();
+        break;
+
+        case SAVERDS_TOKEN:
+        case READRDS_TOKEN:
+        case LOAD_TOKEN:
+        case SAVE_TOKEN:
+        case SAVE_IMAGE_TOKEN:
+            SAVE();
+        break;
 
     default:
+        CODE_ERR = PROGRAM_ERR;
+        Erreur_aff(CODE_ERR);
         break;
     }
 }
 
-void STAT_FUNCTION() {
+void HELP() {
+    switch (SYM_COUR.CODE) {
+        case INTER_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(CHAINE_TOKEN,CHAINE_ERR);
+        case HELP_TOKEN:
+            Sym_Suiv();
+            H1();
+        break;
+    }
+}
+
+void STAT_FUNCTION(){
     switch(SYM_COUR.CODE) {
         case MAX_TOKEN:
         case MIN_TOKEN:
@@ -1297,7 +1347,7 @@ void STAT_FUNCTION() {
         VAR();
         Test_Symbole(PARF_TOKEN,PARF_TOKEN);
         default:
-
+        break;
     }
 }
 

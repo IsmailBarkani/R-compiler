@@ -21,7 +21,7 @@ typedef enum {
     LEVEL_TOKEN,LABELS_TOKEN,EXCLUDE_TOKEN,
 
     LOG2_TOKEN,LOG10_TOKEN,COS_TOKEN,SIN_TOKEN,TAN_TOKEN,ACOS_TOKEN,ASIN_TOKEN,ATAN_TOKEN,ABS_TOKEN,SQRT_TOKEN,RANGE_TOKEN,SUM_TOKEN,
-    PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEXE_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
+    PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEX_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
     MATRIX_TOKEN,DATA_TOKEN,NROW_TOKEN,NCOL_TOKEN,BYROW_TOKEN,DIMNAMES_TOKEN,T_TOKEN,DIM_TOKEN,ROWSUMS_TOKEN,COLSUMS_TOKEN,
     COLMEANS_TOKEN,ROWMEANS_TOKEN,APPLY_TOKEN,LEVELS_TOKEN,IS_FACTOR_TOKEN,AS_FACTOR_TOKEN,SUMMARY_TOKEN,TAPPLY_TOKEN,
     IS_DATA_FRAME_TOKEN,AS_DATA_FRAME_TOKEN,SUBSET_TOKEN,ATTACH_TOKEN,DETACH_TOKEN,FILE_CHOOSE_TOKEN,READ_TSV_TOKEN,WRITE_TABLE_TOKEN,
@@ -35,7 +35,7 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN,CHAINE_TOKEN
 
 }CODES_LEX;
 
@@ -203,7 +203,7 @@ TOKEN ALLTOKENS[231] = {
     {"prod",PROD_TOKEN},
     {"sd",SD_TOKEN},
     {"var",VAR_TOKEN},
-    {"is.complexe",IS_COMPLEXE_TOKEN},
+    {"is.complex",IS_COMPLEX_TOKEN},
     {"as.logical",AS_LOGICAL_TOKEN},
     {"is.na",IS_NA_TOKEN},
     {"is.nan",IS_NAN_TOKEN},
@@ -441,7 +441,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"PROD_TOKEN",PROD_TOKEN},
     {"SD_TOKEN",SD_TOKEN},
     {"VAR_TOKEN",VAR_TOKEN},
-    {"IS_COMPLEXE_TOKEN",IS_COMPLEXE_TOKEN},
+    {"IS_COMPLEX_TOKEN",IS_COMPLEX_TOKEN},
     {"AS_LOGICAL_TOKEN",AS_LOGICAL_TOKEN},
     {"IS_NA_TOKEN",IS_NA_TOKEN},
     {"IS_NAN_TOKEN",IS_NAN_TOKEN},
@@ -528,7 +528,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
-    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
+    {"COMPLEX_TOKEN",COMPLEX_TOKEN},
     {"CHAINE_TOKEN",CHAINE_TOKEN}
 };
 
@@ -969,7 +969,7 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    SYM_COUR.CODE = COMPLEX_TOKEN;
                     Lire_Car();
                     break;
                 default:
@@ -995,7 +995,7 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    SYM_COUR.CODE = COMPLEX_TOKEN;
                     Lire_Car();
                 break;
                 default:
@@ -1008,7 +1008,7 @@ void lire_nombre() {
                 lire_exposant();
                 switch (Car_Cour) {
                     case 'i':
-                        SYM_COUR.CODE = COMPLEXE_TOKEN;
+                        SYM_COUR.CODE = COMPLEX_TOKEN;
                         Lire_Car();
                     break;
                     default:
@@ -1022,7 +1022,7 @@ void lire_nombre() {
                     Lire_Car();
                     break;
                 case 'i':
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+                    SYM_COUR.CODE = COMPLEX_TOKEN;
                     Lire_Car();
                     break;
                 default:
