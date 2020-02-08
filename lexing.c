@@ -4,7 +4,7 @@
 #include <stdlib.h> 
 
 typedef enum {
-    PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
+    NOTA_TOKEN,PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
     SWITCH_TOKEN,BREAK_TOKEN,NEXT_TOKEN,FUNCTION_TOKEN,BODY_TOKEN,INPUT_TOKEN,END_TOKEN,OF_TOKEN,TYPEOF_TOKEN,
     LIST_TOKEN,DATAFRAME_TOKEN,ATTR_TOKEN,CHARACTER_TOKEN,ATOMIC_TOKEN,
@@ -556,7 +556,6 @@ bool Separateur();
 void Sym_Suiv();
 void AfficherToken(TSym_Cour SYM);
 CODES_LEX code_mot_cle(char nom[]);
-bool mot_cle(char nom[]);
 void lire_mot();
 void lire_special();
 void lire_commentaire();
@@ -639,16 +638,7 @@ CODES_LEX code_mot_cle(char nom[]) {
             return ALLTOKENS[i].CODE;
         }
     }
-}
-
-bool mot_cle(char nom[]){
-    for(int i=DEBUTMOTCLE ; i <= FINMOTCLE ; i++){
-        if( strcmp(nom,ALLTOKENS[i].TOKEN_NAME) == 0 ){
-            return true;
-        }
-    }
-    return false;
-    
+    return NOTA_TOKEN;
 }
 
 void lire_mot() {
@@ -677,7 +667,7 @@ void lire_mot() {
         } else {
             NOM[Length_NOM] = '\0';
             strcpy(SYM_COUR.NOM, NOM);
-            if(mot_cle(NOM)){
+            if(code_mot_cle(NOM)!=NOTA_TOKEN){
                 SYM_COUR.CODE = code_mot_cle(NOM);
             } else{
                 SYM_COUR.CODE = ID_TOKEN;
