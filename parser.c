@@ -38,13 +38,14 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN,NUM_TOKEN
 
 }CODES_LEX;
 
 typedef enum {
     ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
-    VAR_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR, PRINT_ERR, ID_ERR
+    VAR_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR, PRINT_ERR, ID_ERR, AFFTOG_ERR,AFFTOD_ERR,
+    EQ_ERR,  AFFECTATION_ERR, NUM_ERR, EG_ERR
 }Erreurs;
 
 typedef struct {
@@ -569,7 +570,13 @@ Erreur MES_ERR[100] = {
     {PARF_ERR , "Manque )"},
     {DQANDSQ_ERR , "Erreur, Manque \" ou \' "},
     {PRINT_ERR , "Erreur dans la syntaxe de print()"},
-    {ID_ERR , "ID Erreur"}
+    {ID_ERR , "ID Erreur"},
+    {AFFTOG_ERR , "<- Erreur"},
+    {AFFTOD_ERR , "-> Erreur"},
+    {EQ_ERR, "= Erreur"},
+    {AFFECTATION_ERR, "Erreur dans l'affectation"},
+    {NUM_ERR, "Number Erreur "},
+    {EG_ERR, "Egalité Erreur "}
 };
 
 // Variable Globale
@@ -1148,6 +1155,11 @@ void interHelp();
 void stringArgs();
 void print();
 void varArgs();
+void affSymbole();
+void affec();
+void expr();
+void term();
+void fact();
 
 
 
@@ -1179,7 +1191,7 @@ void S() {
         case RM_TOKEN:
         break;
 
-        case ID_TOKEN:
+        case ID_TOKEN: affec();
         case TRUE_TOKEN:
         case FALSE_TOKEN:
         case INTEGER_TOKEN:
@@ -1343,6 +1355,44 @@ void varArgs(){
     }
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     
+}
+
+// AFFECTATION les cas traiter:  =  <-
+void affec(){
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    switch(SYM_COUR.CODE){
+        case AFFTOG_TOKEN: Test_Symbole(AFFTOG_TOKEN,AFFTOG_ERR);
+                           expr(); break;
+        case EG_TOKEN : Test_Symbole(EG_TOKEN,EG_ERR);
+                        expr();break;
+
+        default: Erreur_aff(AFFECTATION_ERR); break;
+    }
+}
+
+void expr(){
+    term();
+    while(SYM_COUR.CODE == PLS_TOKEN || SYM_COUR.CODE == MINUS_TOKEN){
+        Sym_Suiv();
+        term();
+    }
+
+}
+void term(){
+    fact();
+    while(SYM_COUR.CODE == MULT_TOKEN || SYM_COUR.CODE == DIV_TOKEN){
+        Sym_Suiv();
+        fact();
+    }
+
+}
+
+void fact(){
+    switch(SYM_COUR.CODE){
+        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);break;
+        case NUM_TOKEN: Test_Symbole(NUM_TOKEN,NUM_ERR);break;
+        default:Erreur_aff(AFFECTATION_ERR); break;
+    }
 }
 
 
