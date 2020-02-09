@@ -44,12 +44,7 @@ typedef enum {
 
 typedef enum {
     ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
-    PROGRAM_ERR, CONST_ERR, VAR_ERR, BEGIN_ERR, END_ERR, IF_ERR,
-    THEN_ERR, WHILE_ERR, DO_ERR, READ_ERR, WRITE_ERR,
-    PV_ERR, PT_ERR, PLUS_ERR, MOINS_ERR, MULT_ERR, DIV_ERR, VIR_ERR, AFF_ERR,
-    INF_ERR, INFEG_ERR, SUP_ERR, SUPEG_ERR, DIFF_ERR, PO_ERR, PF_ERR, FIN_ERR, 
-    ID_ERR, NUM_ERR, CONST_VAR_BEGIN_ERR, V_TOKEN_ERR, VAR_BEGIN_ERR, EQ_ERR,
-    COND_ERR, EXPR_ERR, TERM_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR
+    VAR_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR, PRINT_ERR, ID_ERR
 }Erreurs;
 
 typedef struct {
@@ -564,49 +559,17 @@ Erreur MES_ERR[100] = {
     {ERR_NUM_LONG , "Numero Long"},
     {ID_INV , "ID Invalid"},
     {ERR_FICH_INEX , "Fichier inexistant"},
-    {PROGRAM_ERR , "Program Erreur"},
-    {CONST_ERR , "Const Erreur"},
     {VAR_ERR , "Var Erreur"},
-    {BEGIN_ERR , "Begin Erreur"},
-    {END_ERR , "End Erreur"},
-    {IF_ERR , "If Erreur"},
-    {THEN_ERR , "Then Erreur"},
-    {WHILE_ERR , "While Erreur"},
-    {DO_ERR , "Do Erreur"},
-    {READ_ERR , "Read Erreur"},
-    {WRITE_ERR , "Write Erreur"},
-    {PV_ERR , "Point Virgule Erreur"},
-    {PT_ERR , "Point Erreur"},
-    {PLUS_ERR , "Plus Erreur"},
-    {MOINS_ERR , "Moins Erreur"},
-    {MULT_ERR , "Multiplication Erreur"},
-    {DIV_ERR , "Division Erreur"},
-    {VIR_ERR , "Virgule Erreur"},
-    {AFF_ERR , "Affectation Erreur"},
-    {INF_ERR , "Inferieur Erreur"},
-    {INFEG_ERR , "Inferieur ou egale Erreur"},
-    {SUP_ERR , "Superieur Erreur"},
-    {SUPEG_ERR , "Superieur ou egale Erreur"},
-    {DIFF_ERR , "Difference Erreur"},
-    {PO_ERR , "Parenthese Ouvert Erreur"},
-    {PF_ERR , "Parenthese Ferme Erreur"},
-    {FIN_ERR , "Fin Erreur"}, 
-    {ID_ERR , "Identificateur Erreur"},
-    {NUM_ERR , "Numero Erreur"},
-    {CONST_VAR_BEGIN_ERR , "Const Var Begin Erreur"},
-    {VAR_BEGIN_ERR , "Var Begin Erreur"},
-    {EQ_ERR , "Condition Eguale Erreur"},
-    {COND_ERR , "Condition Erreur"},
-    {EXPR_ERR , "Expression Erreur"},
-    {TERM_ERR , "Terme Erreur"},
     {DQ_ERR , "Double quate erreur"},
     {SQ_ERR , "Simple quote erreur"},
     {STRING_ERR , "String erreur"},
-    {HELP_ERR , "Erreur dans la syntaxede HELP"},
+    {HELP_ERR , "Erreur dans la syntaxe de help()"},
     {INTER_ERR , "Manque ?"},
     {PARO_ERR , "Mansque ("},
     {PARF_ERR , "Manque )"},
-    {DQANDSQ_ERR , "Erreur, Manque \" ou \' "}
+    {DQANDSQ_ERR , "Erreur, Manque \" ou \' "},
+    {PRINT_ERR , "Erreur dans la syntaxe de print()"},
+    {ID_ERR , "ID Erreur"}
 };
 
 // Variable Globale
@@ -1174,12 +1137,18 @@ CODES_LEX dqORsq(CODES_LEX symbole){
 
 
 
-
+////////////////////////
 //Analyseur Syntaxique
+////////////////////////
+
+
 //prototype
 void help();
 void interHelp();
 void stringArgs();
+void print();
+void varArgs();
+
 
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
@@ -1197,8 +1166,7 @@ void S() {
         case INTER_TOKEN: interHelp();break;
         case HELP_TOKEN:  help();break;
 
-        case PRINT_TOKEN:
-        break;
+        case PRINT_TOKEN: print(); break;
 
         case ROW_NAMES_TOKEN:
         case COL_NAMES_TOKEN:
@@ -1357,6 +1325,25 @@ void stringArgs(){
     
 }
 
+
+
+void print(){
+    Test_Symbole(PRINT_TOKEN,PRINT_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    varArgs();
+
+}
+
+//fonction tres util!! s'applique dans tous les fonction d'arguments de type string
+void varArgs(){
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    while(SYM_COUR.CODE == VIR_TOKEN){
+        Sym_Suiv();
+        Test_Symbole(ID_TOKEN,ID_ERR);
+    }
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+    
+}
 
 
 
