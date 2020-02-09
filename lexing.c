@@ -30,7 +30,7 @@ typedef enum {
 
     PV_TOKEN,PARO_TOKEN,PARF_TOKEN,MINUS_TOKEN,PLS_TOKEN,MULT_TOKEN,DIV_TOKEN,NEG_TOKEN,
     TILD_TOKEN,DP_TOKEN,INTER_TOKEN,POWER_TOKEN,INF_TOKEN,SUP_TOKEN,EG_TOKEN,EQ_TOKEN,DIFF_TOKEN,INFEG_TOKEN,SUPEG_TOKEN,DET_TOKEN,
-    ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
+    ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,
     ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,SEPARATEUR_TOKEN,
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
@@ -44,7 +44,7 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN;
 
-int NUMBEROFTOKENS = 240;
+int NUMBEROFTOKENS = 238;
 
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
@@ -275,8 +275,6 @@ TOKEN ALLTOKENS[231] = {
     {"$",DOLLAR_TOKEN},
     {"%in%",IN_TOKEN},
     {"%%",MOD_TOKEN},
-    {"\"",DQ_TOKEN},
-    {"'",SQ_TOKEN},
     {"{",ACCO_TOKEN},
     {"}",ACCF_TOKEN},
     {"[",BRO_TOKEN},
@@ -289,7 +287,7 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
-TOKEN_TEXT ALLTOKENS_TEXT[240] = {
+TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"PRINT_TOKEN",PRINT_TOKEN},
     {"GETWD_TOKEN",GETWD_TOKEN},
     {"SETWD_TOKEN",SETWD_TOKEN},
@@ -512,8 +510,6 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"DOLLAR_TOKEN",DOLLAR_TOKEN},
     {"IN_TOKEN",IN_TOKEN},
     {"MOD_TOKEN",MOD_TOKEN},
-    {"DQ_TOKEN",DQ_TOKEN},
-    {"SQ_TOKEN",SQ_TOKEN},
     {"ACCO_TOKEN",ACCO_TOKEN},
     {"ACCF_TOKEN",ACCF_TOKEN},
     {"BRO_TOKEN",BRO_TOKEN},
@@ -824,14 +820,11 @@ void lire_special() {
         SYM_COUR.CODE = DOLLAR_TOKEN;
         Lire_Car();
         break;
+    /**
+     * 39 = simple Quotes (double quotes or simple quotes -> lire_chaine() )
+    */
     case '\"':
-        SYM_COUR.CODE = DQ_TOKEN;
-        AfficherToken(SYM_COUR);
-        lire_chaine();
-        break;
     case 39:
-        SYM_COUR.CODE = SQ_TOKEN;
-        AfficherToken(SYM_COUR);
         lire_chaine();
         break;
     case '{':
@@ -887,12 +880,10 @@ void lire_chaine() {
     bool isClosedQuotes = false;
     char simpleORdouble = Car_Cour;
     SYM_COUR.CODE = STRING_TOKEN;
-    AfficherToken(SYM_COUR);
     Lire_Car();
     while( !feof(file) && (Length_NOM <= 100) ) {
         if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
             isClosedQuotes = true;
-            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
             Lire_Car();
             break;
         } else {
