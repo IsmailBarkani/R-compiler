@@ -1,1 +1,1 @@
-mode(a)
+c(FALSE)
