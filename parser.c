@@ -46,7 +46,7 @@ typedef enum {
     ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
     VAR_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR, PRINT_ERR, ID_ERR, AFFTOG_ERR,AFFTOD_ERR,
     EQ_ERR,  AFFECTATION_ERR, NUM_ERR, EG_ERR, MODE_ERR, CAT_ERR, LENGTH_ERR, LOG10_ERR, LOG2_ERR, EXP_ERR, COS_ERR, SIN_ERR, TANG_ERR,
-    ACOS_ERR, ASIN_ERR, ATANG_ERR, ABS_ERR
+    ACOS_ERR, ASIN_ERR, ATANG_ERR, ABS_ERR,SQRT_ERR
 }Erreurs;
 
 typedef struct {
@@ -550,6 +550,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"ERREUR_TOKEN",ERREUR_TOKEN},
     {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
     {"CHAINE_TOKEN",CHAINE_TOKEN},
+    
 };
 
 int NOMBRE_ERREUR = 200;
@@ -590,7 +591,8 @@ Erreur MES_ERR[100] = {
     {ACOS_ERR, "Acosinus fonction Erreur "},
     {ASIN_ERR, "Asinus fonction Erreur "},
     {ATANG_ERR, "Atangent fonction Erreur "},
-    {ABS_ERR, "Abs fonction Erreur "}
+    {ABS_ERR, "Abs fonction Erreur "},
+    {SQRT_ERR, "sqrt fonction Erreur "}
     
     };
 
@@ -1215,48 +1217,34 @@ void S() {
     switch (SYM_COUR.CODE) {
         case INTER_TOKEN: interHelp();break;
         case HELP_TOKEN:  help();break;
-
         case PRINT_TOKEN: print(); break;
-
         case ROW_NAMES_TOKEN:
         case COL_NAMES_TOKEN:
-        case LEVELS_TOKEN:
-        break;
-
-        case LS_TOKEN:
-        break;
-
-        case RM_TOKEN:
-        break;
-
+        case LEVELS_TOKEN:break;
+        case LS_TOKEN:break;
+        case RM_TOKEN:break;
         case ID_TOKEN: affec();
         case TRUE_TOKEN:
         case FALSE_TOKEN:
         case INTEGER_TOKEN:
         case DOUBLE_TOKEN:
         case STRING_TOKEN:
-        case COMPLEXE_TOKEN:
-        break;
-
-        case C_TOKEN:
-        break;
-
+        case COMPLEXE_TOKEN:break;
+        case C_TOKEN:break;
         case MODE_TOKEN: mode();break;
-        case CAT_TOKEN:
-        case LENGTH_TOKEN:
-        case LOG2_TOKEN:
-        case LOG10_TOKEN:
-        case EXP_TOKEN:
-        case COS_TOKEN:
-        case SIN_TOKEN:
-        case TAN_TOKEN:
-        case ACOS_TOKEN:
-        case ASIN_TOKEN:
-        case ATAN_TOKEN:
-        case ABS_TOKEN:
-        case SQRT_TOKEN:
-        break;
-
+        case CAT_TOKEN: cat();break;
+        case LENGTH_TOKEN: length();break;
+        case LOG2_TOKEN: log2();break;
+        case LOG10_TOKEN:log10();break;
+        case EXP_TOKEN: exp();break;
+        case COS_TOKEN: cos();break;
+        case SIN_TOKEN: sin();break;
+        case TAN_TOKEN: tan();break;
+        case ACOS_TOKEN:acos();break;
+        case ASIN_TOKEN: asin();break;
+        case ATAN_TOKEN: atan();break;
+        case ABS_TOKEN: abs();break;
+        case SQRT_TOKEN:sqrt();break;
         case MAX_TOKEN:
         case MIN_TOKEN:
         case RANGE_TOKEN:
@@ -1265,13 +1253,9 @@ void S() {
         case MEAN_TOKEN:
         case SD_TOKEN:
         case VAR_TOKEN:
-        case SORT_TOKEN:
-        break;
-
+        case SORT_TOKEN:break;
         case TYPEOF_TOKEN:
-        case CLASS_TOKEN:
-        break;
-
+        case CLASS_TOKEN:break;
         case IS_NUMERIC_TOKEN:
         case IS_CHARACTER_TOKEN:
         case IS_LOGICAL_TOKEN:
@@ -1279,56 +1263,32 @@ void S() {
         case IS_NA_TOKEN:
         case IS_NAN_TOKEN:
         case IS_FACTOR_TOKEN:
-        case IS_DATA_FRAME_TOKEN:
-        break;
-
+        case IS_DATA_FRAME_TOKEN:break;
         case AS_NUMERIC_TOKEN:
         case AS_CHARACTER_TOKEN:
         case AS_LOGICAL_TOKEN:
         case AS_FACTOR_TOKEN:
-        case AS_DATA_FRAME_TOKEN:
-        break;
-
+        case AS_DATA_FRAME_TOKEN:break;
         case RBIND_TOKEN:
         case CBIND_TOKEN:
-        case MATRIX_TOKEN:
-        break;
-
-        case T_TOKEN:
-        break;
-
+        case MATRIX_TOKEN:break;
+        case T_TOKEN:break;
         case NCOL_TOKEN:
         case NROW_TOKEN:
-        case DIM_TOKEN:
-        break;
-
+        case DIM_TOKEN:break;
         case ROWSUMS_TOKEN:
         case COLSUMS_TOKEN:
         case COLMEANS_TOKEN:
         case ROWMEANS_TOKEN:
-        case APPLY_TOKEN:
-        break;
-
-        case FACTOR_TOKEN:
-        break;
-
-        case SUMMARY_TOKEN:
-        break;
-
+        case APPLY_TOKEN:break;
+        case FACTOR_TOKEN:break;
+        case SUMMARY_TOKEN:break;
         case TAPPLY_TOKEN:
-        case TABLE_TOKEN:
-        break;
-
-        /*case LEVELS_TOKEN:
-            LEVELS();
-        break;*/
-
+        case TABLE_TOKEN:break;
         case DATAFRAME_TOKEN:
         break;
-
-
-    default:
-        break;
+        
+        default:break;
     }
 }
 
@@ -1528,6 +1488,17 @@ void abs(){
     Test_Symbole(PARO_TOKEN,PARO_ERR);
     Test_Symbole(ID_TOKEN,ID_ERR);
     Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void sqrt(){
+    Test_Symbole(SQRT_TOKEN,SQRT_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void max(){
+
 }
 
 
