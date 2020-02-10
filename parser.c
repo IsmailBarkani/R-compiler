@@ -45,7 +45,8 @@ typedef enum {
 typedef enum {
     ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
     VAR_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR, PRINT_ERR, ID_ERR, AFFTOG_ERR,AFFTOD_ERR,
-    EQ_ERR,  AFFECTATION_ERR, NUM_ERR, EG_ERR
+    EQ_ERR,  AFFECTATION_ERR, NUM_ERR, EG_ERR, MODE_ERR, CAT_ERR, LENGTH_ERR, LOG10_ERR, LOG2_ERR, EXP_ERR, COS_ERR, SIN_ERR, TANG_ERR,
+    ACOS_ERR, ASIN_ERR, ATANG_ERR, ABS_ERR
 }Erreurs;
 
 typedef struct {
@@ -548,7 +549,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
     {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
-    {"CHAINE_TOKEN",CHAINE_TOKEN}
+    {"CHAINE_TOKEN",CHAINE_TOKEN},
 };
 
 int NOMBRE_ERREUR = 200;
@@ -576,8 +577,22 @@ Erreur MES_ERR[100] = {
     {EQ_ERR, "= Erreur"},
     {AFFECTATION_ERR, "Erreur dans l'affectation"},
     {NUM_ERR, "Number Erreur "},
-    {EG_ERR, "Egalité Erreur "}
-};
+    {EG_ERR, "Egalité Erreur "},
+    {MODE_ERR, "Mode  fonction Erreur "},
+    {CAT_ERR, "Cat fonction  Erreur "},
+    {LENGTH_ERR, "Length fonction Erreur "},
+    {LOG10_ERR, "Log10 fonction Erreur "},
+    {LOG2_ERR, "Log2 fonction Erreur "},
+    {EXP_ERR, "Exponentiel fonction Erreur "},
+    {COS_ERR, "Cosinus fonction Erreur "},
+    {SIN_ERR, "Sinus fonction Erreur "},
+    {TANG_ERR, "Tangent fonction Erreur "},
+    {ACOS_ERR, "Acosinus fonction Erreur "},
+    {ASIN_ERR, "Asinus fonction Erreur "},
+    {ATANG_ERR, "Atangent fonction Erreur "},
+    {ABS_ERR, "Abs fonction Erreur "}
+    
+    };
 
 // Variable Globale
 int MAX_ID_NAME_LENGTH = 100;
@@ -947,7 +962,7 @@ void lire_chaine() {
         // 92 = antislash 
         if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
             isClosedQuotes = true;
-            //SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
+            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
             Lire_Car();
             break;
         } else {
@@ -1160,6 +1175,29 @@ void affec();
 void expr();
 void term();
 void fact();
+//Fonctions Arithemetique
+void mode();
+void cat();
+void log2();
+void log10();
+void exp();
+void cos();
+void tang();
+void sin();
+void acos();
+void asin();
+void atan();
+void abs();
+void max();
+void min();
+void range();
+void length();
+void sum();
+void prod();
+void mean();
+void sd();
+void var();
+void sort();
 
 
 
@@ -1203,7 +1241,7 @@ void S() {
         case C_TOKEN:
         break;
 
-        case MODE_TOKEN:
+        case MODE_TOKEN: mode();break;
         case CAT_TOKEN:
         case LENGTH_TOKEN:
         case LOG2_TOKEN:
@@ -1394,6 +1432,112 @@ void fact(){
         default:Erreur_aff(AFFECTATION_ERR); break;
     }
 }
+
+void mode(){
+    Test_Symbole(MODE_TOKEN,MODE_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void cat(){
+    Test_Symbole(CAT_TOKEN,CAT_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+
+void length(){
+    Test_Symbole(LENGTH_TOKEN,LENGTH_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+
+void length(){
+    Test_Symbole(LENGTH_TOKEN,LENGTH_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+
+void log10(){
+    Test_Symbole(LOG10_TOKEN,LOG10_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void log2(){
+    Test_Symbole(LOG2_TOKEN,LOG2_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void exp(){
+    Test_Symbole(EXP_TOKEN,EXP_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void sin(){
+    Test_Symbole(SIN_TOKEN,SIN_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void tang(){
+    Test_Symbole(TAN_TOKEN,TANG_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+void sin(){
+    Test_Symbole(COS_TOKEN,COS_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+void acos(){
+    Test_Symbole(ACOS_TOKEN,ACOS_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+void asin(){
+    Test_Symbole(ASIN_TOKEN,ASIN_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+void atang(){
+    Test_Symbole(ATAN_TOKEN,ATANG_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void abs(){
+    Test_Symbole(ABS_TOKEN,ABS_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+
+
+
+
+
+
+
+
 
 
 
