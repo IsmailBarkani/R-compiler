@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h> 
 
-
 //Enumeration
 
 typedef enum {
@@ -38,19 +37,11 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN,CHAINE_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN
 
 }CODES_LEX;
 
-typedef enum {
-    ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
-    PROGRAM_ERR, CONST_ERR, VAR_ERR, BEGIN_ERR, END_ERR, IF_ERR,
-    THEN_ERR, WHILE_ERR, DO_ERR, READ_ERR, WRITE_ERR,
-    PV_ERR, PT_ERR, PLUS_ERR, MOINS_ERR, MULT_ERR, DIV_ERR, VIR_ERR, AFF_ERR,
-    INF_ERR, INFEG_ERR, SUP_ERR, SUPEG_ERR, DIFF_ERR, PO_ERR, PF_ERR, FIN_ERR, 
-    ID_ERR, NUM_ERR, CONST_VAR_BEGIN_ERR, V_TOKEN_ERR, VAR_BEGIN_ERR, EQ_ERR,
-    COND_ERR, EXPR_ERR, TERM_ERR
-}Erreurs;
+//enumeration d'erreur 
 
 typedef struct {
     char TOKEN_NAME[40];
@@ -62,10 +53,6 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
-typedef struct {
-    Erreurs CODE_ERR;
-    char MES[40];
-}Erreur;
 
 typedef struct {
     CODES_LEX CODE;
@@ -551,55 +538,29 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
-    {"COMPLEX_TOKEN",COMPLEX_TOKEN},
-    {"CHAINE_TOKEN",CHAINE_TOKEN}
+    {"COMPLEX_TOKEN",COMPLEX_TOKEN}
 };
+
+typedef enum {
+    HELP_ERR,PARO_ERR,PARF_ERR,ID_STRING_ERR,STRING_ERR
+}Erreurs;
 
 int NOMBRE_ERREUR = 42;
 
+typedef struct {
+    Erreurs CODE_ERR;
+    char MES[40];
+}Erreur;
+
 Erreur MES_ERR[42] = {
-    {ERR_CAR_INC , "Caractere inconnu"},
-    {ERR_FICH_VIDE , "Fichier Vide"},
-    {ERR_ID_LONG , "IDF Long"},
-    {ERR_NUM_LONG , "Numero Long"},
-    {ID_INV , "ID Invalid"},
-    {ERR_FICH_INEX , "Fichier inexistant"},
-    {PROGRAM_ERR , "Program Erreur"},
-    {CONST_ERR , "Const Erreur"},
-    {VAR_ERR , "Var Erreur"},
-    {BEGIN_ERR , "Begin Erreur"},
-    {END_ERR , "End Erreur"},
-    {IF_ERR , "If Erreur"},
-    {THEN_ERR , "Then Erreur"},
-    {WHILE_ERR , "While Erreur"},
-    {DO_ERR , "Do Erreur"},
-    {READ_ERR , "Read Erreur"},
-    {WRITE_ERR , "Write Erreur"},
-    {PV_ERR , "Point Virgule Erreur"},
-    {PT_ERR , "Point Erreur"},
-    {PLUS_ERR , "Plus Erreur"},
-    {MOINS_ERR , "Moins Erreur"},
-    {MULT_ERR , "Multiplication Erreur"},
-    {DIV_ERR , "Division Erreur"},
-    {VIR_ERR , "Virgule Erreur"},
-    {AFF_ERR , "Affectation Erreur"},
-    {INF_ERR , "Inferieur Erreur"},
-    {INFEG_ERR , "Inferieur ou egale Erreur"},
-    {SUP_ERR , "Superieur Erreur"},
-    {SUPEG_ERR , "Superieur ou egale Erreur"},
-    {DIFF_ERR , "Difference Erreur"},
-    {PO_ERR , "Parenthese Ouvert Erreur"},
-    {PF_ERR , "Parenthese Ferme Erreur"},
-    {FIN_ERR , "Fin Erreur"}, 
-    {ID_ERR , "Identificateur Erreur"},
-    {NUM_ERR , "Numero Erreur"},
-    {CONST_VAR_BEGIN_ERR , "Const Var Begin Erreur"},
-    {VAR_BEGIN_ERR , "Var Begin Erreur"},
-    {EQ_ERR , "Condition Eguale Erreur"},
-    {COND_ERR , "Condition Erreur"},
-    {EXPR_ERR , "Expression Erreur"},
-    {TERM_ERR , "Terme Erreur"}
+    {HELP_ERR , "Erreur dans Help"},
+    {PARO_ERR , "Parenthese Ouvrante Erreur"},
+    {PARF_ERR , "Parenthese Fermante Erreur"},
+    {ID_STRING_ERR, "ID ou String Erreur"},
+    {STRING_ERR, "String Erreur"}
 };
+
+
 
 // Variable Globale
 int MAX_ID_NAME_LENGTH = 100;
@@ -610,7 +571,6 @@ int Ligne_Courante = 1;
 int Colonne_Courante = 0;
 char NOM[101];
 int Length_NOM = 0;
-Erreurs CODE_ERR;
 
 
 //Prototypes
@@ -679,6 +639,7 @@ void Sym_Suiv(){
         else if(Separateur()){ lire_separateur(); }
         else if( isalpha(Car_Cour) || Car_Cour == '.'){ lire_mot(); }
         else if( isdigit(Car_Cour) ){ lire_nombre(); }
+        else if(Car_Cour ==  '\"' || Car_Cour == 39){ lire_chaine(); }
         else { lire_special(); }
 }
 
@@ -889,16 +850,6 @@ void lire_special() {
         SYM_COUR.CODE = DOLLAR_TOKEN;
         Lire_Car();
         break;
-    case '\"':
-        SYM_COUR.CODE = DQ_TOKEN;
-        AfficherToken(SYM_COUR);
-        lire_chaine();
-        break;
-    case 39:
-        SYM_COUR.CODE = SQ_TOKEN;
-        AfficherToken(SYM_COUR);
-        lire_chaine();
-        break;
     case '{':
         SYM_COUR.CODE = ACCO_TOKEN;
         Lire_Car();
@@ -952,12 +903,10 @@ void lire_chaine() {
     bool isClosedQuotes = false;
     char simpleORdouble = Car_Cour;
     SYM_COUR.CODE = STRING_TOKEN;
-    AfficherToken(SYM_COUR);
     Lire_Car();
     while( !feof(file) && (Length_NOM <= 100) ) {
         if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
             isClosedQuotes = true;
-            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
             Lire_Car();
             break;
         } else {
@@ -1128,182 +1077,14 @@ void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
 }
 
 void S() {
+    Sym_Suiv();
     switch (SYM_COUR.CODE) {
         case INTER_TOKEN:
         case HELP_TOKEN:
             HELP();
         break;
-
         case PRINT_TOKEN:
             PRINT();
-        break;
-
-        case LEVELS_TOKEN:
-            LEVELS();
-            AEXP1();
-        break;
-
-        case LS_TOKEN:
-            LIST();
-        break;
-
-        case SUBSET_TOKEN:
-        case ATTACH_TOKEN:
-            SUBSET_DATAFRAME();
-            AEXP2();
-        break;
-
-        case RM_TOKEN:
-            REMOVE();
-        break;
-
-        case NAMES_TOKEN:
-            ELEMENT_NAMES();
-        break;
-        
-        case ROW_NAMES_TOKEN:
-        case COL_NAMES_TOKEN:
-            A();
-        break;
-
-        case ID_TOKEN:
-        case TRUE_TOKEN:
-        case FALSE_TOKEN:
-        case INTEGER_TOKEN:
-        case DOUBLE_TOKEN:
-        case STRING_TOKEN:
-        case COMPLEX_TOKEN:
-        case C_TOKEN:
-        case MODE_TOKEN:
-        case CAT_TOKEN:
-        case LENGTH_TOKEN:
-        case LOG2_TOKEN:
-        case LOG10_TOKEN:
-        case EXP_TOKEN:
-        case COS_TOKEN:
-        case SIN_TOKEN:
-        case TAN_TOKEN:
-        case ACOS_TOKEN:
-        case ASIN_TOKEN:
-        case ATAN_TOKEN:
-        case ABS_TOKEN:
-        case SQRT_TOKEN:
-        case MAX_TOKEN:
-        case MIN_TOKEN:
-        case RANGE_TOKEN:
-        case SUM_TOKEN:
-        case PROD_TOKEN:
-        case MEAN_TOKEN:
-        case SD_TOKEN:
-        case VAR_TOKEN:
-        case SORT_TOKEN:
-        case TYPEOF_TOKEN:
-        case CLASS_TOKEN:
-        case IS_NUMERIC_TOKEN:
-        case IS_CHARACTER_TOKEN:
-        case IS_LOGICAL_TOKEN:
-        case IS_COMPLEX_TOKEN:
-        case IS_NA_TOKEN:
-        case IS_NAN_TOKEN:
-        case IS_FACTOR_TOKEN:
-        case IS_DATA_FRAME_TOKEN:
-        case AS_NUMERIC_TOKEN:
-        case AS_CHARACTER_TOKEN:
-        case AS_LOGICAL_TOKEN:
-        case AS_FACTOR_TOKEN:
-        case AS_DATA_FRAME_TOKEN:
-        case RBIND_TOKEN:
-        case CBIND_TOKEN:
-        case MATRIX_TOKEN:
-        case T_TOKEN:
-        case NCOL_TOKEN:
-        case NROW_TOKEN:
-        case DIM_TOKEN:
-        case ROWSUMS_TOKEN:
-        case COLSUMS_TOKEN:
-        case COLMEANS_TOKEN:
-        case ROWMEANS_TOKEN:
-        case APPLY_TOKEN:
-        case FACTOR_TOKEN:
-        case SUMMARY_TOKEN:
-        case TAPPLY_TOKEN:
-        case TABLE_TOKEN:
-        case DATAFRAME_TOKEN:
-        case SEQ_TOKEN:
-        case REP_TOKEN:
-        case SEQUENCE_TOKEN:
-        case RNORM_TOKEN:
-        case DNORM_TOKEN:
-        case PNORM_TOKEN:
-        case QNORM_TOKEN:
-        case REXP_TOKEN:
-        case DEXP_TOKEN:
-        case PEXP_TOKEN:
-        case QEXP_TOKEN:
-        case RGAMMA_TOKEN:
-        case DGAMMA_TOKEN:
-        case PGAMMA_TOKEN:
-        case QGAMMA_TOKEN:
-        case RNBINOM_TOKEN:
-        case DNBINOM_TOKEN:
-        case PNBINOM_TOKEN:
-        case QNBINOM_TOKEN:
-        case RUNIF_TOKEN:
-        case DUNIF_TOKEN:
-        case PUNIF_TOKEN:
-        case QUNIF_TOKEN:
-        case RGEOM_TOKEN:
-        case DGEOM_TOKEN:
-        case PGEOM_TOKEN:
-        case QGEOM_TOKEN:
-        case RCAUCHY_TOKEN:
-        case DCAUCHY_TOKEN:
-        case PCAUCHY_TOKEN:
-        case QCAUCHY_TOKEN:
-        case RPOIS_TOKEN:
-        case DPOIS_TOKEN:
-        case PPOIS_TOKEN:
-        case QPOIS_TOKEN:
-        case RF_TOKEN:
-        case DF_TOKEN:
-        case PF_TOKEN:
-        case QF_TOKEN:
-        case RT_TOKEN:
-        case DT_TOKEN:
-        case PT_TOKEN:
-        case QT_TOKEN:
-        case RLOGIS_TOKEN:
-        case DLOGIS_TOKEN:
-        case PLOGIS_TOKEN:
-        case QLOGIS_TOKEN:
-        case LIST_TOKEN:
-            EXP();
-        break;
-
-        case READ_DELIM_TOKEN:
-        case READ_CSV_TOKEN:
-        case READ_CSV2_TOKEN:
-            READ();
-        break;
-
-        case DATA_TOKEN:
-        case WRITE_TABLE_TOKEN:
-        case WRITE_CSV_TOKEN:
-        case WRITE_CSV2_TOKEN:
-            WRITE();
-        break;
-
-        case SAVERDS_TOKEN:
-        case READRDS_TOKEN:
-        case LOAD_TOKEN:
-        case SAVE_TOKEN:
-        case SAVE_IMAGE_TOKEN:
-            SAVE();
-        break;
-
-    default:
-        CODE_ERR = PROGRAM_ERR;
-        Erreur_aff(CODE_ERR);
         break;
     }
 }
@@ -1312,33 +1093,46 @@ void HELP() {
     switch (SYM_COUR.CODE) {
         case INTER_TOKEN:
             Sym_Suiv();
-            Test_Symbole(CHAINE_TOKEN,CHAINE_ERR);
+            switch (SYM_COUR.CODE)
+            {
+            case STRING_TOKEN:
+            case ID_TOKEN:
+                Sym_Suiv();
+                break;
+            
+            default:
+                Erreur_aff(ID_STRING_ERR);
+                break;
+            }
+        break;
         case HELP_TOKEN:
             Sym_Suiv();
-            H1();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            switch (SYM_COUR.CODE)
+            {
+            case STRING_TOKEN:
+            case ID_TOKEN:
+                Sym_Suiv();
+                break;
+            
+            default:
+                Erreur_aff(ID_STRING_ERR);
+                break;
+            }
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+    default:
+        Erreur_aff(HELP_ERR);
         break;
     }
+
 }
 
-void STAT_FUNCTION(){
-    switch(SYM_COUR.CODE) {
-        case MAX_TOKEN:
-        case MIN_TOKEN:
-        case RANGE_TOKEN:
-        case LENGTH_TOKEN:
-        case SUM_TOKEN:
-        case PROD_TOKEN:
-        case MEAN_TOKEN:
-        case SD_TOKEN:
-        case VAR_TOKEN:
-        case SORT_TOKEN:
-        Sym_Suiv();
-        Test_Symbole(PARO_TOKEN,PARO_TOKEN);
-        VAR();
-        Test_Symbole(PARF_TOKEN,PARF_TOKEN);
-        default:
-        break;
-    }
+void PRINT() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
 }
 
 int main(int argc, char const *argv[])
@@ -1347,17 +1141,12 @@ int main(int argc, char const *argv[])
     Ouvrir_Fichier("file.r");
     Lire_Car();
 
-    while(Car_Cour != EOF){
-        Sym_Suiv();
-        AfficherToken(SYM_COUR);
-    }
-    if(Car_Cour == EOF) {
-        printf("FIN_TOKEN\n");
-        exit(EXIT_SUCCESS);
-    }
+    
+    S();
+    
     fclose(file);
     getchar();
-    
+    printf("Bravo !!\n");
     //printf("%s\n",ALLTOKENS[FINMOTCLE].TOKEN_NAME);
     
     return 0;

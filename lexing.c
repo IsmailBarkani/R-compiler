@@ -610,6 +610,7 @@ void Sym_Suiv(){
         else if(Separateur()){ lire_separateur(); }
         else if( isalpha(Car_Cour) || Car_Cour == '.'){ lire_mot(); }
         else if( isdigit(Car_Cour) ){ lire_nombre(); }
+        else if(Car_Cour ==  '\"' || Car_Cour == 39){ lire_chaine(); }
         else { lire_special(); }
 }
 
@@ -820,13 +821,6 @@ void lire_special() {
         SYM_COUR.CODE = DOLLAR_TOKEN;
         Lire_Car();
         break;
-    /**
-     * 39 = simple Quotes (double quotes or simple quotes -> lire_chaine() )
-    */
-    case '\"':
-    case 39:
-        lire_chaine();
-        break;
     case '{':
         SYM_COUR.CODE = ACCO_TOKEN;
         Lire_Car();
@@ -1034,8 +1028,7 @@ void lire_commentaire() {
     }
 }
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
     //argv[1]
     Ouvrir_Fichier("file.r");
     Lire_Car();
