@@ -59,8 +59,25 @@ typedef struct {
     char NOM[101];
 }TSym_Cour;
 
+int NbrId=0;
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
+
+// Symantique
+
+typedef enum{TID} TSYM;
+
+typedef struct 
+{
+    char nom[40];
+    TSYM IDF;
+    int ADRESSE;
+    char valeur[40];
+}T_TAB_IDF;
+
+
+T_TAB_IDF IDFS[200]; // table des identificateur
+int OFFSET = -1;
 
 TOKEN ALLTOKENS[231] = {
     {"print",PRINT_TOKEN},
@@ -545,7 +562,7 @@ typedef enum {
     PARO_ERR,PARF_ERR,ID_STRING_ERR,STRING_ERR,ID_ERR,LEVELS_ERR,
     ASSIGN_ERR,C_ERR,TRUEFALSE_ERR,NUMERIC_ERR,VECTOR2_ERR,LS_ERR,
     SUBSET_DATAFRAME_ERR,VIR_ERR,LOG_OP_ERR,BASIC_TYPE_ERR,
-    RM_ERR,NAMES_ERR,A_ERR,RENAME_ERR,EXP_ERR,EG_ERR,NLS_ERR,NLSNA_ERR,
+    RM_ERR,NAMES_ERR,A_ERR,RENAME_ERR,EXP_ERR,EG_ERR,NLS_ERR,NLSNA_ERR, EXISID_ERR
     
 
 }Erreurs;
@@ -581,7 +598,8 @@ Erreur MES_ERR[42] = {
     {EXP_ERR, "Expression Erreur"},
     {EG_ERR, "Symbole = Manquant"},
     {NLS_ERR, "NUMERIC LOgical or String Manquant"},
-    {NLSNA_ERR, "Numeric Logical String or NA Manquant"}
+    {NLSNA_ERR, "Numeric Logical String or NA Manquant"},
+    { EXISID_ERR, "Variable est deja declarer"}
 };
 
 
@@ -614,6 +632,26 @@ int isdigit();
 void lire_chaine();
 void lire_separateur();
 
+int chercherTabIdent(char *chaineId){
+    int i;
+    for(i=0;i<NbrId;i++){
+        if(strcmp(chaineId,IDFS[i].nom)) return i;
+    }
+    return -1;
+}
+
+int ajouterTabIden(char *chaineId, TSYM ct){
+    int adresse;
+    if(chercherTabIdent(chaineId)==-1){
+        IDFS[NbrId].IDF = ct;
+        adresse = ++OFFSET;
+        IDFS[NbrId].ADRESSE = adresse;
+        strcpy(IDFS[NbrId].nom,chaineId);
+        NbrId++;
+        return adresse;
+    }
+    else Erreur_aff(EXISID_ERR);
+}
 
 void Vider_NOM() {
     Length_NOM = 0;
@@ -1104,7 +1142,7 @@ void S() {
     Sym_Suiv();
     switch (SYM_COUR.CODE) {
         case INTER_TOKEN:
-            INTERHELP();
+            INTERHELP();s();
         break;
         case HELP_TOKEN:
             HELP();
@@ -1255,6 +1293,7 @@ void S() {
             EXP();
         break;
 
+        default:break;
 
     }
 }
@@ -1949,7 +1988,7 @@ void V() {
     switch(SYM_COUR.CODE) {
         case ID_TOKEN:
             Sym_Suiv();
-            Vprime();
+         //   Vprime();
         default:
             Erreur_aff(ID_ERR);
         break;
