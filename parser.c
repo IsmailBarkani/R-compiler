@@ -3,18 +3,10 @@
 #include <string.h>
 #include <stdlib.h> 
 
-<<<<<<< HEAD
 //Enumeration
 
 typedef enum {
     NOTA_TOKEN,PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
-=======
-
-//Enumeration
-
-typedef enum {
-    PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
     SWITCH_TOKEN,BREAK_TOKEN,NEXT_TOKEN,FUNCTION_TOKEN,BODY_TOKEN,INPUT_TOKEN,END_TOKEN,OF_TOKEN,TYPEOF_TOKEN,
     LIST_TOKEN,DATAFRAME_TOKEN,ATTR_TOKEN,CHARACTER_TOKEN,ATOMIC_TOKEN,
@@ -22,11 +14,7 @@ typedef enum {
     IS_DOUBLE_TOKEN,IS_CHARACTER_TOKEN,IS_ATOMIC_TOKEN,IS_VECTOR_TOKEN,IS_NUMERIC_TOKEN,TRUE_TOKEN,FALSE_TOKEN,
     LENGTH_TOKEN,PI_TOKEN,LETTERS_TOKEN,LS_TOKEN,PAT_TOKEN,LS_STR_TOKEN,MAX_LEVEL_TOKEN,EPS_TOKEN,MONTH_NAME_TOKEN,MONTH_ABB_TOKEN,
     NULL_TOKEN,RM_TOKEN,HELP_TOKEN,MODE_TOKEN,CAT_TOKEN,SEP_TOKEN,QUOTE_TOKEN,HEADER_TOKEN,DEC_TOKEN,READ_CSV_TOKEN,READ_CSV2_TOKEN,
-<<<<<<< HEAD
     READ_DELIM_TOKEN,READ_DELIM2_TOKEN,READ_TABLE_TOKEN,ROWNAMES_TOKEN,COLNAMES_TOKEN,FILE_TOKEN,SEQ_TOKEN,FROM_TOKEN,REP_TOKEN,
-=======
-    READ_DELIM_TOKEN,READ_DELIM2_TOKEN,READ_TABLE_TOKEN,ROW_NAMES_TOKEN,COL_NAMES_TOKEN,FILE_TOKEN,SEQ_TOKEN,FROM_TOKEN,REP_TOKEN,
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     SEQUENCE_TOKEN,TO_TOKEN,GL_TOKEN,LABEL_TOKEN,RNORM_TOKEN,DNORM_TOKEN,PNORM_TOKEN,QNORM_TOKEN,REXP_TOKEN,DEXP_TOKEN,
     PEXP_TOKEN,QEXP_TOKEN,RGAMMA_TOKEN,DGAMMA_TOKEN,PGAMMA_TOKEN,QGAMMA_TOKEN,RNBINOM_TOKEN,DNBINOM_TOKEN,PNBINOM_TOKEN,QNBINOM_TOKEN,
     RUNIF_TOKEN,DUNIF_TOKEN,PUNIF_TOKEN,QUNIF_TOKEN,RGEOM_TOKEN,DGEOM_TOKEN,PGEOM_TOKEN,QGEOM_TOKEN,RCAUCHY_TOKEN,DCAUCHY_TOKEN,
@@ -49,24 +37,11 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
-<<<<<<< HEAD
     COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN
 
 }CODES_LEX;
 
 //enumeration d'erreur 
-=======
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN,NUM_TOKEN
-
-}CODES_LEX;
-
-typedef enum {
-    ERR_CAR_INC,ERR_FICH_VIDE,ERR_ID_LONG,ERR_NUM_LONG,ID_INV,ERR_FICH_INEX,
-    VAR_ERR, DQ_ERR, SQ_ERR, STRING_ERR, HELP_ERR,INTER_ERR, PARO_ERR, PARF_ERR, DQANDSQ_ERR, PRINT_ERR, ID_ERR, AFFTOG_ERR,AFFTOD_ERR,
-    EQ_ERR,  AFFECTATION_ERR, NUM_ERR, EG_ERR, MODE_ERR, CAT_ERR, LENGTH_ERR, LOG10_ERR, LOG2_ERR, EXP_ERR, COS_ERR, SIN_ERR, TANG_ERR,
-    ACOS_ERR, ASIN_ERR, ATANG_ERR, ABS_ERR,SQRT_ERR, DOUBLE_ERR, INTEGER_ERR, C_ERR, TRUE_ERR, FALSE_ERR
-}Erreurs;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 typedef struct {
     char TOKEN_NAME[40];
@@ -78,13 +53,6 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
-<<<<<<< HEAD
-=======
-typedef struct {
-    Erreurs CODE_ERR;
-    char MES[40];
-}Erreur;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 typedef struct {
     CODES_LEX CODE;
@@ -94,25 +62,6 @@ typedef struct {
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
 
-<<<<<<< HEAD
-//Table des identificateurs
-
-typedef enum{TVAR} TSYM;
-
-typedef struct parser
-{
-    char NOM[40];
-    TSYM IDF;
-    int ADRESSE;
-    char valeur[40];
-}T_TAB_IDF;
-
-
-
-
-
-=======
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 TOKEN ALLTOKENS[231] = {
     {"print",PRINT_TOKEN},
     {"getwd",GETWD_TOKEN},
@@ -190,13 +139,8 @@ TOKEN ALLTOKENS[231] = {
     {"read.delim",READ_DELIM_TOKEN},
     {"read.delim2",READ_DELIM2_TOKEN},
     {"read.table",READ_TABLE_TOKEN},
-<<<<<<< HEAD
     {"rownames",ROWNAMES_TOKEN},
     {"colnames",COLNAMES_TOKEN},
-=======
-    {"row.names",ROW_NAMES_TOKEN},
-    {"col.names",COL_NAMES_TOKEN},
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"file",FILE_TOKEN},
     {"seq",SEQ_TOKEN},
     {"from",FROM_TOKEN},
@@ -430,13 +374,8 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"READ_DELIM_TOKEN",READ_DELIM_TOKEN},
     {"READ_DELIM2_TOKEN",READ_DELIM2_TOKEN},
     {"READ_TABLE_TOKEN",READ_TABLE_TOKEN},
-<<<<<<< HEAD
     {"ROWNAMES_TOKEN",ROWNAMES_TOKEN},
     {"COLNAMES_TOKEN",COLNAMES_TOKEN},
-=======
-    {"ROW_NAMES_TOKEN",ROW_NAMES_TOKEN},
-    {"COL_NAMES_TOKEN",COL_NAMES_TOKEN},
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"FILE_TOKEN",FILE_TOKEN},
     {"SEQ_TOKEN",SEQ_TOKEN},
     {"FROM_TOKEN",FROM_TOKEN},
@@ -599,7 +538,6 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
-<<<<<<< HEAD
     {"COMPLEX_TOKEN",COMPLEX_TOKEN}
 };
 
@@ -647,60 +585,6 @@ Erreur MES_ERR[42] = {
 };
 
 
-=======
-    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
-    {"CHAINE_TOKEN",CHAINE_TOKEN},
-    
-};
-
-int NOMBRE_ERREUR = 200;
-
-Erreur MES_ERR[100] = {
-    {ERR_CAR_INC , "Caractere inconnu"},
-    {ERR_FICH_VIDE , "Fichier Vide"},
-    {ERR_ID_LONG , "IDF Long"},
-    {ERR_NUM_LONG , "Numero Long"},
-    {ID_INV , "ID Invalid"},
-    {ERR_FICH_INEX , "Fichier inexistant"},
-    {VAR_ERR , "Var Erreur"},
-    {DQ_ERR , "Double quate erreur"},
-    {SQ_ERR , "Simple quote erreur"},
-    {STRING_ERR , "String erreur"},
-    {HELP_ERR , "Erreur dans la syntaxe de help()"},
-    {INTER_ERR , "Manque ?"},
-    {PARO_ERR , "Mansque ("},
-    {PARF_ERR , "Manque )"},
-    {DQANDSQ_ERR , "Erreur, Manque \" ou \' "},
-    {PRINT_ERR , "Erreur dans la syntaxe de print()"},
-    {ID_ERR , "ID Erreur"},
-    {AFFTOG_ERR , "<- Erreur"},
-    {AFFTOD_ERR , "-> Erreur"},
-    {EQ_ERR, "= Erreur"},
-    {AFFECTATION_ERR, "Erreur dans l'affectation"},
-    {NUM_ERR, "Number Erreur "},
-    {EG_ERR, "Egalité Erreur "},
-    {MODE_ERR, "Mode  fonction Erreur "},
-    {CAT_ERR, "Cat fonction  Erreur "},
-    {LENGTH_ERR, "Length fonction Erreur "},
-    {LOG10_ERR, "Log10 fonction Erreur "},
-    {LOG2_ERR, "Log2 fonction Erreur "},
-    {EXP_ERR, "Exponentiel fonction Erreur "},
-    {COS_ERR, "Cosinus fonction Erreur "},
-    {SIN_ERR, "Sinus fonction Erreur "},
-    {TANG_ERR, "Tangent fonction Erreur "},
-    {ACOS_ERR, "Acosinus fonction Erreur "},
-    {ASIN_ERR, "Asinus fonction Erreur "},
-    {ATANG_ERR, "Atangent fonction Erreur "},
-    {ABS_ERR, "Abs fonction Erreur "},
-    {SQRT_ERR, "sqrt fonction Erreur "},
-    {DOUBLE_ERR, "Double Erreur "},
-    {INTEGER_ERR, "Integer  Erreur "},
-    {C_ERR, "Vecteur c Erreur "},
-    {TRUE_ERR, "TRUE c Erreur "},
-    {FALSE_ERR, "False c Erreur "}
-    
-    };
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 // Variable Globale
 int MAX_ID_NAME_LENGTH = 100;
@@ -711,10 +595,6 @@ int Ligne_Courante = 1;
 int Colonne_Courante = 0;
 char NOM[101];
 int Length_NOM = 0;
-<<<<<<< HEAD
-=======
-Erreurs CODE_ERR;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 
 //Prototypes
@@ -725,10 +605,6 @@ bool Separateur();
 void Sym_Suiv();
 void AfficherToken(TSym_Cour SYM);
 CODES_LEX code_mot_cle(char nom[]);
-<<<<<<< HEAD
-=======
-bool mot_cle(char nom[]);
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 void lire_mot();
 void lire_special();
 void lire_commentaire();
@@ -753,10 +629,6 @@ void Ouvrir_Fichier(const char path[]){
       perror("Error in opening file");
       return;
     }
-<<<<<<< HEAD
-=======
-    Car_Cour = fgetc(file);
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 }
 
 void Lire_Car(){
@@ -791,10 +663,7 @@ void Sym_Suiv(){
         else if(Separateur()){ lire_separateur(); }
         else if( isalpha(Car_Cour) || Car_Cour == '.'){ lire_mot(); }
         else if( isdigit(Car_Cour) ){ lire_nombre(); }
-<<<<<<< HEAD
         else if(Car_Cour ==  '\"' || Car_Cour == 39){ lire_chaine(); }
-=======
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
         else { lire_special(); }
 }
 
@@ -819,20 +688,7 @@ CODES_LEX code_mot_cle(char nom[]) {
             return ALLTOKENS[i].CODE;
         }
     }
-<<<<<<< HEAD
     return NOTA_TOKEN;
-=======
-}
-
-bool mot_cle(char nom[]){
-    for(int i=DEBUTMOTCLE ; i <= FINMOTCLE ; i++){
-        if( strcmp(nom,ALLTOKENS[i].TOKEN_NAME) == 0 ){
-            return true;
-        }
-    }
-    return false;
-    
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 }
 
 void lire_mot() {
@@ -861,11 +717,7 @@ void lire_mot() {
         } else {
             NOM[Length_NOM] = '\0';
             strcpy(SYM_COUR.NOM, NOM);
-<<<<<<< HEAD
             if(code_mot_cle(NOM)!=NOTA_TOKEN){
-=======
-            if(mot_cle(NOM)){
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                 SYM_COUR.CODE = code_mot_cle(NOM);
             } else{
                 SYM_COUR.CODE = ID_TOKEN;
@@ -1022,19 +874,6 @@ void lire_special() {
         SYM_COUR.CODE = DOLLAR_TOKEN;
         Lire_Car();
         break;
-<<<<<<< HEAD
-=======
-    case '\"':
-        SYM_COUR.CODE = DQ_TOKEN;
-        AfficherToken(SYM_COUR);
-        lire_chaine();
-        break;
-    case 39:
-        SYM_COUR.CODE = SQ_TOKEN;
-        AfficherToken(SYM_COUR);
-        lire_chaine();
-        break;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     case '{':
         SYM_COUR.CODE = ACCO_TOKEN;
         Lire_Car();
@@ -1088,20 +927,10 @@ void lire_chaine() {
     bool isClosedQuotes = false;
     char simpleORdouble = Car_Cour;
     SYM_COUR.CODE = STRING_TOKEN;
-<<<<<<< HEAD
     Lire_Car();
     while( !feof(file) && (Length_NOM <= 100) ) {
         if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
             isClosedQuotes = true;
-=======
-    AfficherToken(SYM_COUR);
-    Lire_Car();
-    while( !feof(file) && (Length_NOM <= 100) ) {
-        // 92 = antislash 
-        if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
-            isClosedQuotes = true;
-            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
             Lire_Car();
             break;
         } else {
@@ -1116,35 +945,6 @@ void lire_chaine() {
     }
 }
 
-<<<<<<< HEAD
-=======
-// **************Boufous********************
-/*void lire_chaine() {
-    bool isClosedQuotes = false;
-    char simpleORdouble = Car_Cour;
-    SYM_COUR.CODE = STRING_TOKEN;
-    AfficherToken(SYM_COUR);
-    Lire_Car();
-    while( !feof(file) && (Length_NOM <= 100) ) {
-        // 92 = antislash 
-        if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
-            isClosedQuotes = true;
-            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
-            Lire_Car();
-            break;
-        } else {
-            NOM[Length_NOM] = Car_Cour;
-            Length_NOM++;
-            Lire_Car();
-        }
-    }
-
-    if(Length_NOM > 100 || !isClosedQuotes ) {
-        SYM_COUR.CODE = ERREUR_TOKEN;
-    }
-}*/
-
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 // Either the fractional or
 // the decimal part can be empty, but not both at once.
 // Double : 1.5 15.e10 integer : 15L complex = 5i
@@ -1197,11 +997,7 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
-<<<<<<< HEAD
                     SYM_COUR.CODE = COMPLEX_TOKEN;
-=======
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                     Lire_Car();
                     break;
                 default:
@@ -1227,11 +1023,7 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
-<<<<<<< HEAD
                     SYM_COUR.CODE = COMPLEX_TOKEN;
-=======
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                     Lire_Car();
                 break;
                 default:
@@ -1244,11 +1036,7 @@ void lire_nombre() {
                 lire_exposant();
                 switch (Car_Cour) {
                     case 'i':
-<<<<<<< HEAD
                         SYM_COUR.CODE = COMPLEX_TOKEN;
-=======
-                        SYM_COUR.CODE = COMPLEXE_TOKEN;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                         Lire_Car();
                     break;
                     default:
@@ -1262,11 +1050,7 @@ void lire_nombre() {
                     Lire_Car();
                     break;
                 case 'i':
-<<<<<<< HEAD
                     SYM_COUR.CODE = COMPLEX_TOKEN;
-=======
-                    SYM_COUR.CODE = COMPLEXE_TOKEN;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                     Lire_Car();
                     break;
                 default:
@@ -1305,68 +1089,7 @@ void Erreur_aff(Erreurs ERR){
     exit(-1);
 }
 
-<<<<<<< HEAD
 //Analyseur Syntaxique
-=======
-CODES_LEX dqORsq(CODES_LEX symbole){
-    switch(symbole){
-        case DQ_TOKEN: return DQ_TOKEN;break;
-        case SQ_TOKEN: return SQ_TOKEN;break;
-        default: return -1;
-    }
-
-}
-
-
-
-
-////////////////////////
-//Analyseur Syntaxique
-////////////////////////
-
-
-//prototype
-void help();
-void interHelp();
-void stringArgs();
-void print();
-void varArgs();
-void affSymbole();
-void affec();
-void expr();
-void term();
-void fact();
-//Fonctions Arithemetique
-void mode();
-void cat();
-void log2_();
-void log10_();
-void exp_();
-void cos_();
-void tan_();
-void sin_();
-void acos_();
-void asin_();
-void atan_();
-void abs_();
-void max_();
-void min_();
-void range();
-void length_();
-void sum();
-void prod();
-void mean();
-void sd();
-void var();
-void sort();
-void sqrt_();
-
-//Vecteurs, matric, list
-void c();
-void args();
-
-
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     if(SYM_COUR.CODE == CODE_LEX) {
@@ -1378,7 +1101,6 @@ void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
 }
 
 void S() {
-<<<<<<< HEAD
     Sym_Suiv();
     switch (SYM_COUR.CODE) {
         case INTER_TOKEN:
@@ -1441,40 +1163,6 @@ void S() {
         case ATAN_TOKEN:
         case ABS_TOKEN:
         case SQRT_TOKEN:
-=======
-    
-    switch (SYM_COUR.CODE) {
-        case INTER_TOKEN: interHelp();break;
-        case HELP_TOKEN:  help();break;
-        case PRINT_TOKEN: print(); break;
-        case ROW_NAMES_TOKEN:
-        case COL_NAMES_TOKEN:
-        case LEVELS_TOKEN:break;
-        case LS_TOKEN:break;
-        case RM_TOKEN:break;
-        case ID_TOKEN: affec();
-        case TRUE_TOKEN: break;
-        case FALSE_TOKEN: break;
-        case INTEGER_TOKEN: break;
-        case DOUBLE_TOKEN: break;
-        case STRING_TOKEN:break;
-        case COMPLEXE_TOKEN:break;
-        case C_TOKEN: c();break;
-        case MODE_TOKEN: mode();break;
-        case CAT_TOKEN: cat();break;
-        case LENGTH_TOKEN: length_();break;
-        case LOG2_TOKEN: log2_();break;
-        case LOG10_TOKEN:log10_();break;
-        case EXP_TOKEN: exp_();break;
-        case COS_TOKEN: cos_();break;
-        case SIN_TOKEN: sin_();break;
-        case TAN_TOKEN: tan_();break;
-        case ACOS_TOKEN:acos_();break;
-        case ASIN_TOKEN: asin_();break;
-        case ATAN_TOKEN: atan_();break;
-        case ABS_TOKEN: abs_();break;
-        case SQRT_TOKEN:sqrt_();break;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
         case MAX_TOKEN:
         case MIN_TOKEN:
         case RANGE_TOKEN:
@@ -1483,15 +1171,9 @@ void S() {
         case MEAN_TOKEN:
         case SD_TOKEN:
         case VAR_TOKEN:
-<<<<<<< HEAD
         case SORT_TOKEN:
         case TYPEOF_TOKEN:
         case CLASS_TOKEN:
-=======
-        case SORT_TOKEN:break;
-        case TYPEOF_TOKEN:
-        case CLASS_TOKEN:break;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
         case IS_NUMERIC_TOKEN:
         case IS_CHARACTER_TOKEN:
         case IS_LOGICAL_TOKEN:
@@ -1499,16 +1181,11 @@ void S() {
         case IS_NA_TOKEN:
         case IS_NAN_TOKEN:
         case IS_FACTOR_TOKEN:
-<<<<<<< HEAD
         case IS_DATA_FRAME_TOKEN:
-=======
-        case IS_DATA_FRAME_TOKEN:break;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
         case AS_NUMERIC_TOKEN:
         case AS_CHARACTER_TOKEN:
         case AS_LOGICAL_TOKEN:
         case AS_FACTOR_TOKEN:
-<<<<<<< HEAD
         case AS_DATA_FRAME_TOKEN:
         case RBIND_TOKEN:
         case CBIND_TOKEN:
@@ -1517,21 +1194,10 @@ void S() {
         case NCOL_TOKEN:
         case NROW_TOKEN:
         case DIM_TOKEN:
-=======
-        case AS_DATA_FRAME_TOKEN:break;
-        case RBIND_TOKEN:
-        case CBIND_TOKEN:
-        case MATRIX_TOKEN:break;
-        case T_TOKEN:break;
-        case NCOL_TOKEN:
-        case NROW_TOKEN:
-        case DIM_TOKEN:break;
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
         case ROWSUMS_TOKEN:
         case COLSUMS_TOKEN:
         case COLMEANS_TOKEN:
         case ROWMEANS_TOKEN:
-<<<<<<< HEAD
         case APPLY_TOKEN:
         case FACTOR_TOKEN:
         case SUMMARY_TOKEN:
@@ -2300,317 +1966,11 @@ void V() {
         case DOLLAR_TOKEN:
         case 
     }
-
 }*/
-=======
-        case APPLY_TOKEN:break;
-        case FACTOR_TOKEN:break;
-        case SUMMARY_TOKEN:break;
-        case TAPPLY_TOKEN:
-        case TABLE_TOKEN:break;
-        case DATAFRAME_TOKEN:
-        break;
-        
-        default:break;
-    }
-}
-
-void STAT_FUNCTION() {
-    switch(SYM_COUR.CODE) {
-        case MAX_TOKEN:
-        case MIN_TOKEN:
-        case RANGE_TOKEN:
-        case LENGTH_TOKEN:
-        case SUM_TOKEN:
-        case PROD_TOKEN:
-        case MEAN_TOKEN:
-        case SD_TOKEN:
-        case VAR_TOKEN:
-        case SORT_TOKEN:
-        Sym_Suiv();
-        Test_Symbole(PARO_TOKEN,PARO_TOKEN);
-        Test_Symbole(PARF_TOKEN,PARF_TOKEN);
-        default: break;
-
-    }
-}
-
-//  Help => EX: ?print
-void interHelp(){
-    Test_Symbole(INTER_TOKEN,INTER_ERR);
-    Test_Symbole(STRING_TOKEN,STRING_ERR);
-} 
-//Help => EX: help("print") , ca peut avoir pleusieur arguments (parametres)
-void help(){
-    Test_Symbole(HELP_TOKEN,HELP_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    stringArgs();
-    }
-
-//fonction tres util!! s'applique dans tous les fonction d'arguments de type string
-void stringArgs(){
-    Test_Symbole(STRING_TOKEN,STRING_ERR);
-    while(SYM_COUR.CODE == VIR_TOKEN){
-        Sym_Suiv();
-        Test_Symbole(STRING_TOKEN,STRING_ERR);
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-    
-}
-
-
-
-void print(){
-    Test_Symbole(PRINT_TOKEN,PRINT_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    varArgs();
-
-}
-
-//fonction tres util!! s'applique dans tous les fonction d'arguments de type string
-void varArgs(){
-    Test_Symbole(ID_TOKEN,ID_ERR);
-    while(SYM_COUR.CODE == VIR_TOKEN){
-        Sym_Suiv();
-        Test_Symbole(ID_TOKEN,ID_ERR);
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-    
-}
-
-// AFFECTATION les cas traiter:  =  <-
-void affec(){
-    Test_Symbole(ID_TOKEN,ID_ERR);
-    switch(SYM_COUR.CODE){
-        case AFFTOG_TOKEN: Test_Symbole(AFFTOG_TOKEN,AFFTOG_ERR);
-                           expr(); break;
-        case EG_TOKEN : Test_Symbole(EG_TOKEN,EG_ERR);
-                        expr();break;
-
-        default: Erreur_aff(AFFECTATION_ERR); break;
-    }
-}
-
-void expr(){
-    term();
-    while(SYM_COUR.CODE == PLS_TOKEN || SYM_COUR.CODE == MINUS_TOKEN){
-        Sym_Suiv();
-        term();
-    }
-
-}
-void term(){
-    fact();
-    while(SYM_COUR.CODE == MULT_TOKEN || SYM_COUR.CODE == DIV_TOKEN){
-        Sym_Suiv();
-        fact();
-    }
-
-}
-
-void fact(){
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case NUM_TOKEN: Test_Symbole(NUM_TOKEN,NUM_ERR);break;
-        default:Erreur_aff(AFFECTATION_ERR); break;
-    }
-}
-
-void mode(){
-    Test_Symbole(MODE_TOKEN,MODE_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    Test_Symbole(ID_TOKEN,ID_ERR);
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void cat(){
-    Test_Symbole(CAT_TOKEN,CAT_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    Test_Symbole(ID_TOKEN,ID_ERR);
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-
-void length_(){
-    Test_Symbole(LENGTH_TOKEN,LENGTH_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    Test_Symbole(ID_TOKEN,ID_ERR);
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-
-void log10_(){
-    Test_Symbole(LOG10_TOKEN,LOG10_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(LOG10_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void log2_(){
-    Test_Symbole(LOG2_TOKEN,LOG2_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(LOG2_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void exp_(){
-    Test_Symbole(EXP_TOKEN,EXP_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(EXP_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void sin_(){
-    Test_Symbole(SIN_TOKEN,SIN_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(SIN_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void tan_(){
-    Test_Symbole(TAN_TOKEN,TANG_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(SIN_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-void cos_(){
-    Test_Symbole(COS_TOKEN,COS_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(COS_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-void acos_(){
-    Test_Symbole(ACOS_TOKEN,ACOS_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(ACOS_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-void asin_(){
-    Test_Symbole(ASIN_TOKEN,ASIN_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(ASIN_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-void atan_(){
-    Test_Symbole(ATAN_TOKEN,ATANG_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(ATANG_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void abs_(){
-    Test_Symbole(ABS_TOKEN,ABS_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(ABS_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void sqrt_(){
-    Test_Symbole(SQRT_TOKEN,SQRT_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    switch(SYM_COUR.CODE){
-        case ID_TOKEN:Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,INTEGER_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        default: Erreur_aff(SQRT_ERR);break;
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void max_(){
-
-}
-
-
-void c(){
-    Test_Symbole(C_TOKEN,C_ERR);
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    printf("%s\n",ALLTOKENS_TEXT[SYM_COUR.CODE].TOKEN_TEXT);
-    args();
-    while(SYM_COUR.CODE == VIR_TOKEN){
-        Sym_Suiv();
-        args();
-    }
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
-
-void args(){
-    switch(SYM_COUR.CODE){
-        case STRING_TOKEN: Test_Symbole(STRING_TOKEN,STRING_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,INTEGER_ERR);break;
-        case TRUE_TOKEN: Test_Symbole(TRUE_TOKEN,TRUE_ERR);break;
-        case FALSE_TOKEN: Test_Symbole(FALSE_TOKEN,FALSE_ERR);break;
-        default: Erreur_aff(C_ERR);break;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 int main(int argc, char const *argv[])
 {
     //argv[1]
-<<<<<<< HEAD
     Ouvrir_Fichier("file.r");
     Lire_Car();
 
@@ -2620,29 +1980,7 @@ int main(int argc, char const *argv[])
     fclose(file);
     getchar();
     printf("Bravo !!\n");
-=======
-    Ouvrir_Fichier("test_syntaxique.r");
-    Sym_Suiv();
-    S();
-    /*while(Car_Cour != EOF){
-        Sym_Suiv();
-        AfficherToken(SYM_COUR);
-    }
-    if(Car_Cour == EOF) {
-        printf("FIN_TOKEN\n");
-        exit(EXIT_SUCCESS);
-    }*/
-
-
-    printf("Bravo!!!!"); 
-    fclose(file);
-    getchar();
-    
->>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     //printf("%s\n",ALLTOKENS[FINMOTCLE].TOKEN_NAME);
     
     return 0;
 }
-
-
-
