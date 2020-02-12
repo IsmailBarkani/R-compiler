@@ -4,7 +4,11 @@
 #include <stdlib.h> 
 
 typedef enum {
+<<<<<<< HEAD
     NOTA_TOKEN,PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
+=======
+    PRINT_TOKEN,GETWD_TOKEN,SETWD_TOKEN,SCAN_TOKEN,LOG_TOKEN,MAX_TOKEN,MIN_TOKEN,ROUND_TOKEN,SIGNIF_TOKEN,COR_TOKEN,EXP_TOKEN,
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     C_TOKEN,SORT_TOKEN,REV_TOKEN,UNIQUE_TOKEN,TABLE_TOKEN,AS_TOKEN,IF_TOKEN,ELSE_TOKEN,WHILE_TOKEN,REPEAT_TOKEN,FOR_TOKEN,
     SWITCH_TOKEN,BREAK_TOKEN,NEXT_TOKEN,FUNCTION_TOKEN,BODY_TOKEN,INPUT_TOKEN,END_TOKEN,OF_TOKEN,TYPEOF_TOKEN,
     LIST_TOKEN,DATAFRAME_TOKEN,ATTR_TOKEN,CHARACTER_TOKEN,ATOMIC_TOKEN,
@@ -21,7 +25,11 @@ typedef enum {
     LEVEL_TOKEN,LABELS_TOKEN,EXCLUDE_TOKEN,
 
     LOG2_TOKEN,LOG10_TOKEN,COS_TOKEN,SIN_TOKEN,TAN_TOKEN,ACOS_TOKEN,ASIN_TOKEN,ATAN_TOKEN,ABS_TOKEN,SQRT_TOKEN,RANGE_TOKEN,SUM_TOKEN,
+<<<<<<< HEAD
     PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEX_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
+=======
+    PROD_TOKEN,SD_TOKEN,VAR_TOKEN,IS_COMPLEXE_TOKEN,AS_LOGICAL_TOKEN,IS_NA_TOKEN,IS_NAN_TOKEN,NAMES_TOKEN,RBIND_TOKEN,CBIND_TOKEN,
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     MATRIX_TOKEN,DATA_TOKEN,NROW_TOKEN,NCOL_TOKEN,BYROW_TOKEN,DIMNAMES_TOKEN,T_TOKEN,DIM_TOKEN,ROWSUMS_TOKEN,COLSUMS_TOKEN,
     COLMEANS_TOKEN,ROWMEANS_TOKEN,APPLY_TOKEN,LEVELS_TOKEN,IS_FACTOR_TOKEN,AS_FACTOR_TOKEN,SUMMARY_TOKEN,TAPPLY_TOKEN,
     IS_DATA_FRAME_TOKEN,AS_DATA_FRAME_TOKEN,SUBSET_TOKEN,ATTACH_TOKEN,DETACH_TOKEN,FILE_CHOOSE_TOKEN,READ_TSV_TOKEN,WRITE_TABLE_TOKEN,
@@ -30,12 +38,20 @@ typedef enum {
 
     PV_TOKEN,PARO_TOKEN,PARF_TOKEN,MINUS_TOKEN,PLS_TOKEN,MULT_TOKEN,DIV_TOKEN,NEG_TOKEN,
     TILD_TOKEN,DP_TOKEN,INTER_TOKEN,POWER_TOKEN,INF_TOKEN,SUP_TOKEN,EG_TOKEN,EQ_TOKEN,DIFF_TOKEN,INFEG_TOKEN,SUPEG_TOKEN,DET_TOKEN,
+<<<<<<< HEAD
     ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,
+=======
+    ET_TOKEN,OU_TOKEN,DOU_TOKEN,AFFTOD_TOKEN,AFFTOG_TOKEN,VIR_TOKEN,DOLLAR_TOKEN,IN_TOKEN,MOD_TOKEN,DQ_TOKEN,SQ_TOKEN,
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     ACCO_TOKEN,ACCF_TOKEN,BRO_TOKEN,BRF_TOKEN,SEPARATEUR_TOKEN,
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
+<<<<<<< HEAD
     COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN,CHAINE_TOKEN
+=======
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEXE_TOKEN,CHAINE_TOKEN
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 }CODES_LEX;
 
@@ -44,7 +60,11 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN;
 
+<<<<<<< HEAD
 int NUMBEROFTOKENS = 238;
+=======
+int NUMBEROFTOKENS = 240;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
@@ -203,7 +223,11 @@ TOKEN ALLTOKENS[231] = {
     {"prod",PROD_TOKEN},
     {"sd",SD_TOKEN},
     {"var",VAR_TOKEN},
+<<<<<<< HEAD
     {"is.complex",IS_COMPLEX_TOKEN},
+=======
+    {"is.complexe",IS_COMPLEXE_TOKEN},
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"as.logical",AS_LOGICAL_TOKEN},
     {"is.na",IS_NA_TOKEN},
     {"is.nan",IS_NAN_TOKEN},
@@ -275,6 +299,11 @@ TOKEN ALLTOKENS[231] = {
     {"$",DOLLAR_TOKEN},
     {"%in%",IN_TOKEN},
     {"%%",MOD_TOKEN},
+<<<<<<< HEAD
+=======
+    {"\"",DQ_TOKEN},
+    {"'",SQ_TOKEN},
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"{",ACCO_TOKEN},
     {"}",ACCF_TOKEN},
     {"[",BRO_TOKEN},
@@ -287,7 +316,11 @@ typedef struct {
     CODES_LEX CODE;
 }TOKEN_TEXT;
 
+<<<<<<< HEAD
 TOKEN_TEXT ALLTOKENS_TEXT[238] = {
+=======
+TOKEN_TEXT ALLTOKENS_TEXT[240] = {
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"PRINT_TOKEN",PRINT_TOKEN},
     {"GETWD_TOKEN",GETWD_TOKEN},
     {"SETWD_TOKEN",SETWD_TOKEN},
@@ -439,7 +472,11 @@ TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"PROD_TOKEN",PROD_TOKEN},
     {"SD_TOKEN",SD_TOKEN},
     {"VAR_TOKEN",VAR_TOKEN},
+<<<<<<< HEAD
     {"IS_COMPLEX_TOKEN",IS_COMPLEX_TOKEN},
+=======
+    {"IS_COMPLEXE_TOKEN",IS_COMPLEXE_TOKEN},
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"AS_LOGICAL_TOKEN",AS_LOGICAL_TOKEN},
     {"IS_NA_TOKEN",IS_NA_TOKEN},
     {"IS_NAN_TOKEN",IS_NAN_TOKEN},
@@ -510,6 +547,11 @@ TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"DOLLAR_TOKEN",DOLLAR_TOKEN},
     {"IN_TOKEN",IN_TOKEN},
     {"MOD_TOKEN",MOD_TOKEN},
+<<<<<<< HEAD
+=======
+    {"DQ_TOKEN",DQ_TOKEN},
+    {"SQ_TOKEN",SQ_TOKEN},
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"ACCO_TOKEN",ACCO_TOKEN},
     {"ACCF_TOKEN",ACCF_TOKEN},
     {"BRO_TOKEN",BRO_TOKEN},
@@ -524,7 +566,11 @@ TOKEN_TEXT ALLTOKENS_TEXT[238] = {
     {"ID_TOKEN",ID_TOKEN},
     {"FIN_TOKEN",FIN_TOKEN},
     {"ERREUR_TOKEN",ERREUR_TOKEN},
+<<<<<<< HEAD
     {"COMPLEX_TOKEN",COMPLEX_TOKEN},
+=======
+    {"COMPLEXE_TOKEN",COMPLEXE_TOKEN},
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     {"CHAINE_TOKEN",CHAINE_TOKEN}
 };
 
@@ -552,6 +598,10 @@ bool Separateur();
 void Sym_Suiv();
 void AfficherToken(TSym_Cour SYM);
 CODES_LEX code_mot_cle(char nom[]);
+<<<<<<< HEAD
+=======
+bool mot_cle(char nom[]);
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 void lire_mot();
 void lire_special();
 void lire_commentaire();
@@ -610,7 +660,10 @@ void Sym_Suiv(){
         else if(Separateur()){ lire_separateur(); }
         else if( isalpha(Car_Cour) || Car_Cour == '.'){ lire_mot(); }
         else if( isdigit(Car_Cour) ){ lire_nombre(); }
+<<<<<<< HEAD
         else if(Car_Cour ==  '\"' || Car_Cour == 39){ lire_chaine(); }
+=======
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
         else { lire_special(); }
 }
 
@@ -635,7 +688,20 @@ CODES_LEX code_mot_cle(char nom[]) {
             return ALLTOKENS[i].CODE;
         }
     }
+<<<<<<< HEAD
     return NOTA_TOKEN;
+=======
+}
+
+bool mot_cle(char nom[]){
+    for(int i=DEBUTMOTCLE ; i <= FINMOTCLE ; i++){
+        if( strcmp(nom,ALLTOKENS[i].TOKEN_NAME) == 0 ){
+            return true;
+        }
+    }
+    return false;
+    
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
 }
 
 void lire_mot() {
@@ -664,7 +730,11 @@ void lire_mot() {
         } else {
             NOM[Length_NOM] = '\0';
             strcpy(SYM_COUR.NOM, NOM);
+<<<<<<< HEAD
             if(code_mot_cle(NOM)!=NOTA_TOKEN){
+=======
+            if(mot_cle(NOM)){
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                 SYM_COUR.CODE = code_mot_cle(NOM);
             } else{
                 SYM_COUR.CODE = ID_TOKEN;
@@ -821,6 +891,19 @@ void lire_special() {
         SYM_COUR.CODE = DOLLAR_TOKEN;
         Lire_Car();
         break;
+<<<<<<< HEAD
+=======
+    case '\"':
+        SYM_COUR.CODE = DQ_TOKEN;
+        AfficherToken(SYM_COUR);
+        lire_chaine();
+        break;
+    case 39:
+        SYM_COUR.CODE = SQ_TOKEN;
+        AfficherToken(SYM_COUR);
+        lire_chaine();
+        break;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     case '{':
         SYM_COUR.CODE = ACCO_TOKEN;
         Lire_Car();
@@ -874,10 +957,18 @@ void lire_chaine() {
     bool isClosedQuotes = false;
     char simpleORdouble = Car_Cour;
     SYM_COUR.CODE = STRING_TOKEN;
+<<<<<<< HEAD
+=======
+    AfficherToken(SYM_COUR);
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     Lire_Car();
     while( !feof(file) && (Length_NOM <= 100) ) {
         if( Car_Cour == simpleORdouble && (NOM[Length_NOM-1] != 92) ) {
             isClosedQuotes = true;
+<<<<<<< HEAD
+=======
+            SYM_COUR.CODE = simpleORdouble == '\"' ? DQ_TOKEN : SQ_TOKEN;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
             Lire_Car();
             break;
         } else {
@@ -944,7 +1035,11 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
+<<<<<<< HEAD
                     SYM_COUR.CODE = COMPLEX_TOKEN;
+=======
+                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                     Lire_Car();
                     break;
                 default:
@@ -970,7 +1065,11 @@ void lire_nombre() {
             }
             switch (Car_Cour) {
                 case 'i':
+<<<<<<< HEAD
                     SYM_COUR.CODE = COMPLEX_TOKEN;
+=======
+                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                     Lire_Car();
                 break;
                 default:
@@ -983,7 +1082,11 @@ void lire_nombre() {
                 lire_exposant();
                 switch (Car_Cour) {
                     case 'i':
+<<<<<<< HEAD
                         SYM_COUR.CODE = COMPLEX_TOKEN;
+=======
+                        SYM_COUR.CODE = COMPLEXE_TOKEN;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                         Lire_Car();
                     break;
                     default:
@@ -997,7 +1100,11 @@ void lire_nombre() {
                     Lire_Car();
                     break;
                 case 'i':
+<<<<<<< HEAD
                     SYM_COUR.CODE = COMPLEX_TOKEN;
+=======
+                    SYM_COUR.CODE = COMPLEXE_TOKEN;
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
                     Lire_Car();
                     break;
                 default:
@@ -1028,7 +1135,12 @@ void lire_commentaire() {
     }
 }
 
+<<<<<<< HEAD
 int main(int argc, char const *argv[]) {
+=======
+int main(int argc, char const *argv[])
+{
+>>>>>>> f9d0fc95796ba74b3c0377cca68916433a1108a7
     //argv[1]
     Ouvrir_Fichier("file.r");
     Lire_Car();
