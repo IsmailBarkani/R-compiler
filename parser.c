@@ -37,7 +37,7 @@ typedef enum {
     
     INTEGER_TOKEN,DOUBLE_TOKEN,LOGICAL_TOKEN,STRING_TOKEN,NEWLINE_TOKEN,
     
-    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN
+    COM_TOKEN,ID_TOKEN,FIN_TOKEN,ERREUR_TOKEN,COMPLEX_TOKEN, ELSEIF_TOKEN
 
 }CODES_LEX;
 
@@ -59,22 +59,12 @@ typedef struct {
     char NOM[101];
 }TSym_Cour;
 
-<<<<<<< HEAD
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
 //Analyseur Symantique: declaration
 //////////////
 
 typedef enum{TINTEGER, TDOUBLE, TLOGIQUE, TVECTOR, TMATRIX, TDATAFRAME, TFACTORS, TLIST, TSTRING, TCOMPLEX} TSYM;
-=======
-int NbrId=0;
-int DEBUTMOTCLE = 0;
-int FINMOTCLE = 194;
-
-// Symantique
-
-typedef enum{TID} TSYM;
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 
 typedef struct 
 {
@@ -571,7 +561,6 @@ typedef enum {
     PARO_ERR,PARF_ERR,ID_STRING_ERR,STRING_ERR,ID_ERR,LEVELS_ERR,
     ASSIGN_ERR,C_ERR,TRUEFALSE_ERR,NUMERIC_ERR,VECTOR2_ERR,LS_ERR,
     SUBSET_DATAFRAME_ERR,VIR_ERR,LOG_OP_ERR,BASIC_TYPE_ERR,
-<<<<<<< HEAD
     RM_ERR,NAMES_ERR,A_ERR,RENAME_ERR,EXP_ERR,EG_ERR,NLS_ERR,NLSNA_ERR,
     NL_ERR,BRF_ERR,DOUBLE_ERR,DP_ERR,DC_ERR,IS_NA_ERR,ID_NEG_IS_NA_ERR,
     DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
@@ -588,21 +577,6 @@ typedef struct {
 }Erreur;
 
 Erreur MES_ERR[200] = {
-=======
-    RM_ERR,NAMES_ERR,A_ERR,RENAME_ERR,EXP_ERR,EG_ERR,NLS_ERR,NLSNA_ERR, EXISID_ERR
-    
-
-}Erreurs;
-
-int NOMBRE_ERREUR = 42;
-
-typedef struct {
-    Erreurs CODE_ERR;
-    char MES[40];
-}Erreur;
-
-Erreur MES_ERR[42] = {
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
     {PARO_ERR , "Parenthese Ouvrante Erreur"},
     {PARF_ERR , "Parenthese Fermante Erreur"},
     {ID_STRING_ERR, "ID ou String Erreur"},
@@ -627,7 +601,6 @@ Erreur MES_ERR[42] = {
     {EG_ERR, "Symbole = Manquant"},
     {NLS_ERR, "NUMERIC LOgical or String Manquant"},
     {NLSNA_ERR, "Numeric Logical String or NA Manquant"},
-<<<<<<< HEAD
     {NL_ERR, "Numeric or Logical Manquant"},
     {BRF_ERR ,"Braquette Fermante Manquante"},
     {DOUBLE_ERR, "Double Manquant"},
@@ -657,9 +630,6 @@ Erreur MES_ERR[42] = {
     {ACCO_ERR, "{ Manquant"},
     {ACCF_ERR, "} Manquant"},
     {COND_ERR, "Erreur dans la condition"}
-=======
-    { EXISID_ERR, "Variable est deja declarer"}
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 };
 
 
@@ -670,10 +640,7 @@ char Car_Cour;
 FILE *file;
 TSym_Cour SYM_COUR;
 int Ligne_Courante = 1;
-<<<<<<< HEAD
 int NbrId= 0;
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 int Colonne_Courante = 0;
 char NOM[101];
 int Length_NOM = 0;
@@ -695,7 +662,6 @@ int isalpha();
 int isdigit();
 void lire_chaine();
 void lire_separateur();
-<<<<<<< HEAD
 int chercherTabIdent(char * chaineId);
 int ajouterTabIden(char* chaineId, TSYM ct);
 void Erreur_aff( Erreurs e);
@@ -703,8 +669,6 @@ void Erreur_aff( Erreurs e);
 
 
 
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 
 int chercherTabIdent(char *chaineId){
     int i;
@@ -726,10 +690,6 @@ int ajouterTabIden(char *chaineId, TSYM ct){
     }
     else Erreur_aff(EXISID_ERR);
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 void Vider_NOM() {
     Length_NOM = 0;
     memset(NOM,'\0',101);
@@ -780,20 +740,13 @@ void Sym_Suiv(){
         else if( isdigit(Car_Cour) ){ lire_nombre(); }
         else if(Car_Cour ==  '\"' || Car_Cour == 39){ lire_chaine(); }
         else { lire_special(); }
-<<<<<<< HEAD
         Vider_NOM();
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 }
 
 void AfficherToken(TSym_Cour SYM){
     if( SYM.CODE == ERREUR_TOKEN) {
         printf("erreur ligne %d colonne %d .\n", Ligne_Courante, Colonne_Courante);
-<<<<<<< HEAD
         //exit(EXIT_FAILURE);
-=======
-        exit(EXIT_FAILURE);
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
     }
     for(int i = 0;i < NUMBEROFTOKENS; i++) {
         if(ALLTOKENS_TEXT[i].CODE == SYM.CODE) {
@@ -1213,7 +1166,6 @@ void Erreur_aff(Erreurs ERR){
 }
 
 //Analyseur Syntaxique
-<<<<<<< HEAD
 //Prototypes des fonctions d'analyseur syntaxique
 void INSTRS();
 void S();
@@ -1322,8 +1274,8 @@ void COND();
 void CONDTERM();
 void WHILE();
 void IGNORERSEPARATEUR();
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
+void REPEAT();
+void ELSEIF();
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     if(SYM_COUR.CODE == CODE_LEX) {
@@ -1334,7 +1286,6 @@ void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     }
 }
 
-<<<<<<< HEAD
 
 void  INSTRS(){
     Sym_Suiv();
@@ -1363,51 +1314,6 @@ void S() {
         
         //EXP
         case ID_TOKEN: 
-=======
-void S() {
-    Sym_Suiv();
-    switch (SYM_COUR.CODE) {
-        case INTER_TOKEN:
-            INTERHELP();s();
-        break;
-        case HELP_TOKEN:
-            HELP();
-        break;
-        case PRINT_TOKEN:
-            PRINT();
-        break;
-        case LEVELS_TOKEN:
-            LEVELS();
-            AEXP1();
-        break;
-
-        case LS_TOKEN:
-            LIST();
-        break;
-
-        case SUBSET_TOKEN:
-        case ATTACH_TOKEN:
-        case DETACH_TOKEN:
-            SUBSET_DATAFRAME();
-            AEXP2();
-        break;
-        
-        case RM_TOKEN:
-            REMOVE();
-        break;
-
-        case NAMES_TOKEN:
-            ELEMENT_NAMES();
-        break;
-
-        case ROWNAMES_TOKEN:
-        case COLNAMES_TOKEN:
-            A();
-        break;
-        
-        //EXP
-        case ID_TOKEN:
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
         case TRUE_TOKEN:
         case FALSE_TOKEN:
         case INTEGER_TOKEN:
@@ -1517,7 +1423,6 @@ void S() {
         case QT_TOKEN:
         case QLOGIS_TOKEN:
         case LIST_TOKEN:
-<<<<<<< HEAD
         
         // EXP va traiter tous ces tokens precedant
         EXP();
@@ -1529,34 +1434,20 @@ void S() {
         case WHILE_TOKEN: WHILE();break; 
 
     default:/* printf("SORTIT DE S()\n")*/;break;
-=======
-            EXP();
-        break;
-
-        default:break;
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 
     }
 }
 
-<<<<<<< HEAD
 void WHILE(){
     Test_Symbole(WHILE_TOKEN,WHILE_ERR);
     Test_Symbole(PARO_TOKEN,PARO_ERR);
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    //IGNORERSEPARATEUR();
-    //AfficherToken(SYM_COUR);
-
     S();
-    //IGNORERSEPARATEUR();
-    //AfficherToken(SYM_COUR);
-    //printf("sdsqsd");
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
-    //printf("Sortit de IF***** \n");
-    //SYM_COUR.CODE == ELSE_TOKEN ? ELSE():;
+
 }
 
 void IF() {
@@ -1565,14 +1456,16 @@ void IF() {
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    
     S();
-    //IGNORERSEPARATEUR();
-    //printf("sdsqsd");
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
-    //printf("Sortit de IF***** \n");
-    //SYM_COUR.CODE == ELSE_TOKEN ? ELSE():;
+    IGNORERSEPARATEUR();
+    switch(SYM_COUR.CODE){
+        case ELSE_TOKEN : printf("ELSE\n");ELSE();break;
+        case ELSEIF_TOKEN:printf("ELSEIF\n"); ELSEIF();break;
+        default: printf("NOT\n"); break;
+    }
+
 }
 
 void IGNORERSEPARATEUR(){
@@ -1585,11 +1478,14 @@ void ELSE() {
     Sym_Suiv();
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
     S();
+    IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
 }
 
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
+void ELSEIF(){
+
+}
+
 void HELP() {
     Sym_Suiv();
     Test_Symbole(PARO_TOKEN,PARO_ERR);
@@ -1934,7 +1830,6 @@ void CS2() {
     }
 }
 
-<<<<<<< HEAD
 void VECTOR3() {
     switch (SYM_COUR.CODE)
     {
@@ -1980,8 +1875,6 @@ void VECTOR333() {
     }
 }
 
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
 void CV() {
     VECTOR();
     CV2();
@@ -2149,10 +2042,7 @@ void RENAME() {
 void EXP() {
     switch(SYM_COUR.CODE) {
         case ID_TOKEN:
-<<<<<<< HEAD
        
-=======
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
             V();
         break;
         case TRUE_TOKEN:
@@ -2331,23 +2221,17 @@ void EXP() {
 void V() {
     switch(SYM_COUR.CODE) {
         case ID_TOKEN:
-<<<<<<< HEAD
              
             Sym_Suiv();
             
             Vprime();
             break;
-=======
-            Sym_Suiv();
-         //   Vprime();
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
         default:
             Erreur_aff(ID_ERR);
         break;
     }
 }
 
-<<<<<<< HEAD
 void Vprime() {
     switch(SYM_COUR.CODE) {
         case AFFTOG_TOKEN:
@@ -3044,33 +2928,3 @@ int main(int argc, char const *argv[])
 
 
 
-=======
-/*void Vprime() {
-    switch(SYM_COUR.CODE) {
-        case AFFTOG_TOKEN:
-        case EG_TOKEN:
-            ASSIGN();
-            EXP();
-        break;
-        case DOLLAR_TOKEN:
-        case 
-    }
-}*/
-
-int main(int argc, char const *argv[])
-{
-    //argv[1]
-    Ouvrir_Fichier("file.r");
-    Lire_Car();
-
-    
-    S();
-    
-    fclose(file);
-    getchar();
-    printf("Bravo !!\n");
-    //printf("%s\n",ALLTOKENS[FINMOTCLE].TOKEN_NAME);
-    
-    return 0;
-}
->>>>>>> ec28abc5a6b4a1cbf049f3ef939742ebff0426f8
