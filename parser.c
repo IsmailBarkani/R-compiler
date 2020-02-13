@@ -546,18 +546,20 @@ typedef enum {
     ASSIGN_ERR,C_ERR,TRUEFALSE_ERR,NUMERIC_ERR,VECTOR2_ERR,LS_ERR,
     SUBSET_DATAFRAME_ERR,VIR_ERR,LOG_OP_ERR,BASIC_TYPE_ERR,
     RM_ERR,NAMES_ERR,A_ERR,RENAME_ERR,EXP_ERR,EG_ERR,NLS_ERR,NLSNA_ERR,
-    
-
+    NL_ERR,BRF_ERR,DOUBLE_ERR,DP_ERR,DC_ERR,IS_NA_ERR,ID_NEG_IS_NA_ERR,
+    DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
+    DATA_ERR,NCOL_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
+    ,VVARBASIC_ERR,PARAM_ERR
 }Erreurs;
 
 int NOMBRE_ERREUR = 42;
 
 typedef struct {
     Erreurs CODE_ERR;
-    char MES[40];
+    char MES[100];
 }Erreur;
 
-Erreur MES_ERR[42] = {
+Erreur MES_ERR[50] = {
     {PARO_ERR , "Parenthese Ouvrante Erreur"},
     {PARF_ERR , "Parenthese Fermante Erreur"},
     {ID_STRING_ERR, "ID ou String Erreur"},
@@ -581,7 +583,26 @@ Erreur MES_ERR[42] = {
     {EXP_ERR, "Expression Erreur"},
     {EG_ERR, "Symbole = Manquant"},
     {NLS_ERR, "NUMERIC LOgical or String Manquant"},
-    {NLSNA_ERR, "Numeric Logical String or NA Manquant"}
+    {NLSNA_ERR, "Numeric Logical String or NA Manquant"},
+    {NL_ERR, "Numeric or Logical Manquant"},
+    {BRF_ERR ,"Braquette Fermante Manquante"},
+    {DOUBLE_ERR, "Double Manquant"},
+    {DP_ERR, "Double Point Manquant"},
+    {DC_ERR, "Double Or C or (Double:Double) Vecteur Manquant"},
+    {IS_NA_ERR, "is.na Manquante"},
+    {ID_NEG_IS_NA_ERR, "Variable ou ! ou is.na Maquante"},
+    {DOUBLE_VIR_C_ERR, "Double ou Virgule ou C() Manquant"},
+    {DOUBLE_C_TOKEN, "Double or C Manquant"},
+    {BASIC_ID_ERR, "Basic Type ou ID Manquant"},
+    {AFFTOG_ERR ,"Affectation A gauche Erreur"},    
+    {DATA_ERR, "Data Erreur"},
+    {NCOL_ERR, "Ncolumn Erreur"},
+    {BYROW_ERR, "By row Erreur"},
+    {DIMNAMES_ERR ,"dim names Erreur"},
+    {LIST_ERR ,"List Erreur"},
+    {T_ERR, "Symbole T erreur"},
+    {VVARBASIC_ERR,"Vecteur Var BasicType Manquant"},
+    {PARAM_ERR, "Faute Dans les Parametres"}
 };
 
 
@@ -1603,6 +1624,51 @@ void CS2() {
     }
 }
 
+void VECTOR3() {
+    switch (SYM_COUR.CODE)
+    {
+    case VIR_TOKEN:
+        Sym_Suiv();
+        VECTOR33();
+        break;
+    
+    default:
+        //epsilon
+        break;
+    }
+}
+
+void VECTOR33() {
+    switch (SYM_COUR.CODE)
+    {
+    case DOUBLE_TOKEN:
+    case INTEGER_TOKEN:
+        CN();
+        VECTOR333();
+    case TRUE_TOKEN:
+    case FALSE_TOKEN:
+        CL();
+        break;
+    default:
+        Erreur_aff(NL_ERR);
+        break;
+    }
+}
+
+void VECTOR333() {
+    switch (SYM_COUR.CODE)
+    {
+    case VIR_TOKEN:
+        Sym_Suiv();
+        CL();
+        break;
+    
+    default:
+    //epsilon
+        break;
+    }
+}
+
 void CV() {
     VECTOR();
     CV2();
@@ -1950,24 +2016,658 @@ void V() {
         case ID_TOKEN:
             Sym_Suiv();
             Vprime();
+            break;
         default:
             Erreur_aff(ID_ERR);
         break;
     }
 }
 
-/*void Vprime() {
+void Vprime() {
     switch(SYM_COUR.CODE) {
         case AFFTOG_TOKEN:
         case EG_TOKEN:
+        case DOLLAR_TOKEN:
+            V1();
+        break;
+        case BRO_TOKEN:
+            Sym_Suiv();
+            V2();
+            Test_Symbole(BRF_TOKEN,BRF_ERR);
+        break;
+
+        default:
+        //epsilon
+        break;
+    }
+}
+
+void V1() {
+    switch (SYM_COUR.CODE)
+    {
+        case AFFTOG_TOKEN:
+        case EG_TOKEN:
             ASSIGN();
-            EXP();
+            EXPR1();
         break;
         case DOLLAR_TOKEN:
-        case 
+            Sym_Suiv();
+            SLD();
+        break;
+    default:
+        break;
+    }
+}
+
+void EXPR1(){
+    TERM();
+    while(SYM_COUR.CODE == PLS_TOKEN || SYM_COUR.CODE == MINUS_TOKEN){
+        Sym_Suiv();
+        TERM();
     }
 
-}*/
+}
+void TERM(){
+    FACT();
+    while(SYM_COUR.CODE == MULT_TOKEN || SYM_COUR.CODE == DIV_TOKEN){
+        Sym_Suiv();
+        FACT();
+    }
+
+}
+
+void FACT(){
+    switch(SYM_COUR.CODE){
+        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);break;
+        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);break;
+        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);break;
+        case PARO_TOKEN: Sym_Suiv(); EXPR1(); Test_Symbole(PARF_TOKEN,PARF_ERR);break;
+        default:Erreur_aff(A_ERR); break;
+    }
+}
+
+
+void SLD() {
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    SD11();
+}
+
+void SD11() {
+    switch(SYM_COUR.CODE) {
+        case EQ_TOKEN:
+        case DIFF_TOKEN:
+        case SUPEG_TOKEN:
+        case SUP_TOKEN:
+        case INFEG_TOKEN:
+        case INF_TOKEN:
+            LOG_OP();
+            BASIC_TYPE();
+        break;
+        default:
+        //epsilon
+        break;
+    }
+}
+
+void V2() {
+    switch(SYM_COUR.CODE) {
+        case MINUS_TOKEN:
+            Sym_Suiv();
+            EE2();
+        break;
+        
+        case ID_TOKEN:
+        case NEG_TOKEN:
+        case IS_NA_TOKEN:
+            SE2();
+        break;
+
+        case DOUBLE_TOKEN:
+        case VIR_TOKEN:
+        case C_TOKEN:
+            SM1();
+        break;
+
+        /*case DOUBLE_TOKEN:
+        case STRING_TOKEN:
+        case ID_TOKEN:
+
+        break;*/
+    }
+}
+
+void EE2() {
+    switch (SYM_COUR.CODE)
+    {
+    case DOUBLE_TOKEN:
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+    break;
+
+    case C_TOKEN:
+        Test_Symbole(C_TOKEN,C_ERR);
+        Test_Symbole(PARO_TOKEN,PARO_ERR);
+        Test_Symbole(VIR_TOKEN,VIR_ERR);
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        Test_Symbole(PARF_TOKEN,PARF_ERR);
+    break;
+    
+    case PARO_TOKEN:
+        Test_Symbole(PARO_TOKEN,PARO_ERR);
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        Test_Symbole(DP_TOKEN,DP_ERR);
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        Test_Symbole(PARF_TOKEN,PARF_ERR);
+    default:
+        Erreur_aff(DC_ERR);
+        break;
+    }
+}
+
+void SE2() {
+    switch(SYM_COUR.CODE) {
+        case ID_TOKEN:
+            Sym_Suiv();
+            LOG_OP();
+            BASIC_TYPE();
+        break;
+        case NEG_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(IS_NA_TOKEN,IS_NA_ERR);
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            Test_Symbole(ID_TOKEN,ID_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+        case IS_NA_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            Test_Symbole(ID_TOKEN,ID_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+        default:
+            Erreur_aff(ID_NEG_IS_NA_ERR);
+        break;
+    }
+}
+
+void SM1() {
+    switch(SYM_COUR.CODE) {
+        case DOUBLE_TOKEN:
+            SMD();
+        break;
+
+        case VIR_TOKEN:
+            SMP();
+        break;
+        
+        case C_TOKEN:
+            SMV();
+        break;
+        default:
+            Erreur_aff(DOUBLE_VIR_C_ERR);
+        break;
+    }
+}
+
+void SMD() {
+    Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+    Test_Symbole(VIR_TOKEN,VIR_ERR);
+    SMD2();
+}
+
+void SMD2() {
+    switch (SYM_COUR.CODE)
+    {
+    case VIR_TOKEN:
+        Sym_Suiv();
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        break;
+    case DP_TOKEN:
+        Sym_Suiv();
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        SMD3();
+    default:
+    //epsilon
+        break;
+    }
+
+}
+
+void SMV() {
+    VECTOR();
+    SMV2();
+}
+
+void SMV2() {
+    switch (SYM_COUR.CODE)
+    {
+    case VIR_TOKEN:
+        Sym_Suiv();
+        VECTOR();
+        break;
+    
+    default:
+    //epsilon
+        break;
+    }
+}
+
+void SMP() {
+    Test_Symbole(VIR_TOKEN,VIR_ERR);
+    SMP2();
+}
+
+void SMP2() {
+    switch (SYM_COUR.CODE)
+    {
+    case DOUBLE_TOKEN:
+        Sym_Suiv();
+        SMP3();
+        break;
+    case C_TOKEN:
+        VECTOR();
+        break;
+    default:
+        Erreur_aff(DOUBLE_C_TOKEN);
+        break;
+    }
+}
+
+void SMP3() {
+    switch(SYM_COUR.CODE) {
+        case DP_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        break;
+        default:
+            //epsilon
+            break;
+    }
+}
+
+void SMD3() {
+    switch (SYM_COUR.CODE)
+    {
+    case VIR_TOKEN:
+        Sym_Suiv();
+        SMD4();
+        break;
+    
+    default:
+    //epsilon
+        break;
+    }
+}
+
+void SMD4() {
+    switch (SYM_COUR.CODE)
+    {
+    case DOUBLE_TOKEN:
+        Sym_Suiv();
+        Test_Symbole(DP_TOKEN,DP_ERR);
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        break;
+    
+    default:
+    //epsilon
+        break;
+    }
+}
+
+void FUNCTION() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void STAT_FUNCTION() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void TYPE() {
+    switch(SYM_COUR.CODE) {
+        case TYPEOF_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            TYPE2();
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+            break;
+        case CLASS_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(ID_TOKEN,ID_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+            break;
+    }
+}
+
+void TYPE2() {
+    switch (SYM_COUR.CODE)
+    {
+    case DOUBLE_TOKEN:
+    case INTEGER_TOKEN:
+    case TRUE_TOKEN:
+    case FALSE_TOKEN:
+    case COMPLEX_TOKEN:
+    case ID_TOKEN:
+        Sym_Suiv();
+        break;
+    
+    default:
+        Erreur_aff(BASIC_ID_ERR);
+        break;
+    }
+}
+
+void TEST_TYPE() {
+    switch(SYM_COUR.CODE) {
+        case IS_NUMERIC_TOKEN:
+        case IS_CHARACTER_TOKEN:
+        case IS_LOGICAL_TOKEN:
+        case IS_COMPLEX_TOKEN:
+        case IS_NA_TOKEN:
+        case IS_NAN_TOKEN:
+        case IS_FACTOR_TOKEN:
+        case IS_DATA_FRAME_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            Test_Symbole(ID_TOKEN,ID_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;        
+    }
+}
+
+void CONVERT() {
+    switch(SYM_COUR.CODE) {
+        case AS_NUMERIC_TOKEN:
+        case AS_CHARACTER_TOKEN:
+        case AS_LOGICAL_TOKEN:
+        case AS_FACTOR_TOKEN:
+        case AS_DATA_FRAME_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            Test_Symbole(ID_TOKEN,ID_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;        
+    }
+}
+
+void CREATE_MATRIX() {
+    switch(SYM_COUR.CODE) {
+        case RBIND_TOKEN:
+        case CBIND_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            RC();
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+        case MATRIX_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            Test_Symbole(DATA_TOKEN,DATA_ERR);
+            Test_Symbole(EG_TOKEN,EG_ERR);
+            VECTOR();
+            Test_Symbole(VIR_TOKEN,VIR_ERR);
+            Test_Symbole(EG_TOKEN,EG_ERR);
+            Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+            Test_Symbole(VIR_TOKEN,VIR_ERR);
+            Test_Symbole(NCOL_TOKEN,NCOL_ERR);
+            Test_Symbole(EG_TOKEN,EG_ERR);
+            Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+            Test_Symbole(VIR_TOKEN,VIR_ERR);
+            Test_Symbole(BYROW_TOKEN,BYROW_ERR);
+            switch (SYM_COUR.CODE)
+            {
+            case TRUE_TOKEN:
+            case FALSE_TOKEN:
+                Sym_Suiv();
+                break;
+            
+            default:
+                Erreur_aff(TRUEFALSE_ERR);
+                break;
+            }
+            Test_Symbole(VIR_TOKEN,VIR_ERR);
+            Test_Symbole(DIMNAMES_TOKEN,DIMNAMES_ERR);
+            Test_Symbole(EG_TOKEN,EG_ERR);
+            Test_Symbole(LIST_TOKEN,LIST_ERR);
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            VECTORS();
+            Test_Symbole(PARO_TOKEN,PARF_ERR);
+        break;
+    }
+}
+
+void RC() {
+    VARS();
+    VECTORS();
+}
+
+void VECTORS() {
+    VECTOR();
+    VECTORS2();
+}
+
+void VECTORS2() {
+    switch(SYM_COUR.CODE) {
+        case VIR_TOKEN:
+            Sym_Suiv();
+            VECTORS();
+        break;
+        default:
+        //epsilon
+        break;
+    }
+}
+
+void TRANSPOSE() {
+    Test_Symbole(T_TOKEN,T_ERR);
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+
+void DIMENSION() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);       
+}
+
+void SPEC_MATRIX_FUNCTION() {
+    switch (SYM_COUR.CODE)
+    {
+    case ROWSUMS_TOKEN:
+    case COLSUMS_TOKEN:
+    case COLMEANS_TOKEN:
+    case ROWMEANS_TOKEN:
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);  
+    break;
+    case APPLY_TOKEN:
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(VIR_TOKEN,VIR_ERR);
+    APP();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+    default:
+        break;
+    }
+}
+
+void APP() {
+    Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+    STAT_FUNCTION();
+}
+
+void CREATE_FACTOR() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    FP();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void FP() {
+    VECTOR();
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(LEVELS_TOKEN,LEVELS_ERR);
+    Test_Symbole(EG_TOKEN,EG_ERR);
+    VECTOR();
+}
+
+void INDIVID_PER_LEVEL() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void SPEC_FACTOR_FUNC() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(VIR_TOKEN,VIR_ERR);
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(VIR_TOKEN,VIR_ERR);
+    STAT_FUNCTION();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+void CREATE_DATAFRAME() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    COLS();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
+
+
+void COLS() {
+    COL();
+    COLS2();
+}
+
+void COLS2() {
+    switch (SYM_COUR.CODE)
+    {
+    case VIR_TOKEN:
+        Sym_Suiv();
+        COLS();
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void COL() {
+    Test_Symbole(ID_TOKEN,ID_ERR);
+    Test_Symbole(EG_TOKEN,EG_ERR);
+    COL2();
+}
+
+void COL2() {
+    switch(SYM_COUR.CODE) {
+        case C_TOKEN:
+            VECTOR();
+        break;
+        case ID_TOKEN:
+            Sym_Suiv();
+        break;
+        case TRUE_TOKEN:
+        case FALSE_TOKEN:
+        case INTEGER_TOKEN:
+        case DOUBLE_TOKEN:
+        case COMPLEX_TOKEN:
+            BASIC_TYPE();
+        break;
+        default:
+        Erreur_aff(VVARBASIC_ERR);
+        break;
+    }
+    
+}
+
+void SEQ() {
+    switch(SYM_COUR.CODE) {
+        case SEQ_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            SEQPARAM();
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+
+        case REP_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+            Test_Symbole(VIR_TOKEN,VIR_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+            break;
+
+        case SEQUENCE_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(C_TOKEN,C_ERR);
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            CN();
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+    }
+}
+
+void SEQPARAM() {
+    switch(SYM_COUR.CODE) {
+        case LENGTH_TOKEN:
+        case FROM_TOKEN:
+        case TO_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(EG_TOKEN,EG_ERR);
+            Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+            break;
+        case LABEL_TOKEN:
+            Sym_Suiv();
+            Test_Symbole(C_TOKEN,C_ERR);
+            Test_Symbole(PARO_TOKEN,PARO_ERR);
+            CS();
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+        break;
+        default:   
+        Erreur_aff(PARAM_ERR);
+        break;
+    }
+}
+
+void RSEQ() {
+    Sym_Suiv();
+    switch (SYM_COUR.CODE)
+    {
+    case SCALE_TOKEN:
+    case LOCATION_TOKEN:
+    case MEAN_TOKEN:
+    case RATE_TOKEN:
+        Sym_Suiv();
+        Test_Symbole(EG_TOKEN,EG_ERR);
+        Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
+        break;
+    
+    default:
+    Erreur_aff(PARAM_ERR);
+        break;
+    }
+}
+
+void CREATE_LIST() {
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    COLS();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+}
 
 int main(int argc, char const *argv[])
 {
@@ -1975,7 +2675,6 @@ int main(int argc, char const *argv[])
     Ouvrir_Fichier("file.r");
     Lire_Car();
 
-    
     S();
     
     fclose(file);
