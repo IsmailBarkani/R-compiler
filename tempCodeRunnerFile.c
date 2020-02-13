@@ -1,0 +1,1 @@
+AfficherToken(SYM_COUR);
