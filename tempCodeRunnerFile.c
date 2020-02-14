@@ -1,1 +1,7 @@
-    Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+/*Sym_Suiv();
+    IGNORERSEPARATEUR();
+    AfficherToken(SYM_COUR);
+    //printf("sf\n");
+    S();*/
+    //printf("waaah\n");
+    //CODE_TEMP=NEWLINE_TOKEN;

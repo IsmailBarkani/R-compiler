@@ -1,25 +1,7 @@
-if(x==q){
-
-
-   d=a
-   qssd=4
-
-
-
+repeat{
+   z=e ;r=rd
+   if(a==3){
+      r=s
+      break
    }
-   elseif(a==s){
-      
-   }
-   
-   
-      else{
-      
-   }
-
-while(s){
-
-
-    Z<-1
-    e=8
-    
-    }
+}

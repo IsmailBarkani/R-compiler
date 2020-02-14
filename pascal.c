@@ -842,25 +842,11 @@ void sym_suiv(){
 }
 
 int main() {
-	int i;
-	  file = fopen("test.p","r+");
-	  Car_Cour = fgetc(file);
-	  if(Car_Cour=='\n'){
-	  	CUR_POS_Y++;
-	  	CUR_POS_X=0;
-	  }
-	  else CUR_POS_X++;
-	  if(Car_Cour==EOF){
-	  	erreur(ERR_FIC_VID);
-	        	exit(0);
-	  }
-	  
-	    sym_suiv();
-	    program();
-	  printf("BRAVO: le programe est correct!! \n"); 
-	  
-	  for(i=1;i<=PC;i++){
-	  	printf("%s\n",testerGenerateur(PCODE[i].MNE,PCODE[i].SUITE));
-	  }
+	char Cr_Cour= 'g';
+	if(isspace(Cr_Cour)){
+		printf("khedama");
+	
+	}
+	else printf("non");
 	  return 0;
 }
