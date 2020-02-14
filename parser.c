@@ -569,7 +569,7 @@ typedef enum {
     DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
     DATA_ERR,NCOL_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
     ,VVARBASIC_ERR,PARAM_ERR, EXISID_ERR, IF_ERR, ELSE_ERR ,FOR_ERR, WHILE_ERR,REPEAT_ERR,
-    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR
+    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR, ELSEIF_ERR
 }Erreurs;
 
 int NOMBRE_ERREUR = 200;
@@ -634,7 +634,8 @@ Erreur MES_ERR[200] = {
     {ACCF_ERR, "} Manquant"},
     {COND_ERR, "Erreur dans la condition"},
     {BREAK_ERR, "Break Erreur"},
-    {INST_ERR, "Trop d'instructions dans un ligne"}
+    {INST_ERR, "Trop d'instructions dans un ligne"},
+    {ELSEIF_ERR, "Erreur dans ELSEIF syntaxe"}
 };
 
 
@@ -1316,19 +1317,18 @@ void SS(){
         case REPEAT_TOKEN: REPEAT();  break;
         default: INSTRS();break;
         }
-    }while( SYM_COUR.CODE == NEWLINE_TOKEN);
+    }while(!feof(file));
 }
 
 void  INSTRS(){
     int i = 0,j=0;
 
-    
     CODE_TEMP = 7;
     do{ 
        CODE_TEMP = (i == 0 ? 7: SYM_COUR.CODE);
-        i++;
-        Sym_Suiv();
         
+        i==0?1:Sym_Suiv();
+        i++;
         IGNORERSEPARATEUR();
         S();
         IGNORERSEPARATEUR();
@@ -1536,7 +1536,7 @@ void IF() {
     SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
-    AfficherToken(SYM_COUR);
+   // AfficherToken(SYM_COUR);
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
@@ -1559,23 +1559,41 @@ void TESTERSAMELINE(){
 }
 
 void ELSE() {
-    Sym_Suiv();
+    Test_Symbole(ELSE_TOKEN,ELSE_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    INSTRS();
+    IGNORERSEPARATEUR(); 
+    switch(SYM_COUR.CODE){
+        case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
+        default: INSTRS();break;
+    }
+    SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
+    IGNORERNEWLINE();
+    IGNORERSEPARATEUR();
+   //AfficherToken(SYM_COUR);
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+    IGNORERNEWLINE();
+    IGNORERSEPARATEUR();
 
 
 }
 
 void ELSEIF(){
-    
-    Sym_Suiv();
+    Test_Symbole(ELSEIF_TOKEN,ELSEIF_ERR);
     Test_Symbole(PARO_TOKEN,PARO_ERR);
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    INSTRS();
+    IGNORERSEPARATEUR(); 
+    switch(SYM_COUR.CODE){
+        case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
+        default: INSTRS();break;
+    }
+    SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
+    IGNORERNEWLINE();
+    IGNORERSEPARATEUR();
+   // AfficherToken(SYM_COUR);
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+    IGNORERNEWLINE();
     IGNORERSEPARATEUR();
     switch(SYM_COUR.CODE){
         case ELSE_TOKEN :ELSE();break;
@@ -1633,7 +1651,7 @@ void REPEAT(){
     
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
-    AfficherToken(SYM_COUR);
+    //AfficherToken(SYM_COUR);
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
