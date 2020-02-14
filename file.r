@@ -1,3 +1,7 @@
+
+sma<-function(a,b){
+   
+}
 if(a==e){
    ffd=d
    break

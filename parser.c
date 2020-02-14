@@ -569,7 +569,7 @@ typedef enum {
     DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
     DATA_ERR,NCOL_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
     ,VVARBASIC_ERR,PARAM_ERR, EXISID_ERR, IF_ERR, ELSE_ERR ,FOR_ERR, WHILE_ERR,REPEAT_ERR,
-    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR, ELSEIF_ERR
+    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR, ELSEIF_ERR, FUNCTION_ERR
 }Erreurs;
 
 int NOMBRE_ERREUR = 200;
@@ -635,7 +635,8 @@ Erreur MES_ERR[200] = {
     {COND_ERR, "Erreur dans la condition"},
     {BREAK_ERR, "Break Erreur"},
     {INST_ERR, "Trop d'instructions dans un ligne"},
-    {ELSEIF_ERR, "Erreur dans ELSEIF syntaxe"}
+    {ELSEIF_ERR, "Erreur dans ELSEIF syntaxe"},
+    {FUNCTION_ERR, "Erreur dans la declaration de la focntion"}
 };
 
 
@@ -1181,7 +1182,7 @@ void S();
 void APP();
 void V();
 void EXP();
-
+void FUNCTION();
 void CREATE_FACTOR();
 void INTERHELP();
 void HELP();
@@ -1289,6 +1290,8 @@ void SREPEAT(CODES_LEX code);
 void IGNORENEWLINE();
 void TESTERSAMELINE();
 int VERIFIER();
+void ARGUMENT();
+void FUNCTION();
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     if(SYM_COUR.CODE == SEPARATEUR_TOKEN){
@@ -1657,6 +1660,42 @@ void REPEAT(){
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
 }
+
+
+void FUNCTION(){
+    Test_Symbole(FUNCTION_TOKEN,FUNCTION_ERR);
+    
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    ARGUMENT();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+    Test_Symbole(ACCO_TOKEN,ACCO_ERR);
+    IGNORERSEPARATEUR(); 
+    switch(SYM_COUR.CODE){
+        case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
+        default: INSTRS();break;
+    }
+    SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
+    IGNORERNEWLINE();
+    IGNORERSEPARATEUR();
+    Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+    IGNORERNEWLINE();
+    IGNORERSEPARATEUR();
+}
+
+void ARGUMENT(){
+       //AfficherToken(SYM_COUR);
+       Test_Symbole(ID_TOKEN,ID_ERR);
+       SYM_COUR.CODE == EG_TOKEN ?Sym_Suiv():1;
+    while(SYM_COUR.CODE  == VIR_TOKEN){
+       Sym_Suiv();
+       //AfficherToken(SYM_COUR);
+       Test_Symbole(ID_TOKEN,ID_ERR);
+       SYM_COUR.CODE == EG_TOKEN ?Sym_Suiv():1;
+    }
+    //AfficherToken(SYM_COUR);
+    SYM_COUR.CODE == PARF_TOKEN ? 1:Erreur_aff(FUNCTION_ERR);
+}
+
 void INTERHELP() {
     Sym_Suiv();
     switch (SYM_COUR.CODE) {
@@ -2390,8 +2429,8 @@ void V() {
 
 void Vprime() {
     switch(SYM_COUR.CODE) {
-        case AFFTOG_TOKEN:
-        case EG_TOKEN:
+        case EG_TOKEN:switcher=-1;
+        case AFFTOG_TOKEN: 
         case DOLLAR_TOKEN:
                 
             V1();
@@ -2412,6 +2451,7 @@ void V1() {
         case AFFTOG_TOKEN:
         case EG_TOKEN:
             ASSIGN(); 
+            
             EXPR1();
         break;
         case DOLLAR_TOKEN:
@@ -2476,6 +2516,8 @@ void FACT(){
         case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);break;
         case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);break;
         case PARO_TOKEN: Sym_Suiv(); EXPR1(); Test_Symbole(PARF_TOKEN,PARF_ERR);break;
+        case FUNCTION_TOKEN: if(switcher!=-1){FUNCTION();break;}
+                             else{Erreur_aff(FUNCTION_ERR);break;}
 
         default:/*Erreur_aff(A_ERR);*/ break;
     }
@@ -2708,12 +2750,7 @@ void SMD4() {
     }
 }
 
-void FUNCTION() {
-    Sym_Suiv();
-    Test_Symbole(PARO_TOKEN,PARO_ERR);
-    Test_Symbole(ID_TOKEN,ID_ERR);
-    Test_Symbole(PARF_TOKEN,PARF_ERR);
-}
+
 
 void STAT_FUNCTION() {
     Sym_Suiv();
