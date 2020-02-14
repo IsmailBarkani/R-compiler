@@ -78,7 +78,7 @@ typedef struct
 T_TAB_IDF IDFS[200]; // table des identificateur
 int OFFSET = -1;
 
-TOKEN ALLTOKENS[231] = {
+TOKEN ALLTOKENS[300] = {
     {"print",PRINT_TOKEN},
     {"getwd",GETWD_TOKEN},
     {"setwd",SETWD_TOKEN},
@@ -98,6 +98,7 @@ TOKEN ALLTOKENS[231] = {
     {"as",AS_TOKEN},
     {"if",IF_TOKEN},
     {"else",ELSE_TOKEN},
+    {"elseif",ELSEIF_TOKEN},
     {"while",WHILE_TOKEN},
     {"repeat",REPEAT_TOKEN},
     {"for",FOR_TOKEN},
@@ -315,7 +316,7 @@ TOKEN ALLTOKENS[231] = {
 
 int NUMBEROFTOKENS = 240;
 
-TOKEN_TEXT ALLTOKENS_TEXT[240] = {
+TOKEN_TEXT ALLTOKENS_TEXT[300] = {
     {"PRINT_TOKEN",PRINT_TOKEN},
     {"GETWD_TOKEN",GETWD_TOKEN},
     {"SETWD_TOKEN",SETWD_TOKEN},
@@ -335,6 +336,7 @@ TOKEN_TEXT ALLTOKENS_TEXT[240] = {
     {"AS_TOKEN",AS_TOKEN},
     {"IF_TOKEN",IF_TOKEN},
     {"ELSE_TOKEN",ELSE_TOKEN},
+    {"ELSEIF_TOKEN",ELSEIF_TOKEN},
     {"WHILE_TOKEN",WHILE_TOKEN},
     {"REPEAT_TOKEN",REPEAT_TOKEN},
     {"FOR_TOKEN",FOR_TOKEN},
@@ -566,7 +568,7 @@ typedef enum {
     DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
     DATA_ERR,NCOL_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
     ,VVARBASIC_ERR,PARAM_ERR, EXISID_ERR, IF_ERR, ELSE_ERR ,FOR_ERR, WHILE_ERR,REPEAT_ERR,
-    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, 
+    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR,  
 }Erreurs;
 
 int NOMBRE_ERREUR = 200;
@@ -1461,9 +1463,9 @@ void IF() {
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERSEPARATEUR();
     switch(SYM_COUR.CODE){
-        case ELSE_TOKEN : printf("ELSE\n");ELSE();break;
-        case ELSEIF_TOKEN:printf("ELSEIF\n"); ELSEIF();break;
-        default: printf("NOT\n"); break;
+        case ELSE_TOKEN : ELSE();break;
+        case ELSEIF_TOKEN:ELSEIF();break;
+        default:  break;
     }
 
 }
@@ -1483,6 +1485,20 @@ void ELSE() {
 }
 
 void ELSEIF(){
+    Sym_Suiv();
+    Test_Symbole(PARO_TOKEN,PARO_ERR);
+    COND();
+    Test_Symbole(PARF_TOKEN,PARF_ERR);
+    Test_Symbole(ACCO_TOKEN,ACCO_ERR);
+    S();
+    IGNORERSEPARATEUR();
+    Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+    IGNORERSEPARATEUR();
+    switch(SYM_COUR.CODE){
+        case ELSE_TOKEN :ELSE();break;
+        case ELSEIF_TOKEN: ELSEIF();break;
+        default:Erreur_aff(ELSE_ERR); break;
+    }
 
 }
 

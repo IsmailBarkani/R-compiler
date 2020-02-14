@@ -6,6 +6,9 @@ if(x==q){
 
 
    }
+   elseif(a==s){
+      
+   }
    
    
       else{
