@@ -1,5 +1,5 @@
 
-sma<-function(a,b){
+sma<-function(a=4+9,b){
    
 }
 if(a==e){

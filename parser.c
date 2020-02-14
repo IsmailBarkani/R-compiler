@@ -1292,6 +1292,7 @@ void TESTERSAMELINE();
 int VERIFIER();
 void ARGUMENT();
 void FUNCTION();
+void ARGUMENTEG();
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     if(SYM_COUR.CODE == SEPARATEUR_TOKEN){
@@ -1683,17 +1684,27 @@ void FUNCTION(){
 }
 
 void ARGUMENT(){
+    int i=0;
        //AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
-       SYM_COUR.CODE == EG_TOKEN ?Sym_Suiv():1;
+       AfficherToken(SYM_COUR);
+       SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():i++;
+
     while(SYM_COUR.CODE  == VIR_TOKEN){
        Sym_Suiv();
        //AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
        SYM_COUR.CODE == EG_TOKEN ?Sym_Suiv():1;
     }
-    //AfficherToken(SYM_COUR);
+    AfficherToken(SYM_COUR);
     SYM_COUR.CODE == PARF_TOKEN ? 1:Erreur_aff(FUNCTION_ERR);
+}
+void ARGUMENTEG(){
+    Test_Symbole(EG_TOKEN,EG_ERR);
+    SYM_COUR.CODE == VIR_TOKEN ? Erreur_aff(FUNCTION_ERR):1;
+    EXPR1();
+    printf("Hada");
+    AfficherToken(SYM_COUR);
 }
 
 void INTERHELP() {
@@ -2519,7 +2530,7 @@ void FACT(){
         case FUNCTION_TOKEN: if(switcher!=-1){FUNCTION();break;}
                              else{Erreur_aff(FUNCTION_ERR);break;}
 
-        default:/*Erreur_aff(A_ERR);*/ break;
+        default:/*AfficherToken(SYM_COUR); Erreur_aff(A_ERR);*/ break;
     }
 }
 
