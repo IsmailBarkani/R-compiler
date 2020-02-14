@@ -1321,32 +1321,20 @@ void SS(){
 
 void  INSTRS(){
     int i = 0,j=0;
-    /*Sym_Suiv();
-    IGNORERSEPARATEUR();
-    AfficherToken(SYM_COUR);
-    //printf("sf\n");
-    S();*/
-    //printf("waaah\n");
-    //CODE_TEMP=NEWLINE_TOKEN;
+
     
     CODE_TEMP = 7;
-    do{ //printf("%d\n",SYM_COUR.CODE);
-        //printf("waaah\n");
-        //IGNORERSEPARATEUR();
+    do{ 
        CODE_TEMP = (i == 0 ? 7: SYM_COUR.CODE);
-       //printf("%d\n",CODE_TEMP);
         i++;
         Sym_Suiv();
         
         IGNORERSEPARATEUR();
-        //AfficherToken(SYM_COUR);
         S();
         IGNORERSEPARATEUR();
-        AfficherToken(SYM_COUR);
     }while( SYM_COUR.CODE == NEWLINE_TOKEN );
     
     j= VERIFIER();
-    printf("ddd %d\n",CODE_TEMP);
 
     if(j==1 && CODE_VER == PV_TOKEN){return;}
     if(CODE_TEMP != NEWLINE_TOKEN ){
@@ -1499,7 +1487,19 @@ void S() {
 
     }
 }
+void IGNORERSEPARATEUR(){
+    while(/*SYM_COUR.CODE == NEWLINE_TOKEN ||*/ SYM_COUR.CODE == SEPARATEUR_TOKEN){
+        Sym_Suiv();
+    }
+    Vider_NOM();
+}
 
+void IGNORERNEWLINE(){
+    while(SYM_COUR.CODE == NEWLINE_TOKEN){
+        Sym_Suiv();
+    }
+    Vider_NOM();
+}
 int VERIFIER(){
     switch(SYM_COUR.CODE){
         case IF_TOKEN:
@@ -1523,14 +1523,22 @@ void WHILE(){
 }
 
 void IF() {
-   Test_Symbole(IF_TOKEN,IF_ERR);
+    Test_Symbole(IF_TOKEN,IF_ERR);
     Test_Symbole(PARO_TOKEN,PARO_ERR);
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    INSTRS();
+    IGNORERSEPARATEUR(); 
+    switch(SYM_COUR.CODE){
+        case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
+        default: INSTRS();break;
+    }
+    SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
+    IGNORERNEWLINE();
     IGNORERSEPARATEUR();
+    AfficherToken(SYM_COUR);
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+    IGNORERNEWLINE();
     IGNORERSEPARATEUR();
     switch(SYM_COUR.CODE){
         case ELSE_TOKEN : ELSE();break;
@@ -1540,19 +1548,7 @@ void IF() {
 
 }
 
-void IGNORERSEPARATEUR(){
-    while(/*SYM_COUR.CODE == NEWLINE_TOKEN ||*/ SYM_COUR.CODE == SEPARATEUR_TOKEN){
-        Sym_Suiv();
-    }
-    Vider_NOM();
-}
 
-void IGNORERNEWLINE(){
-    while(SYM_COUR.CODE == NEWLINE_TOKEN){
-        Sym_Suiv();
-    }
-    Vider_NOM();
-}
 void TESTERSAMELINE(){
     IGNORERSEPARATEUR();
     switch(SYM_COUR.CODE){
@@ -1613,10 +1609,11 @@ void REPEAT(){
    // AfficherToken(SYM_COUR);
     INSTRS();
     
-    //printf("waaah\n");
+    
     //AfficherToken(SYM_COUR);
     //TESTERSAMELINE();
     //AfficherToken(SYM_COUR);
+    
     Test_Symbole(IF_TOKEN,IF_ERR);
     //AfficherToken(SYM_COUR);
     Test_Symbole(PARO_TOKEN,PARO_ERR);
@@ -1625,17 +1622,18 @@ void REPEAT(){
     Test_Symbole(PARF_TOKEN,PARF_ERR);
    // AfficherToken(SYM_COUR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    //IGNORERNEWLINE();
+   //IGNORERNEWLINE();
     IGNORERSEPARATEUR();
     //AfficherToken(SYM_COUR);
    
     SYM_COUR.CODE == BREAK_TOKEN?1:INSTRS();
+    
     Test_Symbole(BREAK_TOKEN,BREAK_ERR);
     //AfficherToken(SYM_COUR);
     
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
-    
+    AfficherToken(SYM_COUR);
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
