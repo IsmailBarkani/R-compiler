@@ -683,7 +683,7 @@ void Erreur_aff( Erreurs e);
 int chercherTabIdent(char *chaineId){
     int i;
     for(i=0;i<NbrId;i++){
-        if(strcmp(chaineId,IDFS[i].nom)) return i;
+        if(strcmp(chaineId,IDFS[i].nom)==0) return i;
     }
     return -1;
 }
@@ -2469,7 +2469,7 @@ void V() {
 
 void Vprime() {
     switch(SYM_COUR.CODE) {
-        case EG_TOKEN:switcher=-1;printf("Mot: %s ",NOM_TOKEN);
+        case EG_TOKEN:switcher=-1;
         case AFFTOG_TOKEN: 
         case DOLLAR_TOKEN:
                 
@@ -2553,8 +2553,8 @@ void TERM(){
 void FACT(){
     switch(SYM_COUR.CODE){
         case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);break;
+        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TINTEGER);break;
+        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TDOUBLE);break;
         case PARO_TOKEN: Sym_Suiv(); EXPR1(); Test_Symbole(PARF_TOKEN,PARF_ERR);break;
         case FUNCTION_TOKEN: if(switcher!=-1){FUNCTION();break;}
                              else{Erreur_aff(FUNCTION_ERR);break;}

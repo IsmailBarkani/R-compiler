@@ -2,18 +2,18 @@ a<-function(a,b,x){
    
 }
 if(a==e){
-   ffd=d
-   fd=s 
+   ffd=10
+   
    break
 }
 elseif(d=d){
-   ffffdd=dd
+   ffffdd=4
 }
 else{
-   d=z
+   d=2
 }
 repeat{
-   ff=s;fdfd=s
+   ff=22;fdfd=6
 if(a==d){
       break
    }
