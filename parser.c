@@ -1290,6 +1290,7 @@ void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
 
 
 void  INSTRS(){
+    
     Sym_Suiv();
     S();
     while(SYM_COUR.CODE == PV_TOKEN || SYM_COUR.CODE == NEWLINE_TOKEN){
@@ -1446,7 +1447,7 @@ void WHILE(){
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    S();
+    INSTRS();
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
 
@@ -1458,7 +1459,7 @@ void IF() {
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    S();
+    INSTRS();
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERSEPARATEUR();
@@ -1479,7 +1480,7 @@ void IGNORERSEPARATEUR(){
 void ELSE() {
     Sym_Suiv();
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    S();
+    INSTRS();
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
 }
@@ -1490,7 +1491,7 @@ void ELSEIF(){
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    S();
+    INSTRS();
     IGNORERSEPARATEUR();
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERSEPARATEUR();
