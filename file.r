@@ -3,6 +3,7 @@ a<-function(a,b,x){
 }
 if(a==e){
    ffd=d
+   fd=s 
    break
 }
 elseif(d=d){
@@ -12,8 +13,7 @@ else{
    d=z
 }
 repeat{
-   ff=s
-   fdfd=s
+   ff=s;fdfd=s
 if(a==d){
       break
    }

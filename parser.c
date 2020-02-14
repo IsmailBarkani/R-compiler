@@ -58,6 +58,7 @@ typedef struct {
 typedef struct {
     CODES_LEX CODE;
     char NOM[101];
+    
 }TSym_Cour;
 
 int DEBUTMOTCLE = 0;
@@ -649,7 +650,7 @@ TSym_Cour SYM_COUR;
 int Ligne_Courante = 1;
 int NbrId= 0;
 int Colonne_Courante = 0;
-char NOM[101];
+char NOM[101],NOM_TMP[101],NOM_TOKEN[101];
 int Length_NOM = 0;
 int switcher = 0;
 CODES_LEX CODE_TEMP,CODE_VER;
@@ -749,6 +750,8 @@ void Sym_Suiv(){
         else if( isdigit(Car_Cour) ){ lire_nombre(); }
         else if(Car_Cour ==  '\"' || Car_Cour == 39){ lire_chaine(); }
         else { lire_special(); }
+        
+        //strcpy(NOM_TMP,NOM);
         Vider_NOM();
 }
 
@@ -778,6 +781,7 @@ CODES_LEX code_mot_cle(char nom[]) {
 
 void lire_mot() {
     NOM[Length_NOM] = Car_Cour;
+    NOM_TMP[Length_NOM] = Car_Cour;
     Length_NOM++;
 
     if(Car_Cour == '.') {
@@ -789,6 +793,7 @@ void lire_mot() {
             SYM_COUR.CODE = ID_TOKEN;
             if(isalpha(Car_Cour) || Car_Cour == '.' || Car_Cour == '_') {
                 NOM[Length_NOM] = Car_Cour;
+                NOM_TMP[Length_NOM] = Car_Cour;
                 Length_NOM++;
             }
         }
@@ -798,9 +803,12 @@ void lire_mot() {
         Lire_Car();
         if(isdigit(Car_Cour) || isalpha(Car_Cour) || Car_Cour == '.' || Car_Cour == '_') {
             NOM[Length_NOM] = Car_Cour;
+            NOM_TMP[Length_NOM] = Car_Cour;
             Length_NOM++;
         } else {
             NOM[Length_NOM] = '\0';
+            memset(NOM_TOKEN,'\0',101);
+            strcpy(NOM_TOKEN,NOM);
             strcpy(SYM_COUR.NOM, NOM);
             if(code_mot_cle(NOM)!=NOTA_TOKEN){
                 SYM_COUR.CODE = code_mot_cle(NOM);
@@ -1020,6 +1028,7 @@ void lire_chaine() {
             break;
         } else {
             NOM[Length_NOM] = Car_Cour;
+            NOM_TMP[Length_NOM] = Car_Cour;
             Length_NOM++;
             Lire_Car();
         }
@@ -1045,11 +1054,13 @@ void lire_chaine() {
 
 void lire_exposant() {
     NOM[Length_NOM] = Car_Cour;
+    NOM_TMP[Length_NOM] = Car_Cour;
     Length_NOM++;
     Lire_Car();
 
     if(Car_Cour == '+' || Car_Cour == '-'){
         NOM[Length_NOM] = Car_Cour;
+        NOM_TMP[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
@@ -1057,6 +1068,7 @@ void lire_exposant() {
     if(isdigit(Car_Cour)){
         while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
             NOM[Length_NOM] = Car_Cour;
+            NOM_TMP[Length_NOM] = Car_Cour;
             Length_NOM++;
             Lire_Car();
         }
@@ -1069,6 +1081,7 @@ void lire_nombre() {
 
     while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
         NOM[Length_NOM] = Car_Cour;
+        NOM_TMP[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
@@ -1100,6 +1113,7 @@ void lire_nombre() {
             Lire_Car();
             while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
                 NOM[Length_NOM] = Car_Cour;
+                NOM_TMP[Length_NOM] = Car_Cour;
                 Length_NOM++;
                 Lire_Car();
             }
@@ -1355,17 +1369,17 @@ void  INSTRS(){
         //IGNORERNEWLINE();        
         
         IGNORERSEPARATEUR();
-        printf("Hada");AfficherToken(SYM_COUR);
+       // printf("Hada");AfficherToken(SYM_COUR);
         S();
 
         IGNORERSEPARATEUR();
-         printf("Hadi");AfficherToken(SYM_COUR);
+        // printf("Hadi");AfficherToken(SYM_COUR);
     }while( SYM_COUR.CODE == NEWLINE_TOKEN );
     
     j= VERIFIER();
-    printf("roro%d",j);AfficherToken(SYM_COUR);
+   // printf("roro%d",j);AfficherToken(SYM_COUR);
     if(j==1 && SYM_COUR.CODE == PV_TOKEN){return;}
-    if(j==0 && SYM_COUR.CODE == PV_TOKEN){Sym_Suiv();printf("dd");AfficherToken(SYM_COUR); VERIFIER()!=1?INSTRS():1; printf("ss");return;}
+    if(j==0 && SYM_COUR.CODE == PV_TOKEN){Sym_Suiv();VERIFIER()!=1?INSTRS():1; printf("ss");return;}
     if(CODE_TEMP != NEWLINE_TOKEN){
         switch(SYM_COUR.CODE){
         case PV_TOKEN:CODE_VER = PV_TOKEN; INSTRS();break;        
@@ -1546,7 +1560,7 @@ void IF() {
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
     IGNORERSEPARATEUR(); 
-    printf("Dam"); AfficherToken(SYM_COUR);
+    //printf("Dam"); AfficherToken(SYM_COUR);
     switch(SYM_COUR.CODE){
         case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
         default: INSTRS();break;
@@ -1642,7 +1656,7 @@ void REPEAT(){
     Sym_Suiv();
    // AfficherToken(SYM_COUR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    AfficherToken(SYM_COUR);
+    //AfficherToken(SYM_COUR);
     INSTRS();
     
     
@@ -1660,7 +1674,7 @@ void REPEAT(){
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
-    AfficherToken(SYM_COUR);
+    //AfficherToken(SYM_COUR);
    
     SYM_COUR.CODE == BREAK_TOKEN?1:INSTRS();
     
@@ -1700,26 +1714,26 @@ void FUNCTION(){
 
 void ARGUMENT(){
     int i=0;
-       AfficherToken(SYM_COUR);
+       //AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
        
        SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():1;
          //AfficherToken(SYM_COUR);
     while(SYM_COUR.CODE  == VIR_TOKEN){
        Sym_Suiv();
-       AfficherToken(SYM_COUR);
+       //AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
        SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():1;
     }
-    AfficherToken(SYM_COUR);
+    //AfficherToken(SYM_COUR);
     SYM_COUR.CODE == PARF_TOKEN ? 1:Erreur_aff(FUNCTION_ERR);
 }
 void ARGUMENTEG(){
     Test_Symbole(EG_TOKEN,EG_ERR);
     SYM_COUR.CODE == VIR_TOKEN ? Erreur_aff(FUNCTION_ERR):1;
     EXPR1();
-    printf("Hada");
-    AfficherToken(SYM_COUR);
+   // printf("Hada");
+    //AfficherToken(SYM_COUR);
 }
 
 void INTERHELP() {
@@ -2455,7 +2469,7 @@ void V() {
 
 void Vprime() {
     switch(SYM_COUR.CODE) {
-        case EG_TOKEN:switcher=-1;
+        case EG_TOKEN:switcher=-1;printf("Mot: %s ",NOM_TOKEN);
         case AFFTOG_TOKEN: 
         case DOLLAR_TOKEN:
                 
