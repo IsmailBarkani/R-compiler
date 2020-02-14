@@ -1,5 +1,4 @@
-
-sma<-function(a=4+9,b){
+a<-function(a,b,x){
    
 }
 if(a==e){
@@ -14,7 +13,8 @@ else{
 }
 repeat{
    ff=s
-   if(a==d){
+   fdfd=s
+if(a==d){
       break
    }
 }

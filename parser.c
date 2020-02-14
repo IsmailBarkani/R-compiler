@@ -1311,7 +1311,24 @@ void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     }
 }
 
+void IGNORERSEPARATEUR(){
+    while(/*SYM_COUR.CODE == NEWLINE_TOKEN ||*/ SYM_COUR.CODE == SEPARATEUR_TOKEN){
+        Sym_Suiv();
+    }
+    Vider_NOM();
+}
+
+void IGNORERNEWLINE(){
+    while(SYM_COUR.CODE == NEWLINE_TOKEN){
+        Sym_Suiv();
+    }
+    Vider_NOM();
+}
+
 void SS(){
+    if(SYM_COUR.CODE == NEWLINE_TOKEN){
+        IGNORERNEWLINE();
+    }
     do{
         //printf("waaah\n");
         //IGNORERSEPARATEUR();
@@ -1329,19 +1346,27 @@ void  INSTRS(){
 
     CODE_TEMP = 7;
     do{ 
-       CODE_TEMP = (i == 0 ? 7: SYM_COUR.CODE);
-        
+       
+        SYM_COUR.CODE == NEWLINE_TOKEN?i++:0;
+        CODE_TEMP = (i == 0 ? 7: SYM_COUR.CODE);
         i==0?1:Sym_Suiv();
-        i++;
+        //i++;
+        //IGNORERSEPARATEUR();
+        //IGNORERNEWLINE();        
+        
         IGNORERSEPARATEUR();
+        printf("Hada");AfficherToken(SYM_COUR);
         S();
+
         IGNORERSEPARATEUR();
+         printf("Hadi");AfficherToken(SYM_COUR);
     }while( SYM_COUR.CODE == NEWLINE_TOKEN );
     
     j= VERIFIER();
-
-    if(j==1 && CODE_VER == PV_TOKEN){return;}
-    if(CODE_TEMP != NEWLINE_TOKEN ){
+    printf("roro%d",j);AfficherToken(SYM_COUR);
+    if(j==1 && SYM_COUR.CODE == PV_TOKEN){return;}
+    if(j==0 && SYM_COUR.CODE == PV_TOKEN){Sym_Suiv();printf("dd");AfficherToken(SYM_COUR); VERIFIER()!=1?INSTRS():1; printf("ss");return;}
+    if(CODE_TEMP != NEWLINE_TOKEN){
         switch(SYM_COUR.CODE){
         case PV_TOKEN:CODE_VER = PV_TOKEN; INSTRS();break;        
         default:Erreur_aff(INST_ERR);break;
@@ -1491,19 +1516,7 @@ void S() {
 
     }
 }
-void IGNORERSEPARATEUR(){
-    while(/*SYM_COUR.CODE == NEWLINE_TOKEN ||*/ SYM_COUR.CODE == SEPARATEUR_TOKEN){
-        Sym_Suiv();
-    }
-    Vider_NOM();
-}
 
-void IGNORERNEWLINE(){
-    while(SYM_COUR.CODE == NEWLINE_TOKEN){
-        Sym_Suiv();
-    }
-    Vider_NOM();
-}
 int VERIFIER(){
     switch(SYM_COUR.CODE){
         case IF_TOKEN:
@@ -1533,6 +1546,7 @@ void IF() {
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
     IGNORERSEPARATEUR(); 
+    printf("Dam"); AfficherToken(SYM_COUR);
     switch(SYM_COUR.CODE){
         case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
         default: INSTRS();break;
@@ -1540,7 +1554,7 @@ void IF() {
     SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
-   // AfficherToken(SYM_COUR);
+    
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
     IGNORERNEWLINE();
     IGNORERSEPARATEUR();
@@ -1628,7 +1642,7 @@ void REPEAT(){
     Sym_Suiv();
    // AfficherToken(SYM_COUR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-   // AfficherToken(SYM_COUR);
+    AfficherToken(SYM_COUR);
     INSTRS();
     
     
@@ -1644,9 +1658,9 @@ void REPEAT(){
     Test_Symbole(PARF_TOKEN,PARF_ERR);
    // AfficherToken(SYM_COUR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-   //IGNORERNEWLINE();
+    IGNORERNEWLINE();
     IGNORERSEPARATEUR();
-    //AfficherToken(SYM_COUR);
+    AfficherToken(SYM_COUR);
    
     SYM_COUR.CODE == BREAK_TOKEN?1:INSTRS();
     
@@ -1664,6 +1678,7 @@ void REPEAT(){
 
 
 void FUNCTION(){
+    
     Test_Symbole(FUNCTION_TOKEN,FUNCTION_ERR);
     
     Test_Symbole(PARO_TOKEN,PARO_ERR);
@@ -1685,16 +1700,16 @@ void FUNCTION(){
 
 void ARGUMENT(){
     int i=0;
-       //AfficherToken(SYM_COUR);
-       Test_Symbole(ID_TOKEN,ID_ERR);
        AfficherToken(SYM_COUR);
-       SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():i++;
-
+       Test_Symbole(ID_TOKEN,ID_ERR);
+       
+       SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():1;
+         //AfficherToken(SYM_COUR);
     while(SYM_COUR.CODE  == VIR_TOKEN){
        Sym_Suiv();
-       //AfficherToken(SYM_COUR);
+       AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
-       SYM_COUR.CODE == EG_TOKEN ?Sym_Suiv():1;
+       SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():1;
     }
     AfficherToken(SYM_COUR);
     SYM_COUR.CODE == PARF_TOKEN ? 1:Erreur_aff(FUNCTION_ERR);
@@ -3122,10 +3137,11 @@ int main(int argc, char const *argv[])
         INSTRS();
         S();
     }*/
-    Sym_Suiv();
+    //Sym_Suiv();
      /*   S();
     INSTRS();*/
-
+    Sym_Suiv();
+    AfficherToken(SYM_COUR);
     SS();
     fclose(file);
     //getchar();
