@@ -687,7 +687,7 @@ void Erreur_aff( Erreurs e);
 void chercherTabIdent(char *chaineId, int arg){
     int j=0,i;
     for(i=0;i<NbrId;i++){
-        if(strcmp(chaineId,IDFS[i].nom)==0 )
+        if(strcmp(chaineId,IDFS[i].nom)==0 && IDFS[i].nbrArgs == arg )
         {
             j++;
             } 
@@ -2471,17 +2471,20 @@ void V() {
     }
 }
 void ARGUMENTVALEUR(){
+    int arg =0;
     Sym_Suiv();
     ARGUMENTFACT();
     Sym_Suiv();
-    AfficherToken(SYM_COUR);
+    arg++;
+    //AfficherToken(SYM_COUR);
     while(SYM_COUR.CODE == VIR_TOKEN){
         Sym_Suiv();
         ARGUMENTFACT();
         Sym_Suiv();
-        printf("what");AfficherToken(SYM_COUR);
+        arg++;
     }
-    
+    printf("Nombre %d\n",arg);
+    chercherTabIdent(NOM_TOKEN,arg);
     
 }
 void ARGUMENTFACT(){
