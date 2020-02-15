@@ -3070,7 +3070,7 @@ void CREATE_DATAFRAME() {
 void COLS() {
     COL();
     COLS2();
-    AfficherToken(SYM_COUR);
+    //AfficherToken(SYM_COUR);
 
 }
 

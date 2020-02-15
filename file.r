@@ -11,6 +11,7 @@ p(1,5,7)
 c(4,5)
 matrix(data=c(1,2,3,4,5,6),nrow=4,ncol=5,byrow=TRUE,dimnames=list(c(1,2)))
 list(f=c(1,2),f=c(1,2,8))
+data.frame(id=c(1,2,4),name=c("r","d"),stringsAsFactors=FALSE)
 if(s==e){
    ffd<-2L
    break
