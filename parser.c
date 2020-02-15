@@ -569,7 +569,7 @@ typedef enum {
     RM_ERR,NAMES_ERR,A_ERR,RENAME_ERR,EXP_ERR,EG_ERR,NLS_ERR,NLSNA_ERR,
     NL_ERR,BRF_ERR,DOUBLE_ERR,DP_ERR,DC_ERR,IS_NA_ERR,ID_NEG_IS_NA_ERR,
     DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
-    DATA_ERR,NCOL_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
+    DATA_ERR,NCOL_ERR,NROW_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
     ,VVARBASIC_ERR,PARAM_ERR, EXISID_ERR, IF_ERR, ELSE_ERR ,FOR_ERR, WHILE_ERR,REPEAT_ERR,
     EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR, ELSEIF_ERR, FUNCTION_ERR,
     TRUE_ERR, FALSE_ERR
@@ -620,6 +620,7 @@ Erreur MES_ERR[200] = {
     {AFFTOG_ERR ,"Affectation A gauche Erreur"},    
     {DATA_ERR, "Data Erreur"},
     {NCOL_ERR, "Ncolumn Erreur"},
+    {NROW_ERR, "NRow Erreur"},
     {BYROW_ERR, "By row Erreur"},
     {DIMNAMES_ERR ,"dim names Erreur"},
     {LIST_ERR ,"List Erreur"},
@@ -2923,6 +2924,7 @@ void CREATE_MATRIX() {
             Test_Symbole(EG_TOKEN,EG_ERR);
             VECTOR();
             Test_Symbole(VIR_TOKEN,VIR_ERR);
+            Test_Symbole(NROW_TOKEN,NROW_ERR);
             Test_Symbole(EG_TOKEN,EG_ERR);
             Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
             Test_Symbole(VIR_TOKEN,VIR_ERR);
@@ -2931,6 +2933,7 @@ void CREATE_MATRIX() {
             Test_Symbole(DOUBLE_TOKEN,DOUBLE_ERR);
             Test_Symbole(VIR_TOKEN,VIR_ERR);
             Test_Symbole(BYROW_TOKEN,BYROW_ERR);
+            Test_Symbole(EG_TOKEN,EG_ERR);
             switch (SYM_COUR.CODE)
             {
             case TRUE_TOKEN:
@@ -2948,7 +2951,8 @@ void CREATE_MATRIX() {
             Test_Symbole(LIST_TOKEN,LIST_ERR);
             Test_Symbole(PARO_TOKEN,PARO_ERR);
             VECTORS();
-            Test_Symbole(PARO_TOKEN,PARF_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
+            Test_Symbole(PARF_TOKEN,PARF_ERR);
         break;
     }
 }
@@ -3061,9 +3065,12 @@ void CREATE_DATAFRAME() {
 }
 
 
+
+
 void COLS() {
-    COL();
+   COL();
     COLS2();
+
 }
 
 void COLS2() {
@@ -3097,6 +3104,7 @@ void COL2() {
         case FALSE_TOKEN:
         case INTEGER_TOKEN:
         case DOUBLE_TOKEN:
+        case STRING_TOKEN:
         case COMPLEX_TOKEN:
             BASIC_TYPE();
         break;
@@ -3104,6 +3112,7 @@ void COL2() {
         Erreur_aff(VVARBASIC_ERR);
         break;
     }
+    
     
 }
 
@@ -3179,6 +3188,7 @@ void CREATE_LIST() {
     Sym_Suiv();
     Test_Symbole(PARO_TOKEN,PARO_ERR);
     COLS();
+    printf("hh"); AfficherToken(SYM_COUR);
     Test_Symbole(PARF_TOKEN,PARF_ERR);
 }
 

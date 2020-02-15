@@ -8,6 +8,8 @@ s="d"
 e=4 
 d=5
 p(1,5,7)
+c(4,5)
+matrix(data=c(1,2,3,4,5,6),nrow=4,ncol=5,byrow=TRUE,dimnames=list(c(1,2)))
 if(s==e){
    ffd<-2L
    break
