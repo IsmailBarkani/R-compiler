@@ -1,1 +1,1 @@
-printf("Dam"); AfficherToken(SYM_COUR);
+FACT()

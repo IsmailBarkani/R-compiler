@@ -1,13 +1,14 @@
 a<-function(a,b,x){
    
 }
+s="d"
 if(a==e){
-   ffd=10
+   ffd<-2L
    
    break
 }
 elseif(d=d){
-   ffffdd=4
+   ffdd=TRUE
 }
 else{
    d=2

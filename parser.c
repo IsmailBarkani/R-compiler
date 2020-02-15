@@ -60,13 +60,13 @@ typedef struct {
     char NOM[101];
     
 }TSym_Cour;
-
+int args;
 int DEBUTMOTCLE = 0;
 int FINMOTCLE = 194;
 //Analyseur Symantique: declaration
 //////////////
 
-typedef enum{TINTEGER, TDOUBLE, TLOGIQUE, TVECTOR, TMATRIX, TDATAFRAME, TFACTORS, TLIST, TSTRING, TCOMPLEX} TSYM;
+typedef enum{TINTEGER, TDOUBLE, TLOGIQUE, TVECTOR, TMATRIX, TDATAFRAME, TFACTORS, TLIST, TSTRING, TCOMPLEX, TFUNCTION} TSYM;
 
 typedef struct 
 {
@@ -74,6 +74,7 @@ typedef struct
     TSYM IDF;
     int ADRESSE;
     char valeur[40];
+    int nbrArgs;
 }T_TAB_IDF;
 
 
@@ -570,7 +571,8 @@ typedef enum {
     DOUBLE_VIR_C_ERR,DOUBLE_C_TOKEN,BASIC_ID_ERR,AFFTOG_ERR,
     DATA_ERR,NCOL_ERR,BYROW_ERR,DIMNAMES_ERR,LIST_ERR,T_ERR
     ,VVARBASIC_ERR,PARAM_ERR, EXISID_ERR, IF_ERR, ELSE_ERR ,FOR_ERR, WHILE_ERR,REPEAT_ERR,
-    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR, ELSEIF_ERR, FUNCTION_ERR
+    EQ_ERR, ACCO_ERR, ACCF_ERR, COND_ERR, BREAK_ERR, INST_ERR, ELSEIF_ERR, FUNCTION_ERR,
+    TRUE_ERR, FALSE_ERR
 }Erreurs;
 
 int NOMBRE_ERREUR = 200;
@@ -637,7 +639,9 @@ Erreur MES_ERR[200] = {
     {BREAK_ERR, "Break Erreur"},
     {INST_ERR, "Trop d'instructions dans un ligne"},
     {ELSEIF_ERR, "Erreur dans ELSEIF syntaxe"},
-    {FUNCTION_ERR, "Erreur dans la declaration de la focntion"}
+    {FUNCTION_ERR, "Erreur dans la declaration de la focntion"},
+    {TRUE_ERR, "Erreur TRUE"},
+    {FALSE_ERR, "Erreur FALSE"}
 };
 
 
@@ -673,7 +677,7 @@ int isdigit();
 void lire_chaine();
 void lire_separateur();
 int chercherTabIdent(char * chaineId);
-int ajouterTabIden(char* chaineId, TSYM ct);
+int ajouterTabIden(char* chaineId, TSYM ct, int arg);
 void Erreur_aff( Erreurs e);
 
 
@@ -688,10 +692,11 @@ int chercherTabIdent(char *chaineId){
     return -1;
 }
 
-int ajouterTabIden(char *chaineId, TSYM ct){
+int ajouterTabIden(char *chaineId, TSYM ct, int arg){
     int adresse;
     if(chercherTabIdent(chaineId)==-1){
         IDFS[NbrId].IDF = ct;
+        IDFS[NbrId].nbrArgs=arg;
         adresse = ++OFFSET;
         IDFS[NbrId].ADRESSE = adresse;
         strcpy(IDFS[NbrId].nom,chaineId);
@@ -781,7 +786,6 @@ CODES_LEX code_mot_cle(char nom[]) {
 
 void lire_mot() {
     NOM[Length_NOM] = Car_Cour;
-    NOM_TMP[Length_NOM] = Car_Cour;
     Length_NOM++;
 
     if(Car_Cour == '.') {
@@ -793,7 +797,6 @@ void lire_mot() {
             SYM_COUR.CODE = ID_TOKEN;
             if(isalpha(Car_Cour) || Car_Cour == '.' || Car_Cour == '_') {
                 NOM[Length_NOM] = Car_Cour;
-                NOM_TMP[Length_NOM] = Car_Cour;
                 Length_NOM++;
             }
         }
@@ -803,7 +806,6 @@ void lire_mot() {
         Lire_Car();
         if(isdigit(Car_Cour) || isalpha(Car_Cour) || Car_Cour == '.' || Car_Cour == '_') {
             NOM[Length_NOM] = Car_Cour;
-            NOM_TMP[Length_NOM] = Car_Cour;
             Length_NOM++;
         } else {
             NOM[Length_NOM] = '\0';
@@ -1028,7 +1030,6 @@ void lire_chaine() {
             break;
         } else {
             NOM[Length_NOM] = Car_Cour;
-            NOM_TMP[Length_NOM] = Car_Cour;
             Length_NOM++;
             Lire_Car();
         }
@@ -1054,13 +1055,11 @@ void lire_chaine() {
 
 void lire_exposant() {
     NOM[Length_NOM] = Car_Cour;
-    NOM_TMP[Length_NOM] = Car_Cour;
     Length_NOM++;
     Lire_Car();
 
     if(Car_Cour == '+' || Car_Cour == '-'){
         NOM[Length_NOM] = Car_Cour;
-        NOM_TMP[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
@@ -1068,7 +1067,6 @@ void lire_exposant() {
     if(isdigit(Car_Cour)){
         while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
             NOM[Length_NOM] = Car_Cour;
-            NOM_TMP[Length_NOM] = Car_Cour;
             Length_NOM++;
             Lire_Car();
         }
@@ -1081,7 +1079,6 @@ void lire_nombre() {
 
     while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
         NOM[Length_NOM] = Car_Cour;
-        NOM_TMP[Length_NOM] = Car_Cour;
         Length_NOM++;
         Lire_Car();
     }
@@ -1113,7 +1110,6 @@ void lire_nombre() {
             Lire_Car();
             while(!feof(file) && Length_NOM <100 && isdigit(Car_Cour)) {
                 NOM[Length_NOM] = Car_Cour;
-                NOM_TMP[Length_NOM] = Car_Cour;
                 Length_NOM++;
                 Lire_Car();
             }
@@ -1307,6 +1303,7 @@ int VERIFIER();
 void ARGUMENT();
 void FUNCTION();
 void ARGUMENTEG();
+void TYPEDEFINI(char * chaine);
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     if(SYM_COUR.CODE == SEPARATEUR_TOKEN){
@@ -1714,16 +1711,19 @@ void FUNCTION(){
 
 void ARGUMENT(){
     int i=0;
+    args=0;
        //AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
        
        SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():1;
          //AfficherToken(SYM_COUR);
+         args++;
     while(SYM_COUR.CODE  == VIR_TOKEN){
        Sym_Suiv();
        //AfficherToken(SYM_COUR);
        Test_Symbole(ID_TOKEN,ID_ERR);
        SYM_COUR.CODE == EG_TOKEN ? ARGUMENTEG():1;
+       args++;
     }
     //AfficherToken(SYM_COUR);
     SYM_COUR.CODE == PARF_TOKEN ? 1:Erreur_aff(FUNCTION_ERR);
@@ -2456,7 +2456,8 @@ void EXP() {
 void V() {
     switch(SYM_COUR.CODE) {
         case ID_TOKEN:
-             
+            memset(NOM_TMP,'\0',101);
+             strcpy(NOM_TMP,NOM_TOKEN);
             Sym_Suiv();
             
             Vprime();
@@ -2533,6 +2534,8 @@ void CONDTERM(){
     EXPR1();
 }
 
+
+
 void EXPR1(){
     TERM();
     while(SYM_COUR.CODE == PLS_TOKEN || SYM_COUR.CODE == MINUS_TOKEN){
@@ -2553,15 +2556,19 @@ void TERM(){
 void FACT(){
     switch(SYM_COUR.CODE){
         case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);break;
-        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TINTEGER);break;
-        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TDOUBLE);break;
+        case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TINTEGER,0);break;
+        case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TDOUBLE,0);break;
+        case TRUE_TOKEN : Test_Symbole(TRUE_TOKEN,TRUE_ERR);ajouterTabIden(NOM_TMP,TLOGIQUE,0);break;
+        case FALSE_TOKEN : Test_Symbole(FALSE_TOKEN,FALSE_ERR);ajouterTabIden(NOM_TMP,TLOGIQUE,0);break;
         case PARO_TOKEN: Sym_Suiv(); EXPR1(); Test_Symbole(PARF_TOKEN,PARF_ERR);break;
-        case FUNCTION_TOKEN: if(switcher!=-1){FUNCTION();break;}
+        case FUNCTION_TOKEN: if(switcher!=-1){FUNCTION();ajouterTabIden(NOM_TMP,TFUNCTION,args);break;}
                              else{Erreur_aff(FUNCTION_ERR);break;}
 
         default:/*AfficherToken(SYM_COUR); Erreur_aff(A_ERR);*/ break;
     }
 }
+
+
 
 
 void SLD() {
@@ -3161,6 +3168,12 @@ int main(int argc, char const *argv[])
     //getchar();
     printf("sssssssssfffffffffffffffffffrrrrrrrrrrBravo !!\n");
     
+    int i;
+        for(i=0;i<NbrId;i++){
+            printf("\nID: %s , Type: %d, ARGS: %d",IDFS[i].nom,IDFS[i].IDF,IDFS[i].nbrArgs);
+        }
+    
+
     return 0;
 }
 
