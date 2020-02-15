@@ -676,7 +676,7 @@ int isalpha();
 int isdigit();
 void lire_chaine();
 void lire_separateur();
-void chercherTabIdent(char * chaineId);
+void chercherTabIdent(char * chaineId,int arg);
 int ajouterTabIden(char* chaineId, TSYM ct, int arg);
 void Erreur_aff( Erreurs e);
 
@@ -684,10 +684,13 @@ void Erreur_aff( Erreurs e);
 
 
 
-void chercherTabIdent(char *chaineId){
+void chercherTabIdent(char *chaineId, int arg){
     int j=0,i;
     for(i=0;i<NbrId;i++){
-        if(strcmp(chaineId,IDFS[i].nom)==0) j++;
+        if(strcmp(chaineId,IDFS[i].nom)==0 )
+        {
+            j++;
+            } 
     }
     j==0?Erreur_aff(EXISID_ERR):1;
 }
@@ -1301,6 +1304,8 @@ void ARGUMENT();
 void FUNCTION();
 void ARGUMENTEG();
 void TYPEDEFINI(char * chaine);
+void ARGUMENTVALEUR();
+void ARGUMENTFACT();
 
 void Test_Symbole(CODES_LEX CODE_LEX,Erreurs CODE_ERR) {
     if(SYM_COUR.CODE == SEPARATEUR_TOKEN){
@@ -2455,7 +2460,7 @@ void V() {
     switch(SYM_COUR.CODE) {
         case ID_TOKEN:
             memset(NOM_TMP,'\0',101);
-             strcpy(NOM_TMP,NOM_TOKEN);
+            strcpy(NOM_TMP,NOM_TOKEN);
             Sym_Suiv();
             
             Vprime();
@@ -2463,6 +2468,31 @@ void V() {
         default:
             Erreur_aff(ID_ERR);
         break;
+    }
+}
+void ARGUMENTVALEUR(){
+    Sym_Suiv();
+    ARGUMENTFACT();
+    Sym_Suiv();
+    AfficherToken(SYM_COUR);
+    while(SYM_COUR.CODE == VIR_TOKEN){
+        Sym_Suiv();
+        ARGUMENTFACT();
+        Sym_Suiv();
+        printf("what");AfficherToken(SYM_COUR);
+    }
+    
+    
+}
+void ARGUMENTFACT(){
+    switch(SYM_COUR.CODE){
+        case DOUBLE_TOKEN:break;
+        case INTEGER_TOKEN: break;
+        case ID_TOKEN:break;
+        case STRING_TOKEN: break;
+        case TRUE_TOKEN:break;
+        case FALSE_TOKEN:break;
+        default: Erreur_aff(FUNCTION_ERR);break;
     }
 }
 
@@ -2479,6 +2509,9 @@ void Vprime() {
             V2();
             Test_Symbole(BRF_TOKEN,BRF_ERR);
         break;
+
+        case PARO_TOKEN: ARGUMENTVALEUR();
+                         Test_Symbole(PARF_TOKEN,PARF_ERR);break;
 
         default: Erreur_aff(ID_ERR); break;
     }
@@ -2533,7 +2566,6 @@ void CONDTERM(){
 }
 
 
-
 void EXPR1(){
     TERM();
     while(SYM_COUR.CODE == PLS_TOKEN || SYM_COUR.CODE == MINUS_TOKEN){
@@ -2553,7 +2585,7 @@ void TERM(){
 
 void FACT(){
     switch(SYM_COUR.CODE){
-        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);chercherTabIdent(NOM_TOKEN); break;
+        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);chercherTabIdent(NOM_TOKEN,0); break;
         case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TINTEGER,0);break;
         case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TDOUBLE,0);break;
         case TRUE_TOKEN : Test_Symbole(TRUE_TOKEN,TRUE_ERR);ajouterTabIden(NOM_TMP,TLOGIQUE,0);break;
