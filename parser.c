@@ -3068,8 +3068,9 @@ void CREATE_DATAFRAME() {
 
 
 void COLS() {
-   COL();
+    COL();
     COLS2();
+    AfficherToken(SYM_COUR);
 
 }
 
@@ -3188,7 +3189,7 @@ void CREATE_LIST() {
     Sym_Suiv();
     Test_Symbole(PARO_TOKEN,PARO_ERR);
     COLS();
-    printf("hh"); AfficherToken(SYM_COUR);
+    AfficherToken(SYM_COUR);
     Test_Symbole(PARF_TOKEN,PARF_ERR);
 }
 
