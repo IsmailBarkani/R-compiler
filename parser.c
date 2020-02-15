@@ -2488,7 +2488,7 @@ void ARGUMENTFACT(){
     switch(SYM_COUR.CODE){
         case DOUBLE_TOKEN:break;
         case INTEGER_TOKEN: break;
-        case ID_TOKEN:break;
+        case ID_TOKEN:chercherTabIdent(NOM_TOKEN,0); break;
         case STRING_TOKEN: break;
         case TRUE_TOKEN:break;
         case FALSE_TOKEN:break;

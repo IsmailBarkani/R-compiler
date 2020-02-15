@@ -3,6 +3,7 @@ a<-function(a,b,x){
 }
 s="d" 
 e=4 
+d=5
 p(1,5,7,d,"e")
 if(s==a){
    ffd<-2L
