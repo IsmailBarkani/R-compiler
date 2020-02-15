@@ -1175,6 +1175,7 @@ void lire_commentaire() {
     while(Car_Cour!='\n' &&  !feof(file) ) {
         Lire_Car();
     }
+    //AfficherToken(SYM_COUR);
 }
 
 void Erreur_aff(Erreurs ERR){
@@ -1350,6 +1351,7 @@ void SS(){
         case IF_TOKEN: IF(); break;
         case WHILE_TOKEN: WHILE();break; 
         case REPEAT_TOKEN: REPEAT();  break;
+        case COM_TOKEN:Sym_Suiv(); SYM_COUR.CODE==NEWLINE_TOKEN?1:SS();break;
         default: INSTRS();break;
         }
     }while(!feof(file));
@@ -1374,7 +1376,7 @@ void  INSTRS(){
 
         IGNORERSEPARATEUR();
         // printf("Hadi");AfficherToken(SYM_COUR);
-        AfficherToken(SYM_COUR);
+        //AfficherToken(SYM_COUR);
     }while( SYM_COUR.CODE == NEWLINE_TOKEN );
     
     j= VERIFIER();
@@ -1548,9 +1550,19 @@ void WHILE(){
     COND();
     Test_Symbole(PARF_TOKEN,PARF_ERR);
     Test_Symbole(ACCO_TOKEN,ACCO_ERR);
-    INSTRS();
+    IGNORERSEPARATEUR(); 
+    //printf("Dam"); AfficherToken(SYM_COUR);
+    switch(SYM_COUR.CODE){
+        case BREAK_TOKEN:Test_Symbole(BREAK_TOKEN,BREAK_ERR);break;
+        default: INSTRS();break;
+    }
+    SYM_COUR.CODE==BREAK_TOKEN?Test_Symbole(BREAK_TOKEN,BREAK_ERR):1;
+    IGNORERNEWLINE();
     IGNORERSEPARATEUR();
+    
     Test_Symbole(ACCF_TOKEN,ACCF_ERR);
+    IGNORERNEWLINE();
+    IGNORERSEPARATEUR();
 
 }
 
@@ -2902,7 +2914,7 @@ void CONVERT() {
         case AS_DATA_FRAME_TOKEN:
             Sym_Suiv();
             Test_Symbole(PARO_TOKEN,PARO_ERR);
-            Test_Symbole(ID_TOKEN,ID_ERR);
+            Test_Symbole(ID_TOKEN,ID_ERR); chercherTabIdent(NOM_TOKEN,0);
             Test_Symbole(PARF_TOKEN,PARF_ERR);
         break;        
     }
