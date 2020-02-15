@@ -626,7 +626,7 @@ Erreur MES_ERR[200] = {
     {T_ERR, "Symbole T erreur"},
     {VVARBASIC_ERR,"Vecteur Var BasicType Manquant"},
     {PARAM_ERR, "Faute Dans les Parametres"},
-    {EXISID_ERR, "Le ID est deja declarer"},
+    {EXISID_ERR, "Le ID n'est pas declarer"},
     {IF_ERR, "Erreur dans la syntaxe IF"},
     {ELSE_ERR,"Erreur dans la syntaxe ELSE"},
     {FOR_ERR, "Erreur dans la syntae FOR"},
@@ -676,7 +676,7 @@ int isalpha();
 int isdigit();
 void lire_chaine();
 void lire_separateur();
-int chercherTabIdent(char * chaineId);
+void chercherTabIdent(char * chaineId);
 int ajouterTabIden(char* chaineId, TSYM ct, int arg);
 void Erreur_aff( Erreurs e);
 
@@ -684,17 +684,16 @@ void Erreur_aff( Erreurs e);
 
 
 
-int chercherTabIdent(char *chaineId){
-    int i;
+void chercherTabIdent(char *chaineId){
+    int j=0,i;
     for(i=0;i<NbrId;i++){
-        if(strcmp(chaineId,IDFS[i].nom)==0) return i;
+        if(strcmp(chaineId,IDFS[i].nom)==0) j++;
     }
-    return -1;
+    j==0?Erreur_aff(EXISID_ERR):1;
 }
 
 int ajouterTabIden(char *chaineId, TSYM ct, int arg){
     int adresse;
-    if(chercherTabIdent(chaineId)==-1){
         IDFS[NbrId].IDF = ct;
         IDFS[NbrId].nbrArgs=arg;
         adresse = ++OFFSET;
@@ -702,8 +701,6 @@ int ajouterTabIden(char *chaineId, TSYM ct, int arg){
         strcpy(IDFS[NbrId].nom,chaineId);
         NbrId++;
         return adresse;
-    }
-    else Erreur_aff(EXISID_ERR);
 }
 void Vider_NOM() {
     Length_NOM = 0;
@@ -1354,7 +1351,7 @@ void SS(){
 
 void  INSTRS(){
     int i = 0,j=0;
-
+   
     CODE_TEMP = 7;
     do{ 
        
@@ -1371,6 +1368,7 @@ void  INSTRS(){
 
         IGNORERSEPARATEUR();
         // printf("Hadi");AfficherToken(SYM_COUR);
+        AfficherToken(SYM_COUR);
     }while( SYM_COUR.CODE == NEWLINE_TOKEN );
     
     j= VERIFIER();
@@ -2555,11 +2553,12 @@ void TERM(){
 
 void FACT(){
     switch(SYM_COUR.CODE){
-        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);break;
+        case ID_TOKEN: Test_Symbole(ID_TOKEN,ID_ERR);chercherTabIdent(NOM_TOKEN); break;
         case INTEGER_TOKEN: Test_Symbole(INTEGER_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TINTEGER,0);break;
         case DOUBLE_TOKEN: Test_Symbole(DOUBLE_TOKEN,NUMERIC_ERR);ajouterTabIden(NOM_TOKEN,TDOUBLE,0);break;
         case TRUE_TOKEN : Test_Symbole(TRUE_TOKEN,TRUE_ERR);ajouterTabIden(NOM_TMP,TLOGIQUE,0);break;
         case FALSE_TOKEN : Test_Symbole(FALSE_TOKEN,FALSE_ERR);ajouterTabIden(NOM_TMP,TLOGIQUE,0);break;
+        case STRING_TOKEN : Test_Symbole(STRING_TOKEN,STRING_ERR);ajouterTabIden(NOM_TMP,TSTRING,0);break;
         case PARO_TOKEN: Sym_Suiv(); EXPR1(); Test_Symbole(PARF_TOKEN,PARF_ERR);break;
         case FUNCTION_TOKEN: if(switcher!=-1){FUNCTION();ajouterTabIden(NOM_TMP,TFUNCTION,args);break;}
                              else{Erreur_aff(FUNCTION_ERR);break;}

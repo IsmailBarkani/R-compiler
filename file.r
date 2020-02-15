@@ -2,20 +2,20 @@ a<-function(a,b,x){
    
 }
 s="d"
-if(a==e){
+ e=4
+if(s==e){
    ffd<-2L
-   
    break
 }
-elseif(d=d){
-   ffdd=TRUE
+elseif(ffd=s){
+   ffd=TRUE
 }
 else{
    d=2
 }
 repeat{
    ff=22;fdfd=6
-if(a==d){
+if(ff==d){
       break
    }
 }
